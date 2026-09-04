@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  --color-liwa-magenta: #EC006C;
+  --color-liwa-magenta-hover: #D80064;
+  --color-liwa-dark: #2C2C2C;
+  --color-liwa-green: #72A619;
+  --color-liwa-gold: #C89211;
+  --color-liwa-purple: #4B187B;
+  --color-liwa-bg: #F8FAFC;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* Smooth transitions & Neumorphic-inspired soft shadows */
+.shadow-soft {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+}
+
+.shadow-card {
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.06);
+}
+
+.shadow-card-hover {
+  box-shadow: 0 12px 30px -4px rgba(236, 0, 108, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+}
+
+/* Custom username pin on Leaflet map */
+.custom-username-pin {
+  background: transparent !important;
+  border: none !important;
+}
+
+.username-box {
+  background-color: #3B1E54;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.username-box:hover {
+  transform: translateY(-2px) scale(1.05);
+  background-color: #EC006C;
+  box-shadow: 0 6px 18px rgba(236, 0, 108, 0.35);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
