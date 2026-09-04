@@ -5,12 +5,8 @@ import { ProductCard } from '@/components/ProductCard';
 import { ProductModal } from '@/components/ProductModal';
 import {
   Search,
-  SlidersHorizontal,
   RefreshCw,
   Repeat,
-  Package,
-  Layers,
-  Sparkles,
 } from 'lucide-react';
 
 interface ExplorarPageProps {
@@ -79,16 +75,16 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header & Search Bar Section */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-soft">
+      <div className="bg-white/85 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-white/80 shadow-soft">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
+            <h1 className="text-3xl font-black text-[#2C2C2C] tracking-tight flex items-center gap-2.5">
               <span>Explorar Catálogo</span>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#EC006C]/10 text-[#EC006C] border border-[#EC006C]/20">
                 {filteredProducts.length} productos
               </span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            <p className="text-xs sm:text-sm text-[#2C2C2C]/70 mt-1">
               Descubre productos y servicios ofrecidos por la comunidad local en Liwa
             </p>
           </div>
@@ -96,7 +92,7 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
           <button
             onClick={fetchData}
             disabled={loading}
-            className="self-start md:self-auto flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+            className="self-start md:self-auto flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-[#2C2C2C] hover:bg-slate-50 text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shadow-2xs"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Actualizar</span>
@@ -113,7 +109,7 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar por nombre, descripción o categoría..."
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#EC006C] focus:bg-white focus:ring-2 focus:ring-[#EC006C]/20 rounded-2xl text-sm font-medium text-slate-800 transition-all outline-none"
+              className="w-full pl-12 pr-4 py-3.5 bg-white/90 border border-slate-200 focus:border-[#EC006C] focus:bg-white focus:ring-3 focus:ring-[#EC006C]/20 rounded-2xl text-sm font-medium text-[#2C2C2C] transition-all outline-none shadow-2xs"
             />
           </div>
 
@@ -124,7 +120,7 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
               onChange={(e) =>
                 setSelectedCondition(e.target.value === 'all' ? 'all' : Number(e.target.value))
               }
-              className="w-full py-3 px-4 bg-slate-50 border border-slate-200 focus:border-[#EC006C] focus:bg-white rounded-2xl text-sm font-semibold text-slate-700 transition-all outline-none cursor-pointer"
+              className="w-full py-3.5 px-4 bg-white/90 border border-slate-200 focus:border-[#EC006C] focus:bg-white rounded-2xl text-sm font-semibold text-[#2C2C2C] transition-all outline-none cursor-pointer shadow-2xs"
             >
               <option value="all">Todas las condiciones</option>
               {conditions.map((cond) => (
@@ -139,10 +135,10 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
           <div className="md:col-span-3">
             <button
               onClick={() => setOnlyBarter(!onlyBarter)}
-              className={`w-full py-3 px-4 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 border transition-all cursor-pointer ${
+              className={`w-full py-3.5 px-4 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 border transition-all cursor-pointer shadow-2xs ${
                 onlyBarter
-                  ? 'bg-[#72A619] text-white border-[#72A619] shadow-xs'
-                  : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                  ? 'bg-[#7AAF00] text-white border-[#7AAF00] shadow-md shadow-[#7AAF00]/25'
+                  : 'bg-white border-slate-200 text-[#2C2C2C] hover:bg-slate-50'
               }`}
             >
               <Repeat className="w-4 h-4" />
@@ -157,8 +153,8 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
             onClick={() => setSelectedCategory('all')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
               selectedCategory === 'all'
-                ? 'bg-[#EC006C] text-white shadow-xs'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-[#EC006C] text-white shadow-md shadow-[#EC006C]/25'
+                : 'bg-white text-[#2C2C2C] border border-slate-200 hover:bg-slate-50'
             }`}
           >
             Todos
@@ -171,8 +167,8 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                   isSelected
-                    ? 'bg-[#EC006C] text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'bg-[#EC006C] text-white shadow-md shadow-[#EC006C]/25'
+                    : 'bg-white text-[#2C2C2C] border border-slate-200 hover:bg-slate-50'
                 }`}
               >
                 {cat.name}
@@ -186,28 +182,18 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
       {loading ? (
         <div className="py-24 text-center">
           <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-slate-200 border-t-[#EC006C]"></div>
-          <p className="text-slate-500 font-medium text-sm mt-4">
+          <p className="text-[#2C2C2C]/70 font-medium text-sm mt-4">
             Cargando productos desde Liwa...
           </p>
         </div>
       ) : filteredProducts.length === 0 ? (
-        <div className="bg-white rounded-3xl p-16 text-center border border-slate-100 shadow-soft">
-          <Package className="w-16 h-16 text-slate-300 mx-auto mb-4 stroke-1" />
-          <h3 className="text-lg font-bold text-slate-800">No se encontraron publicaciones</h3>
-          <p className="text-slate-500 text-xs mt-1 max-w-sm mx-auto">
-            Prueba ajustando el término de búsqueda o seleccionando otra categoría en los filtros.
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-16 text-center border border-white/80 shadow-soft">
+          <p className="text-[#2C2C2C] font-bold text-lg">
+            No se encontraron productos coincidentes
           </p>
-          <button
-            onClick={() => {
-              setSearchQuery('');
-              setSelectedCategory('all');
-              setSelectedCondition('all');
-              setOnlyBarter(false);
-            }}
-            className="mt-6 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
-          >
-            Limpiar filtros
-          </button>
+          <p className="text-[#2C2C2C]/60 text-xs mt-1">
+            Intenta ajustar los filtros de búsqueda o categoría
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

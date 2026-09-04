@@ -6,12 +6,10 @@ import {
   Repeat,
   Scale,
   CheckCircle2,
-  AlertCircle,
   TrendingUp,
   TrendingDown,
   Plus,
   Trash2,
-  ArrowRight,
   ShieldAlert,
 } from 'lucide-react';
 
@@ -95,8 +93,8 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
     balanceStatus = {
       label: '¡Intercambio Justo y Equilibrado!',
       description: 'La diferencia es menor al 15%. Alta probabilidad de aceptación por el vendedor.',
-      color: 'text-[#72A619]',
-      bg: 'bg-emerald-50 border-emerald-200',
+      color: 'text-[#7AAF00]',
+      bg: 'bg-[#7AAF00]/10 border-[#7AAF00]/30',
       icon: CheckCircle2,
     };
   } else if (diff < 0) {
@@ -105,8 +103,8 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
       description: `Estás ofreciendo C$ ${Math.abs(diff).toLocaleString('es-NI', {
         minimumFractionDigits: 2,
       })} más del valor referencial del artículo.`,
-      color: 'text-sky-600',
-      bg: 'bg-sky-50 border-sky-200',
+      color: 'text-[#4A198C]',
+      bg: 'bg-[#4A198C]/10 border-[#4A198C]/30',
       icon: TrendingUp,
     };
   } else {
@@ -115,8 +113,8 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
       description: `Faltan aproximadamente C$ ${diff.toLocaleString('es-NI', {
         minimumFractionDigits: 2,
       })} para igualar el valor referencial. Puedes agregar otro artículo.`,
-      color: 'text-amber-600',
-      bg: 'bg-amber-50 border-amber-200',
+      color: 'text-[#EC006C]',
+      bg: 'bg-[#EC006C]/10 border-[#EC006C]/30',
       icon: TrendingDown,
     };
   }
@@ -128,7 +126,7 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
     } else {
       if (selectedItems.length >= 4) {
         setStatusMessage({
-          text: 'Puedes seleccionar un máximo de 4 artículos para el trueque.',
+          text: 'Solo puedes ofrecer un máximo de 4 artículos por propuesta.',
           error: true,
         });
         return;
@@ -145,6 +143,7 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
 
     setSubmitting(true);
     setStatusMessage(null);
+
     try {
       if (currentUser?.id && targetProduct.user_id) {
         await sendBarterProposal({
@@ -156,7 +155,7 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
       }
 
       onSuccess(
-        `¡Propuesta de Trueque Inteligente enviada con éxito por ${targetProduct.title}!`
+        `¡Propuesta de Trueque Inteligente enviada con éxito por "${targetProduct.title}"!`
       );
       onClose();
     } catch (err: any) {
@@ -173,22 +172,22 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
   const StatusIcon = balanceStatus.icon;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#2C2C2C]/60 backdrop-blur-md animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-slate-100"
+        className="relative w-full max-w-4xl bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-white/80"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#72A619] text-white flex items-center justify-center shadow-xs">
+            <div className="w-11 h-11 rounded-2xl bg-[#7AAF00] text-white flex items-center justify-center shadow-md shadow-[#7AAF00]/25">
               <Repeat className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-slate-900 tracking-tight">
+              <h2 className="text-xl font-black text-[#2C2C2C] tracking-tight">
                 Trueque Inteligente Liwa
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#2C2C2C]/70">
                 Compara y equilibra valores para un intercambio justo y transparente
               </p>
             </div>
@@ -240,14 +239,14 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
                     )}
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-900 text-sm line-clamp-2">
+                    <h4 className="font-bold text-[#2C2C2C] text-sm line-clamp-2">
                       {targetProduct.title}
                     </h4>
-                    <p className="text-xs text-slate-500 mt-0.5">
+                    <p className="text-xs text-[#2C2C2C]/60 mt-0.5">
                       {targetProduct.category?.name || 'General'} •{' '}
                       {targetProduct.condition?.name || 'Buen estado'}
                     </p>
-                    <div className="mt-2 text-base font-black text-slate-900">
+                    <div className="mt-2 text-base font-black text-[#2C2C2C]">
                       C${' '}
                       {targetPrice.toLocaleString('es-NI', {
                         minimumFractionDigits: 2,
@@ -257,21 +256,21 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-200/60 text-[11px] text-slate-500">
+              <div className="mt-4 pt-3 border-t border-slate-200/60 text-[11px] text-[#2C2C2C]/60">
                 Valor estimado por el vendedor para el trueque
               </div>
             </div>
 
             {/* Right: Offered Products */}
-            <div className="bg-emerald-50/40 p-5 rounded-2xl border border-emerald-100 flex flex-col justify-between">
+            <div className="bg-[#7AAF00]/10 p-5 rounded-2xl border border-[#7AAF00]/25 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#72A619]">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#7AAF00]">
                     2. Tu Oferta ({selectedItems.length}/4 artículos)
                   </span>
                   <button
                     onClick={() => setShowItemPicker(!showItemPicker)}
-                    className="text-xs font-bold text-[#72A619] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-xs font-bold text-[#7AAF00] hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     {showItemPicker ? 'Ocultar catálogo' : 'Elegir artículos'}
@@ -281,13 +280,13 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
                 {selectedItems.length === 0 ? (
                   <div
                     onClick={() => setShowItemPicker(true)}
-                    className="h-28 border-2 border-dashed border-emerald-300/80 rounded-xl flex flex-col items-center justify-center text-slate-400 hover:border-[#72A619] hover:text-[#72A619] transition-all cursor-pointer p-4 text-center bg-white/60"
+                    className="h-28 border-2 border-dashed border-[#7AAF00]/40 rounded-xl flex flex-col items-center justify-center text-slate-500 hover:border-[#7AAF00] hover:text-[#7AAF00] transition-all cursor-pointer p-4 text-center bg-white/70"
                   >
-                    <Plus className="w-6 h-6 mb-1 text-emerald-600" />
-                    <span className="text-xs font-bold text-slate-700">
+                    <Plus className="w-6 h-6 mb-1 text-[#7AAF00]" />
+                    <span className="text-xs font-bold text-[#2C2C2C]">
                       Haz clic aquí para agregar artículos de tu inventario
                     </span>
-                    <span className="text-[10px] text-slate-400">
+                    <span className="text-[10px] text-[#2C2C2C]/60">
                       (Puedes seleccionar hasta 4 artículos)
                     </span>
                   </div>
@@ -296,7 +295,7 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
                     {selectedItems.map((item) => (
                       <div
                         key={item.id}
-                        className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-emerald-100 shadow-xs"
+                        className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-[#7AAF00]/20 shadow-2xs"
                       >
                         <div className="flex items-center gap-3 truncate">
                           <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
@@ -313,10 +312,10 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
                             )}
                           </div>
                           <div className="truncate text-left">
-                            <p className="text-xs font-bold text-slate-800 truncate max-w-[180px]">
+                            <p className="text-xs font-bold text-[#2C2C2C] truncate max-w-[180px]">
                               {item.title}
                             </p>
-                            <span className="text-xs font-extrabold text-[#72A619]">
+                            <span className="text-xs font-extrabold text-[#7AAF00]">
                               C${' '}
                               {Number(item.price || 0).toLocaleString('es-NI', {
                                 minimumFractionDigits: 2,
@@ -337,9 +336,9 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
                 )}
               </div>
 
-              <div className="mt-4 pt-3 border-t border-emerald-100/80 flex items-center justify-between text-xs">
-                <span className="text-slate-500 font-medium">Total ofrecido:</span>
-                <span className="text-base font-black text-slate-900">
+              <div className="mt-4 pt-3 border-t border-[#7AAF00]/20 flex items-center justify-between text-xs">
+                <span className="text-[#2C2C2C]/70 font-medium">Total ofrecido:</span>
+                <span className="text-base font-black text-[#2C2C2C]">
                   C${' '}
                   {offeredPrice.toLocaleString('es-NI', {
                     minimumFractionDigits: 2,
@@ -362,11 +361,11 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
                   <h4 className={`text-sm font-black ${balanceStatus.color}`}>
                     {balanceStatus.label}
                   </h4>
-                  <span className="text-xs font-bold text-slate-700">
+                  <span className="text-xs font-bold text-[#2C2C2C]">
                     Equivalencia: {Math.round(ratio)}%
                   </span>
                 </div>
-                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                <p className="text-xs text-[#2C2C2C]/80 mt-1 leading-relaxed">
                   {balanceStatus.description}
                 </p>
 
@@ -375,10 +374,10 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${
                       ratio > 115
-                        ? 'bg-sky-500'
+                        ? 'bg-[#4A198C]'
                         : ratio >= 85
-                        ? 'bg-[#72A619]'
-                        : 'bg-amber-500'
+                        ? 'bg-[#7AAF00]'
+                        : 'bg-[#EC006C]'
                     }`}
                     style={{ width: `${Math.min(ratio, 100)}%` }}
                   ></div>
@@ -391,7 +390,7 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
           {showItemPicker && (
             <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200 animate-in slide-in-from-top-4 duration-200">
               <div className="flex items-center justify-between mb-3">
-                <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
+                <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#2C2C2C]">
                   Selecciona artículos para agregar a tu propuesta
                 </h4>
                 <span className="text-xs text-slate-400">
@@ -417,7 +416,7 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
                         onClick={() => toggleSelectItem(item)}
                         className={`p-2.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
                           isSelected
-                            ? 'bg-emerald-50 border-[#72A619] shadow-xs'
+                            ? 'bg-[#7AAF00]/10 border-[#7AAF00] shadow-xs'
                             : 'bg-white border-slate-200 hover:border-slate-300'
                         }`}
                       >
@@ -435,10 +434,10 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
                           )}
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-slate-800 line-clamp-1">
+                          <p className="text-xs font-bold text-[#2C2C2C] line-clamp-1">
                             {item.title}
                           </p>
-                          <p className="text-[11px] font-extrabold text-slate-900 mt-0.5">
+                          <p className="text-[11px] font-extrabold text-[#2C2C2C] mt-0.5">
                             C$ {Number(item.price || 0).toLocaleString('es-NI')}
                           </p>
                         </div>
@@ -446,7 +445,7 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
                           <span
                             className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                               isSelected
-                                ? 'bg-[#72A619] text-white'
+                                ? 'bg-[#7AAF00] text-white'
                                 : 'bg-slate-100 text-slate-600'
                             }`}
                           >
@@ -463,10 +462,10 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
+        <div className="p-6 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/60">
           <button
             onClick={onClose}
-            className="px-5 py-3 rounded-2xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-sm transition-all cursor-pointer"
+            className="px-5 py-3 rounded-2xl bg-white border border-slate-200 hover:bg-slate-100 text-[#2C2C2C] font-bold text-sm transition-all cursor-pointer shadow-2xs"
           >
             Cancelar
           </button>
@@ -474,7 +473,7 @@ export const TruequeModal: React.FC<TruequeModalProps> = ({
           <button
             onClick={handleSendProposal}
             disabled={submitting || selectedItems.length === 0}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#72A619] hover:bg-[#628f14] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm shadow-md shadow-[#72A619]/25 transition-all cursor-pointer hover:-translate-y-0.5"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#7AAF00] hover:bg-[#6B9A00] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm shadow-md shadow-[#7AAF00]/25 transition-all cursor-pointer hover:-translate-y-0.5"
           >
             <Repeat className="w-4 h-4" />
             <span>{submitting ? 'Enviando...' : 'Enviar Propuesta de Trueque'}</span>

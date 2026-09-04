@@ -4,7 +4,6 @@ import {
   Mail,
   Lock,
   ArrowRight,
-  ShieldCheck,
   Compass,
   Repeat,
   MapPin,
@@ -61,7 +60,7 @@ export const BienvenidoPage: React.FC<BienvenidoPageProps> = ({
 
     try {
       if (isRegister) {
-        const data = await signUp(email.trim().toLowerCase(), password);
+        await signUp(email.trim().toLowerCase(), password);
         setSuccessMessage('¡Cuenta creada con éxito! Ahora puedes iniciar sesión.');
         setIsRegister(false);
       } else {
@@ -78,101 +77,120 @@ export const BienvenidoPage: React.FC<BienvenidoPageProps> = ({
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div className="min-h-[calc(100vh-80px)] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Left Column: Brand Hero & Value Proposition */}
         <div className="lg:col-span-7 space-y-8">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EC006C]/10 text-[#EC006C] text-xs font-bold uppercase tracking-wider">
+          {/* Badge superior con desenfoque e insignia Magenta */}
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/80 border border-[#EC006C]/30 text-[#EC006C] text-xs font-bold uppercase tracking-wider shadow-xs backdrop-blur-md">
+            <span className="w-2 h-2 rounded-full bg-[#EC006C] animate-pulse"></span>
             <Sparkles className="w-3.5 h-3.5" />
             <span>La nueva forma de intercambiar y comerciar</span>
           </div>
 
+          {/* Gran titular con degradado desvaneciente Morado -> Magenta */}
           <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.1]">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#2C2C2C] tracking-tight leading-[1.12]">
               Tu mercado local de confianza en{' '}
-              <span className="text-[#EC006C] relative inline-block">
-                Liwa
-                <span className="absolute bottom-1.5 left-0 w-full h-3 bg-[#EC006C]/15 -z-10 rounded-sm"></span>
+              <span className="relative inline-block">
+                <span className="bg-gradient-to-r from-[#4A198C] via-[#EC006C] to-[#EC006C] bg-clip-text text-transparent">
+                  Liwa
+                </span>
+                <span className="absolute -bottom-1 left-0 w-full h-2.5 bg-gradient-to-r from-[#4A198C]/30 via-[#EC006C]/40 to-[#7AAF00]/40 rounded-full blur-[2px] -z-10"></span>
               </span>
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl leading-relaxed">
-              Explora productos cercanos, ubica vendedores en el mapa en tiempo real y realiza
-              <strong> trueques inteligentes</strong> valorando tus artículos con justicia y equidad.
+            <p className="text-lg sm:text-xl text-[#2C2C2C]/80 max-w-2xl leading-relaxed">
+              Explora productos cercanos, ubica vendedores en el mapa en tiempo real y realiza{' '}
+              <strong className="text-[#4A198C] font-extrabold underline decoration-[#7AAF00] decoration-2 underline-offset-4">
+                trueques inteligentes
+              </strong>{' '}
+              valorando tus artículos con absoluta justicia y equidad comunitaria.
             </p>
           </div>
 
-          {/* Quick Access Feature Cards (Aligned with Navigation Order) */}
+          {/* Tarjetas de Acceso Rápido (3 colores de la paleta oficial) */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-            {/* 1. Explorar */}
+            {/* 1. Explorar -> Color: Magenta (#EC006C) */}
             <div
               onClick={() => onNavigateToTab('explorar')}
-              className="p-4 rounded-2xl bg-white border border-slate-100 shadow-soft hover:shadow-card-hover hover:border-[#EC006C]/30 transition-all cursor-pointer group"
+              className="group relative p-5 rounded-3xl bg-white/80 hover:bg-white border border-white/80 hover:border-[#EC006C]/40 shadow-soft hover:shadow-card-hover backdrop-blur-xl transition-all duration-300 cursor-pointer overflow-hidden"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#EC006C]/10 text-[#EC006C] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-[#EC006C]"></div>
+              <div className="w-11 h-11 rounded-2xl bg-[#EC006C] text-white flex items-center justify-center mb-3 shadow-md shadow-[#EC006C]/25 group-hover:scale-110 transition-transform">
                 <Compass className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-800 text-sm flex items-center justify-between">
+              <h3 className="font-bold text-[#2C2C2C] group-hover:text-[#EC006C] text-sm flex items-center justify-between transition-colors">
                 <span>Explorar</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[#EC006C]" />
+                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[#EC006C]" />
               </h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-[#2C2C2C]/65 mt-1.5 leading-normal">
                 Catálogo de productos, filtros y ofertas en córdobas.
               </p>
             </div>
 
-            {/* 2. Explorar Mapa */}
+            {/* 2. Explorar Mapa -> Color: Morado (#4A198C) */}
             <div
               onClick={() => onNavigateToTab('mapa')}
-              className="p-4 rounded-2xl bg-white border border-slate-100 shadow-soft hover:shadow-card-hover hover:border-[#C89211]/30 transition-all cursor-pointer group"
+              className="group relative p-5 rounded-3xl bg-white/80 hover:bg-white border border-white/80 hover:border-[#4A198C]/40 shadow-soft hover:shadow-card-hover backdrop-blur-xl transition-all duration-300 cursor-pointer overflow-hidden"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#C89211]/15 text-[#C89211] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-[#4A198C]"></div>
+              <div className="w-11 h-11 rounded-2xl bg-[#4A198C] text-white flex items-center justify-center mb-3 shadow-md shadow-[#4A198C]/25 group-hover:scale-110 transition-transform">
                 <MapPin className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-800 text-sm flex items-center justify-between">
+              <h3 className="font-bold text-[#2C2C2C] group-hover:text-[#4A198C] text-sm flex items-center justify-between transition-colors">
                 <span>Mapa Vendedores</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[#C89211]" />
+                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[#4A198C]" />
               </h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-[#2C2C2C]/65 mt-1.5 leading-normal">
                 Ubica negocios locales y contacta por WhatsApp.
               </p>
             </div>
 
-            {/* 3. Trueque */}
+            {/* 3. Trueque ECO -> Color: Verde (#7AAF00) */}
             <div
               onClick={() => onNavigateToTab('trueque')}
-              className="p-4 rounded-2xl bg-white border border-slate-100 shadow-soft hover:shadow-card-hover hover:border-[#72A619]/30 transition-all cursor-pointer group"
+              className="group relative p-5 rounded-3xl bg-white/80 hover:bg-white border border-white/80 hover:border-[#7AAF00]/40 shadow-soft hover:shadow-card-hover backdrop-blur-xl transition-all duration-300 cursor-pointer overflow-hidden"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#72A619]/15 text-[#72A619] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-[#7AAF00]"></div>
+              <div className="w-11 h-11 rounded-2xl bg-[#7AAF00] text-white flex items-center justify-center mb-3 shadow-md shadow-[#7AAF00]/25 group-hover:scale-110 transition-transform">
                 <Repeat className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-800 text-sm flex items-center justify-between">
+              <h3 className="font-bold text-[#2C2C2C] group-hover:text-[#7AAF00] text-sm flex items-center justify-between transition-colors">
                 <span>Trueque Inteligente</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[#72A619]" />
+                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all text-[#7AAF00]" />
               </h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-[#2C2C2C]/65 mt-1.5 leading-normal">
                 Intercambia valor por valor con comparador en tiempo real.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Neumorphic / Soft Raised Auth Card */}
+        {/* Right Column: Tarjeta Glassmorphic con desenfoque (Blur) y degradados */}
         <div className="lg:col-span-5">
-          <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-slate-100/80 backdrop-blur-md relative overflow-hidden">
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#EC006C]/5 rounded-full blur-2xl pointer-events-none"></div>
+          <div className="relative bg-white/85 backdrop-blur-2xl rounded-3xl p-8 sm:p-10 shadow-2xl border border-white/90 overflow-hidden">
+            {/* Orbes internos de desenfoque decorativo con la paleta oficial */}
+            <div
+              className="absolute -right-12 -top-12 w-48 h-48 rounded-full blur-2xl opacity-20 pointer-events-none"
+              style={{ background: 'radial-gradient(circle, #EC006C 0%, transparent 70%)' }}
+            />
+            <div
+              className="absolute -left-12 -bottom-12 w-48 h-48 rounded-full blur-2xl opacity-20 pointer-events-none"
+              style={{ background: 'radial-gradient(circle, #4A198C 0%, transparent 70%)' }}
+            />
 
-            <div className="flex items-center justify-between mb-6">
+            <div className="relative z-10 flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+                <h2 className="text-2xl font-black text-[#2C2C2C] tracking-tight">
                   {isRegister ? 'Crear Cuenta' : 'Bienvenido'}
                 </h2>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-[#2C2C2C]/70 mt-1">
                   {isRegister
                     ? 'Regístrate para publicar y proponer trueques'
                     : 'Inicia sesión para continuar en Liwa'}
                 </p>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center p-2 shadow-xs">
+              <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-center p-2 shadow-xs">
                 <img
                   src="/assets/liwa_color.png"
                   alt="Liwa"
@@ -183,23 +201,23 @@ export const BienvenidoPage: React.FC<BienvenidoPageProps> = ({
             </div>
 
             {errorMessage && (
-              <div className="mb-4 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+              <div className="relative z-10 mb-4 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
                 <span>{errorMessage}</span>
               </div>
             )}
 
             {successMessage && (
-              <div className="mb-4 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs flex items-center gap-2">
+              <div className="relative z-10 mb-4 p-3.5 rounded-xl bg-emerald-50 border border-[#7AAF00]/40 text-[#7AAF00] text-xs flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
                 <span>{successMessage}</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="relative z-10 space-y-4">
               {/* Email */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#2C2C2C]/80 mb-1.5">
                   Correo Electrónico
                 </label>
                 <div className="relative flex items-center">
@@ -209,7 +227,7 @@ export const BienvenidoPage: React.FC<BienvenidoPageProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="correo@ejemplo.com"
-                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:border-[#EC006C] focus:bg-white focus:ring-2 focus:ring-[#EC006C]/20 rounded-2xl text-sm font-medium text-slate-800 transition-all outline-none"
+                    className="w-full pl-11 pr-4 py-3.5 bg-white/90 border border-slate-200/90 focus:border-[#EC006C] focus:bg-white focus:ring-3 focus:ring-[#EC006C]/20 rounded-2xl text-sm font-medium text-[#2C2C2C] transition-all outline-none"
                     autoComplete="email"
                   />
                 </div>
@@ -217,7 +235,7 @@ export const BienvenidoPage: React.FC<BienvenidoPageProps> = ({
 
               {/* Password */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#2C2C2C]/80 mb-1.5">
                   Contraseña
                 </label>
                 <div className="relative flex items-center">
@@ -227,23 +245,24 @@ export const BienvenidoPage: React.FC<BienvenidoPageProps> = ({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full pl-11 pr-11 py-3.5 bg-slate-50 border border-slate-200 focus:border-[#EC006C] focus:bg-white focus:ring-2 focus:ring-[#EC006C]/20 rounded-2xl text-sm font-medium text-slate-800 transition-all outline-none"
+                    className="w-full pl-11 pr-11 py-3.5 bg-white/90 border border-slate-200/90 focus:border-[#EC006C] focus:bg-white focus:ring-3 focus:ring-[#EC006C]/20 rounded-2xl text-sm font-medium text-[#2C2C2C] transition-all outline-none"
                     autoComplete={isRegister ? 'new-password' : 'current-password'}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                    className="absolute right-4 text-slate-400 hover:text-[#EC006C] transition-colors cursor-pointer"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
+              {/* Botón Principal: Sólido + Desvaneciente (Gris/Morado/Magenta) */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-2xl bg-[#EC006C] hover:bg-[#D80064] text-white font-bold text-sm shadow-lg shadow-[#EC006C]/25 transition-all cursor-pointer hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2"
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#EC006C] via-[#E10067] to-[#4A198C] hover:opacity-95 text-white font-extrabold text-sm shadow-xl shadow-[#EC006C]/30 hover:shadow-[#EC006C]/45 transition-all duration-300 cursor-pointer hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
               >
                 <span>
                   {loading
@@ -256,14 +275,14 @@ export const BienvenidoPage: React.FC<BienvenidoPageProps> = ({
               </button>
             </form>
 
-            {/* Quick Guest exploration shortcut */}
-            <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col gap-3">
+            {/* Acceso como invitado */}
+            <div className="relative z-10 mt-6 pt-6 border-t border-slate-200/70 flex flex-col gap-3">
               <button
                 type="button"
                 onClick={onExploreAsGuest}
-                className="w-full py-3 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3 px-4 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 text-[#2C2C2C] font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xs hover:border-[#4A198C]/40"
               >
-                <Compass className="w-4 h-4 text-slate-500" />
+                <Compass className="w-4 h-4 text-[#4A198C]" />
                 <span>Explorar la plataforma como invitado</span>
               </button>
 

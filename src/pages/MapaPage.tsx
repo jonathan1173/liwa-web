@@ -8,9 +8,6 @@ import {
   Package,
   X,
   Repeat,
-  ExternalLink,
-  ChevronRight,
-  Sparkles,
   Info,
 } from 'lucide-react';
 import L from 'leaflet';
@@ -94,7 +91,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
       if (seller.latitude && seller.longitude) {
         bounds.push([seller.latitude, seller.longitude]);
 
-        // Custom divIcon matching mobile "@username" pill badge
+        // Custom divIcon matching mobile "@username" pill badge with official Morado + Magenta dot
         const usernameTag = seller.username || seller.full_name?.split(' ')[0] || 'vendedor';
         const customIcon = L.divIcon({
           className: 'custom-username-pin',
@@ -155,29 +152,29 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
       {/* Top Bar for Map */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-soft flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white/85 backdrop-blur-xl rounded-3xl p-5 border border-white/80 shadow-soft flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#C89211]/15 text-[#C89211] flex items-center justify-center font-bold">
+          <div className="w-11 h-11 rounded-2xl bg-[#4A198C] text-white flex items-center justify-center font-bold shadow-md shadow-[#4A198C]/25">
             <MapPin className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-xl font-black text-[#2C2C2C] tracking-tight">
               Mapa de Vendedores
             </h1>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#2C2C2C]/70">
               Explora en el mapa a los emprendedores y miembros de la comunidad Liwa
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-slate-50 py-2 px-3.5 rounded-xl border border-slate-200">
+        <div className="flex items-center gap-2 text-xs font-semibold text-[#2C2C2C] bg-white/90 py-2 px-3.5 rounded-xl border border-slate-200/80 shadow-2xs">
           <span className="w-2.5 h-2.5 rounded-full bg-[#EC006C] animate-pulse"></span>
           <span>{sellers.length} vendedores geolocalizados</span>
         </div>
       </div>
 
       {/* Main Map Container with Split Desktop Layout */}
-      <div className="relative w-full h-[calc(100vh-250px)] min-h-[500px] rounded-3xl overflow-hidden border border-slate-200 shadow-soft flex">
+      <div className="relative w-full h-[calc(100vh-250px)] min-h-[500px] rounded-3xl overflow-hidden border border-white/80 shadow-soft flex bg-white">
         {/* Leaflet Map Area */}
         <div
           ref={mapContainerRef}
@@ -186,39 +183,39 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
 
         {/* Loading Overlay */}
         {loading && (
-          <div className="absolute inset-0 z-20 bg-white/75 backdrop-blur-xs flex flex-col items-center justify-center">
-            <div className="animate-spin rounded-full h-10 w-10 border-4 border-slate-200 border-t-[#C89211] mb-3"></div>
-            <p className="text-xs font-bold text-slate-700">Cargando ubicaciones en el mapa...</p>
+          <div className="absolute inset-0 z-20 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center">
+            <div className="animate-spin rounded-full h-10 w-10 border-4 border-slate-200 border-t-[#4A198C] mb-3"></div>
+            <p className="text-xs font-bold text-[#2C2C2C]">Cargando ubicaciones en el mapa...</p>
           </div>
         )}
 
         {/* Floating Quick Hint if no seller selected */}
         {!selectedSeller && (
-          <div className="absolute bottom-6 left-6 z-20 bg-white/95 backdrop-blur-md py-3 px-4 rounded-2xl border border-slate-200 shadow-lg text-xs font-semibold text-slate-700 flex items-center gap-2 pointer-events-none">
-            <Info className="w-4 h-4 text-[#C89211]" />
+          <div className="absolute bottom-6 left-6 z-20 bg-white/90 backdrop-blur-md py-3 px-4 rounded-2xl border border-slate-200/80 shadow-lg text-xs font-semibold text-[#2C2C2C] flex items-center gap-2 pointer-events-none">
+            <Info className="w-4 h-4 text-[#4A198C]" />
             <span>Haz clic en el distintivo de un vendedor (@usuario) para ver sus artículos</span>
           </div>
         )}
 
         {/* Desktop Slide-in Seller Products Sidebar */}
         {selectedSeller && (
-          <div className="absolute top-0 right-0 h-full w-full sm:w-[420px] bg-white z-30 shadow-2xl border-l border-slate-200 flex flex-col animate-in slide-in-from-right duration-300">
+          <div className="absolute top-0 right-0 h-full w-full sm:w-[420px] bg-white/95 backdrop-blur-2xl z-30 shadow-2xl border-l border-slate-200/90 flex flex-col animate-in slide-in-from-right duration-300">
             {/* Seller Header */}
             <div className="p-5 border-b border-slate-100 bg-slate-50/70 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-[#3B1E54] text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                <div className="w-12 h-12 rounded-2xl bg-linear-to-r from-[#4A198C] to-[#EC006C] text-white flex items-center justify-center font-bold text-sm shadow-md shadow-[#4A198C]/20">
                   {selectedSeller.full_name?.slice(0, 2).toUpperCase() || 'VE'}
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-slate-900 tracking-tight">
+                  <h3 className="text-sm font-black text-[#2C2C2C] tracking-tight">
                     {selectedSeller.full_name || 'Vendedor Liwa'}
                   </h3>
-                  <p className="text-xs font-semibold text-[#EC006C]">
+                  <p className="text-xs font-bold text-[#EC006C]">
                     @{selectedSeller.username || 'vendedor'}
                   </p>
                   {selectedSeller.city && (
-                    <span className="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5">
-                      <MapPin className="w-3 h-3" />
+                    <span className="text-[11px] text-[#2C2C2C]/60 flex items-center gap-1 mt-0.5">
+                      <MapPin className="w-3 h-3 text-[#4A198C]" />
                       {selectedSeller.city.name}
                     </span>
                   )}
@@ -235,16 +232,16 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
 
             {/* Contact Actions */}
             {selectedSeller.phone && (
-              <div className="px-5 py-3.5 bg-emerald-50/50 border-b border-emerald-100 flex items-center justify-between">
-                <div className="text-xs text-slate-600">
-                  <span className="font-bold text-slate-800 block">Contacto directo</span>
+              <div className="px-5 py-3.5 bg-[#7AAF00]/10 border-b border-[#7AAF00]/20 flex items-center justify-between">
+                <div className="text-xs text-[#2C2C2C]">
+                  <span className="font-bold text-[#2C2C2C] block">Contacto directo</span>
                   <span>{selectedSeller.phone}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleWhatsApp(selectedSeller.phone)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#7AAF00] hover:bg-[#6B9A00] text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
                   >
                     <MessageSquare className="w-3.5 h-3.5" />
                     <span>WhatsApp</span>
@@ -252,7 +249,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
 
                   <a
                     href={`tel:${selectedSeller.phone}`}
-                    className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+                    className="p-2 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-[#2C2C2C] transition-colors"
                     title="Llamar"
                   >
                     <Phone className="w-3.5 h-3.5" />
@@ -264,10 +261,10 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
             {/* Seller Publications List */}
             <div className="p-5 flex-1 overflow-y-auto space-y-3">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-500">
+                <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#2C2C2C]/70">
                   Publicaciones del vendedor
                 </h4>
-                <span className="text-xs font-bold text-slate-400">
+                <span className="text-xs font-bold text-[#2C2C2C]/50">
                   {sellerProducts.length} productos
                 </span>
               </div>
@@ -275,7 +272,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
               {loadingProducts ? (
                 <div className="py-12 text-center">
                   <div className="inline-block animate-spin rounded-full h-6 w-6 border-2 border-slate-200 border-t-[#EC006C]"></div>
-                  <p className="text-xs text-slate-500 mt-2">Cargando catálogo...</p>
+                  <p className="text-xs text-[#2C2C2C]/60 mt-2">Cargando catálogo...</p>
                 </div>
               ) : sellerProducts.length === 0 ? (
                 <div className="py-12 text-center text-slate-400">
@@ -304,7 +301,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
                           )}
                         </div>
                         <div className="truncate">
-                          <h5 className="text-xs font-bold text-slate-900 truncate">
+                          <h5 className="text-xs font-bold text-[#2C2C2C] truncate">
                             {prod.title}
                           </h5>
                           <span className="text-xs font-extrabold text-[#EC006C] block mt-0.5">
@@ -318,7 +315,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
                       {prod.barter && (
                         <button
                           onClick={() => onStartBarter(prod)}
-                          className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#72A619] hover:bg-[#628f14] text-white text-xs font-bold shadow-xs transition-colors flex-shrink-0 cursor-pointer"
+                          className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#7AAF00] hover:bg-[#6B9A00] text-white text-xs font-bold shadow-xs transition-colors flex-shrink-0 cursor-pointer"
                         >
                           <Repeat className="w-3.5 h-3.5" />
                           <span>Trueque</span>

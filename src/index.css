@@ -4,24 +4,52 @@
   --color-liwa-magenta: #EC006C;
   --color-liwa-magenta-hover: #D80064;
   --color-liwa-dark: #2C2C2C;
-  --color-liwa-green: #72A619;
-  --color-liwa-gold: #C89211;
-  --color-liwa-purple: #4B187B;
+  --color-liwa-purple: #4A198C;
+  --color-liwa-purple-hover: #3E1475;
+  --color-liwa-green: #7AAF00;
+  --color-liwa-green-hover: #6B9A00;
   --color-liwa-bg: #F8FAFC;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
-/* Smooth transitions & Neumorphic-inspired soft shadows */
+/* Smooth transitions & Glassmorphic soft shadows */
 .shadow-soft {
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 10px 25px -5px rgba(44, 44, 44, 0.05), 0 8px 10px -6px rgba(44, 44, 44, 0.03);
 }
 
 .shadow-card {
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px 0 rgba(44, 44, 44, 0.06);
 }
 
 .shadow-card-hover {
-  box-shadow: 0 12px 30px -4px rgba(236, 0, 108, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 16px 36px -4px rgba(236, 0, 108, 0.16), 0 8px 16px -4px rgba(74, 25, 140, 0.08);
+}
+
+.shadow-glow-magenta {
+  box-shadow: 0 0 25px -3px rgba(236, 0, 108, 0.35);
+}
+
+.shadow-glow-purple {
+  box-shadow: 0 0 25px -3px rgba(74, 25, 140, 0.35);
+}
+
+.shadow-glow-green {
+  box-shadow: 0 0 25px -3px rgba(122, 175, 0, 0.35);
+}
+
+/* Glassmorphism surfaces */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.glass-panel-subtle {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 /* Custom username pin on Leaflet map */
@@ -31,14 +59,14 @@
 }
 
 .username-box {
-  background-color: #3B1E54;
+  background-color: #4A198C;
   color: #ffffff;
   font-weight: 700;
   font-size: 13px;
   padding: 6px 14px;
   border-radius: 9999px;
   border: 2px solid #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 14px rgba(74, 25, 140, 0.3);
   white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -50,7 +78,7 @@
 .username-box:hover {
   transform: translateY(-2px) scale(1.05);
   background-color: #EC006C;
-  box-shadow: 0 6px 18px rgba(236, 0, 108, 0.35);
+  box-shadow: 0 6px 20px rgba(236, 0, 108, 0.4);
 }
 
 /* Custom Scrollbar */

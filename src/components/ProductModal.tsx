@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Product } from '@/types';
-import { X, Repeat, Tag, ShieldCheck, Calendar, ArrowRight } from 'lucide-react';
+import { X, Repeat, Tag, Calendar } from 'lucide-react';
 
 interface ProductModalProps {
   product: Product | null;
@@ -35,21 +35,21 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     : null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#2C2C2C]/60 backdrop-blur-md animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh] border border-slate-100"
+        className="relative w-full max-w-3xl bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh] border border-white/80"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white text-slate-500 hover:text-slate-800 shadow-md transition-all cursor-pointer"
+          className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white text-slate-500 hover:text-[#EC006C] shadow-md transition-all cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Left Column: Image gallery */}
-        <div className="md:w-1/2 bg-slate-100 flex flex-col justify-between p-4">
+        <div className="md:w-1/2 bg-slate-50 flex flex-col justify-between p-4">
           <div className="relative aspect-4/3 w-full rounded-2xl overflow-hidden bg-white shadow-xs">
             {images.length > 0 ? (
               <img
@@ -58,7 +58,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-slate-400">
+              <div className="w-full h-full flex items-center justify-center text-slate-400 text-sm">
                 Sin imagen disponible
               </div>
             )}
@@ -89,25 +89,25 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-3">
               {product.category && (
-                <span className="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-full flex items-center gap-1">
+                <span className="px-3 py-1 bg-slate-100 text-[#2C2C2C] text-xs font-bold rounded-full flex items-center gap-1">
                   <Tag className="w-3 h-3 text-[#EC006C]" />
                   {product.category.name}
                 </span>
               )}
               {product.condition && (
-                <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full">
+                <span className="px-3 py-1 bg-slate-100 text-[#2C2C2C] text-xs font-semibold rounded-full">
                   {product.condition.name}
                 </span>
               )}
               {product.barter && (
-                <span className="px-3 py-1 bg-[#72A619]/10 text-[#72A619] text-xs font-bold rounded-full flex items-center gap-1">
+                <span className="px-3 py-1 bg-[#7AAF00]/15 text-[#7AAF00] text-xs font-bold rounded-full flex items-center gap-1 border border-[#7AAF00]/30">
                   <Repeat className="w-3 h-3" />
                   Acepta Trueque
                 </span>
               )}
             </div>
 
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">
+            <h2 className="text-2xl font-black text-[#2C2C2C] tracking-tight leading-tight">
               {product.title}
             </h2>
 
@@ -121,10 +121,10 @@ export const ProductModal: React.FC<ProductModalProps> = ({
             </div>
 
             <div className="mt-6">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-[#2C2C2C]/70 mb-2">
                 Descripción
               </h4>
-              <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">
+              <p className="text-sm text-[#2C2C2C]/80 leading-relaxed whitespace-pre-line">
                 {product.description || 'El vendedor no incluyó una descripción detallada para este producto.'}
               </p>
             </div>
@@ -145,7 +145,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                   onClose();
                   onStartBarter(product);
                 }}
-                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-5 rounded-2xl bg-[#72A619] hover:bg-[#628f14] text-white font-bold text-sm shadow-md shadow-[#72A619]/20 transition-all cursor-pointer hover:-translate-y-0.5"
+                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-5 rounded-2xl bg-[#7AAF00] hover:bg-[#6B9A00] text-white font-bold text-sm shadow-md shadow-[#7AAF00]/25 transition-all cursor-pointer hover:-translate-y-0.5"
               >
                 <Repeat className="w-4 h-4" />
                 <span>Iniciar Trueque Inteligente</span>
@@ -154,7 +154,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
             <button
               onClick={onClose}
-              className="px-5 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition-all cursor-pointer"
+              className="px-5 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-[#2C2C2C] font-bold text-sm transition-all cursor-pointer"
             >
               Cerrar
             </button>
