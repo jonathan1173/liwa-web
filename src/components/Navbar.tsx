@@ -48,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     },
     {
       id: 'mapa' as NavTab,
-      label: 'Explorar Mapa',
+      label: 'Explorar',
       renderIcon: (active: boolean) => <MorphPin active={active} className="w-4 h-4 text-[#4A198C]" />,
       activeClass: 'text-[#4A198C] border-[#4A198C] bg-[#4A198C]/10 shadow-xs shadow-[#4A198C]/10',
     },
@@ -93,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <nav className="hidden lg:flex items-center space-x-1 lg:space-x-2">
             {navItems.map((item) => {
               const isActive = currentTab === item.id;
               return (
@@ -114,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Desktop Right Side: User State or Login CTA */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3">
             {user ? (
               <div className="flex items-center gap-3 pl-3 border-l border-slate-200">
                 <div className="flex items-center gap-2.5 bg-white/90 py-1.5 px-3.5 rounded-full border border-slate-200/90 shadow-2xs">
@@ -150,8 +150,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
-          {/* Mobile Hamburger Morph Button */}
-          <div className="flex items-center gap-2 md:hidden">
+          {/* Mobile/Tablet Hamburger Morph Button (active at 768px and below) */}
+          <div className="flex items-center gap-2 lg:hidden">
             {!user && (
               <button
                 onClick={() => handleTabClick('auth')}
@@ -172,9 +172,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer / Dropdown Menu */}
+      {/* Mobile/Tablet Drawer / Dropdown Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-2 shadow-2xl animate-in slide-in-from-top-4 duration-300">
+        <div className="lg:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-2 shadow-2xl animate-in slide-in-from-top-4 duration-300">
           <div className="space-y-1">
             {navItems.map((item) => {
               const isActive = currentTab === item.id;

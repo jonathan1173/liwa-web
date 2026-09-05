@@ -90,6 +90,40 @@ export const BienvenidoPage: React.FC<BienvenidoPageProps> = ({
           )}
         </div>
       </section>
+      
+      {/* Banner / Value Proposition Hero for Trueque con degradado y desenfoque */}
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#4A198C] via-[#351066] to-[#7AAF00] text-white p-5 sm:p-8 lg:p-10 shadow-xl border border-white/10">
+        <div className="relative z-10 max-w-3xl space-y-3 sm:space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white border border-white/20">
+            <MorphBarter active className="w-3.5 h-3.5 text-[#7AAF00]" />
+            <span>Comercio Justo y Colaborativo</span>
+          </div>
+
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
+            Trueque Inteligente: Intercambia lo que tienes por lo que necesitas
+          </h1>
+
+          <p className="text-xs sm:text-sm text-white/90 leading-relaxed max-w-2xl">
+            Selecciona cualquier artículo con insignia verde. Nuestra herramienta compara el valor de hasta 4
+            de tus artículos en tiempo real para asegurar una oferta equilibrada.
+          </p>
+
+          <div className="pt-1 flex flex-wrap items-center gap-4 sm:gap-6 text-xs font-semibold text-white/90">
+            <div className="flex items-center gap-1.5">
+              {/* <Scale className="w-4 h-4 text-[#7AAF00]" /> */}
+              <span>Balanceador de valor monetario</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-[#7AAF00]" />
+              <span>Ofertas seguras sin comisiones</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Decorative Ambient Orbs */}
+        <div className="absolute -right-16 -bottom-16 w-80 h-80 bg-[#7AAF00]/25 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-0 right-1/3 w-60 h-60 bg-[#EC006C]/20 rounded-full blur-3xl pointer-events-none"></div>
+      </div>
 
       {/* =========================================================================
           2. PILARES OFICIALES LIWA: Estructura limpia y abierta sin cajas sofocantes

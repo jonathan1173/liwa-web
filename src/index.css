@@ -193,3 +193,12 @@
   transform: translateY(-7px) rotate(-45deg);
 }
 
+/* Hide scrollbar for mobile carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
