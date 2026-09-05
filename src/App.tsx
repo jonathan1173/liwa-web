@@ -6,6 +6,7 @@ import { BienvenidoPage } from '@/pages/BienvenidoPage';
 import { ExplorarPage } from '@/pages/ExplorarPage';
 import { MapaPage } from '@/pages/MapaPage';
 import { TruequePage } from '@/pages/TruequePage';
+import { AuthPage } from '@/pages/AuthPage';
 import { TruequeModal } from '@/components/TruequeModal';
 import { CheckCircle2, X } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
@@ -122,7 +123,7 @@ export function App() {
           currentTab={currentTab}
           onSelectTab={(tab) => setCurrentTab(tab)}
           user={currentUser}
-          onOpenLoginModal={() => setCurrentTab('bienvenido')}
+          onOpenLoginModal={() => setCurrentTab('auth')}
           onLogout={handleLogout}
         />
       </div>
@@ -147,9 +148,18 @@ export function App() {
       <main className="flex-1 relative z-10">
         {currentTab === 'bienvenido' && (
           <BienvenidoPage
-            onLoginSuccess={handleLoginSuccess}
             onExploreAsGuest={() => setCurrentTab('explorar')}
             onNavigateToTab={(tab) => setCurrentTab(tab)}
+            onGoToAuth={() => setCurrentTab('auth')}
+            isLoggedIn={!!currentUser}
+          />
+        )}
+
+        {currentTab === 'auth' && (
+          <AuthPage
+            onLoginSuccess={handleLoginSuccess}
+            onBackToHome={() => setCurrentTab('bienvenido')}
+            onExploreAsGuest={() => setCurrentTab('explorar')}
           />
         )}
 

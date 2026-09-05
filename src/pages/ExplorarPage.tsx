@@ -3,15 +3,20 @@ import { Product, Category, Condition } from '@/types';
 import { getProducts, getCategories, getConditions } from '@/lib/supabase';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductModal } from '@/components/ProductModal';
+import { Pagination } from '@/components/common/Pagination';
+import { MorphCompass } from '@/components/common/MorphIcon';
 import {
   Search,
   RefreshCw,
   Repeat,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 interface ExplorarPageProps {
   onStartBarter: (product: Product) => void;
 }
+
+const ITEMS_PER_PAGE = 8;
 
 export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -23,6 +28,7 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
   const [selectedCondition, setSelectedCondition] = useState<number | 'all'>('all');
   const [onlyBarter, setOnlyBarter] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchData = async () => {
     setLoading(true);
@@ -45,6 +51,11 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
   useEffect(() => {
     fetchData();
   }, []);
+
+  // Reset pagination to page 1 whenever any filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, selectedCondition, onlyBarter]);
 
   // Filter products by search text, category, condition, and barter
   const filteredProducts = useMemo(() => {
@@ -72,6 +83,18 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
     });
   }, [products, searchQuery, selectedCategory, selectedCondition, onlyBarter, categories, conditions]);
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE) || 1;
+  const paginatedProducts = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredProducts.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredProducts, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 120, behavior: 'smooth' });
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header & Search Bar Section */}
@@ -79,10 +102,9 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
             <h1 className="text-3xl font-black text-[#2C2C2C] tracking-tight flex items-center gap-2.5">
+              <MorphCompass active className="w-7 h-7 text-[#EC006C]" />
               <span>Explorar Catálogo</span>
-              <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#EC006C]/10 text-[#EC006C] border border-[#EC006C]/20">
-                {filteredProducts.length} productos
-              </span>
+           
             </h1>
             <p className="text-xs sm:text-sm text-[#2C2C2C]/70 mt-1">
               Descubre productos y servicios ofrecidos por la comunidad local en Liwa
@@ -109,7 +131,7 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar por nombre, descripción o categoría..."
-              className="w-full pl-12 pr-4 py-3.5 bg-white/90 border border-slate-200 focus:border-[#EC006C] focus:bg-white focus:ring-3 focus:ring-[#EC006C]/20 rounded-2xl text-sm font-medium text-[#2C2C2C] transition-all outline-none shadow-2xs"
+              className="w-full pl-12 pr-4 py-3 bg-white/95 border border-slate-200 focus:border-[#EC006C] focus:bg-white focus:ring-3 focus:ring-[#EC006C]/20 rounded-2xl text-sm font-medium text-[#2C2C2C] transition-all outline-none shadow-2xs"
             />
           </div>
 
@@ -120,7 +142,7 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
               onChange={(e) =>
                 setSelectedCondition(e.target.value === 'all' ? 'all' : Number(e.target.value))
               }
-              className="w-full py-3.5 px-4 bg-white/90 border border-slate-200 focus:border-[#EC006C] focus:bg-white rounded-2xl text-sm font-semibold text-[#2C2C2C] transition-all outline-none cursor-pointer shadow-2xs"
+              className="w-full py-3 px-4 bg-white/95 border border-slate-200 focus:border-[#EC006C] focus:bg-white rounded-2xl text-sm font-semibold text-[#2C2C2C] transition-all outline-none cursor-pointer shadow-2xs"
             >
               <option value="all">Todas las condiciones</option>
               {conditions.map((cond) => (
@@ -135,7 +157,7 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
           <div className="md:col-span-3">
             <button
               onClick={() => setOnlyBarter(!onlyBarter)}
-              className={`w-full py-3.5 px-4 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 border transition-all cursor-pointer shadow-2xs ${
+              className={`w-full py-3 px-4 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 border transition-all cursor-pointer shadow-2xs ${
                 onlyBarter
                   ? 'bg-[#7AAF00] text-white border-[#7AAF00] shadow-md shadow-[#7AAF00]/25'
                   : 'bg-white border-slate-200 text-[#2C2C2C] hover:bg-slate-50'
@@ -148,7 +170,7 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
         </div>
 
         {/* Categories Chip Carousel / Row */}
-        <div className="mt-6 pt-5 border-t border-slate-100 flex items-center gap-2 overflow-x-auto pb-1">
+        <div className="mt-5 pt-4 border-t border-slate-100 flex items-center gap-2 overflow-x-auto pb-1">
           <button
             onClick={() => setSelectedCategory('all')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
@@ -196,15 +218,29 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onViewDetails={(p) => setSelectedProduct(p)}
-              onStartBarter={onStartBarter}
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {paginatedProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onViewDetails={(p) => setSelectedProduct(p)}
+                onStartBarter={onStartBarter}
+              />
+            ))}
+          </div>
+
+          {/* Flowbite-styled Pagination */}
+          <div className="mt-8 pt-6 border-t border-slate-200/80">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={filteredProducts.length}
+              itemsPerPage={ITEMS_PER_PAGE}
+              onPageChange={handlePageChange}
+              accentColor="magenta"
             />
-          ))}
+          </div>
         </div>
       )}
 

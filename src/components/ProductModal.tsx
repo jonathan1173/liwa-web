@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Product } from '@/types';
-import { X, Repeat, Tag, Calendar } from 'lucide-react';
+import { X, Tag, Calendar } from 'lucide-react';
+import { MorphBarter } from '@/components/common/MorphIcon';
 
 interface ProductModalProps {
   product: Product | null;
@@ -100,8 +101,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 </span>
               )}
               {product.barter && (
-                <span className="px-3 py-1 bg-[#7AAF00]/15 text-[#7AAF00] text-xs font-bold rounded-full flex items-center gap-1 border border-[#7AAF00]/30">
-                  <Repeat className="w-3 h-3" />
+                <span className="px-3 py-1 bg-[#7AAF00]/15 text-[#7AAF00] text-xs font-bold rounded-full flex items-center gap-1.5 border border-[#7AAF00]/30">
+                  <MorphBarter active className="w-3.5 h-3.5 text-[#7AAF00]" />
                   Acepta Trueque
                 </span>
               )}
@@ -147,7 +148,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 }}
                 className="flex-1 flex items-center justify-center gap-2 py-3.5 px-5 rounded-2xl bg-[#7AAF00] hover:bg-[#6B9A00] text-white font-bold text-sm shadow-md shadow-[#7AAF00]/25 transition-all cursor-pointer hover:-translate-y-0.5"
               >
-                <Repeat className="w-4 h-4" />
+                <MorphBarter active className="w-4 h-4 text-white" />
                 <span>Iniciar Trueque Inteligente</span>
               </button>
             )}

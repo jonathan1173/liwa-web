@@ -1,6 +1,7 @@
 import React from 'react';
 import { Product } from '@/types';
-import { Repeat, Eye, Tag, Image as ImageIcon } from 'lucide-react';
+import { Eye, Tag, Image as ImageIcon } from 'lucide-react';
+import { MorphBarter } from '@/components/common/MorphIcon';
 
 interface ProductCardProps {
   product: Product;
@@ -41,7 +42,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Barter badge */}
         {product.barter && (
           <div className="absolute top-3 left-3 bg-[#7AAF00] text-white text-xs font-bold px-3 py-1 rounded-full shadow-md shadow-[#7AAF00]/30 flex items-center gap-1.5 backdrop-blur-xs">
-            <Repeat className="w-3.5 h-3.5" />
+            <MorphBarter active className="w-3.5 h-3.5 text-white" />
             <span>Trueque</span>
           </div>
         )}
@@ -107,7 +108,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 onClick={() => onStartBarter(product)}
                 className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-[#7AAF00] hover:bg-[#6B9A00] text-white shadow-md shadow-[#7AAF00]/25 transition-all cursor-pointer hover:scale-105 active:scale-95"
               >
-                <Repeat className="w-3.5 h-3.5" />
+                <MorphBarter active className="w-3.5 h-3.5 text-white" />
                 <span>Trueque</span>
               </button>
             )}

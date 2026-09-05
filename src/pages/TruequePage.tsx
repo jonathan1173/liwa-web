@@ -3,6 +3,8 @@ import { Product, Category } from '@/types';
 import { getBarterProducts, getCategories } from '@/lib/supabase';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductModal } from '@/components/ProductModal';
+import { Pagination } from '@/components/common/Pagination';
+import { MorphBarter } from '@/components/common/MorphIcon';
 import {
   Repeat,
   Search,
@@ -15,6 +17,8 @@ interface TruequePageProps {
   onStartBarter: (product: Product) => void;
 }
 
+const ITEMS_PER_PAGE = 8;
+
 export const TruequePage: React.FC<TruequePageProps> = ({ onStartBarter }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -22,6 +26,7 @@ export const TruequePage: React.FC<TruequePageProps> = ({ onStartBarter }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<number | 'all'>('all');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchData = async () => {
     setLoading(true);
@@ -43,6 +48,11 @@ export const TruequePage: React.FC<TruequePageProps> = ({ onStartBarter }) => {
     fetchData();
   }, []);
 
+  // Reset pagination to page 1 whenever filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory]);
+
   const filteredProducts = useMemo(() => {
     return products.filter((item) => {
       const query = searchQuery.toLowerCase().trim();
@@ -60,13 +70,25 @@ export const TruequePage: React.FC<TruequePageProps> = ({ onStartBarter }) => {
     });
   }, [products, searchQuery, selectedCategory, categories]);
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE) || 1;
+  const paginatedProducts = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredProducts.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredProducts, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 120, behavior: 'smooth' });
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Banner / Value Proposition Hero for Trueque con degradado y desenfoque */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#4A198C] via-[#351066] to-[#7AAF00] text-white p-8 sm:p-10 shadow-xl border border-white/10">
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-bold uppercase tracking-wider text-white border border-white/20">
-            <Repeat className="w-3.5 h-3.5 text-[#7AAF00]" />
+            <MorphBarter active className="w-3.5 h-3.5 text-[#7AAF00]" />
             <span>Comercio Justo y Colaborativo</span>
           </div>
 
@@ -102,10 +124,9 @@ export const TruequePage: React.FC<TruequePageProps> = ({ onStartBarter }) => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
             <h2 className="text-2xl font-black text-[#2C2C2C] tracking-tight flex items-center gap-2.5">
+              <MorphBarter active className="w-6 h-6 text-[#7AAF00]" />
               <span>Artículos Disponibles para Trueque</span>
-              <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#7AAF00]/15 text-[#7AAF00] border border-[#7AAF00]/30">
-                {filteredProducts.length} disponibles
-              </span>
+           
             </h2>
             <p className="text-xs text-[#2C2C2C]/70 mt-1">
               Todos los productos listados a continuación aceptan intercambios
@@ -130,12 +151,12 @@ export const TruequePage: React.FC<TruequePageProps> = ({ onStartBarter }) => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar artículos para trueque..."
-            className="w-full pl-12 pr-4 py-3.5 bg-white/90 border border-slate-200 focus:border-[#7AAF00] focus:bg-white focus:ring-3 focus:ring-[#7AAF00]/20 rounded-2xl text-sm font-medium text-[#2C2C2C] transition-all outline-none shadow-2xs"
+            className="w-full pl-12 pr-4 py-3 bg-white/95 border border-slate-200 focus:border-[#7AAF00] focus:bg-white focus:ring-3 focus:ring-[#7AAF00]/20 rounded-2xl text-sm font-medium text-[#2C2C2C] transition-all outline-none shadow-2xs"
           />
         </div>
 
         {/* Categories */}
-        <div className="mt-5 pt-5 border-t border-slate-100 flex items-center gap-2 overflow-x-auto pb-1">
+        <div className="mt-5 pt-4 border-t border-slate-100 flex items-center gap-2 overflow-x-auto pb-1">
           <button
             onClick={() => setSelectedCategory('all')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
@@ -184,15 +205,29 @@ export const TruequePage: React.FC<TruequePageProps> = ({ onStartBarter }) => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onViewDetails={(p) => setSelectedProduct(p)}
-              onStartBarter={onStartBarter}
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {paginatedProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onViewDetails={(p) => setSelectedProduct(p)}
+                onStartBarter={onStartBarter}
+              />
+            ))}
+          </div>
+
+          {/* Flowbite-styled Pagination */}
+          <div className="mt-8 pt-6 border-t border-slate-200/80">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={filteredProducts.length}
+              itemsPerPage={ITEMS_PER_PAGE}
+              onPageChange={handlePageChange}
+              accentColor="green"
             />
-          ))}
+          </div>
         </div>
       )}
 

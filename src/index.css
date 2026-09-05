@@ -99,3 +99,97 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* =========================================================================
+   MORPHICONS & MICRO-ANIMATIONS
+   Animaciones sutiles y reactivas para iconos de interfaz
+   ========================================================================= */
+
+@keyframes morph-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes morph-spin-subtle {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(12deg);
+  }
+  75% {
+    transform: rotate(-12deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes morph-pulse-scale {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 0.9;
+  }
+}
+
+@keyframes morph-wobble {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-15deg);
+  }
+  40% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(-5deg);
+  }
+  80% {
+    transform: rotate(3deg);
+  }
+}
+
+.animate-morph-float {
+  animation: morph-float 3s ease-in-out infinite;
+}
+
+.animate-morph-spin-subtle {
+  animation: morph-spin-subtle 4s ease-in-out infinite;
+}
+
+.animate-morph-pulse {
+  animation: morph-pulse-scale 2.4s ease-in-out infinite;
+}
+
+.animate-morph-wobble {
+  animation: morph-wobble 1.2s ease-in-out;
+}
+
+/* Morphing hamburger lines */
+.hamburger-line {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, background-color 0.2s ease;
+  transform-origin: center;
+}
+
+.hamburger-line-top-active {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-line-middle-active {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger-line-bottom-active {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
