@@ -29,65 +29,65 @@ export const BienvenidoPage: React.FC<BienvenidoPageProps> = ({
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-20">
       {/* =========================================================================
-          1. HERO SECTION: Aireado, elegante y sin sobre-uso de contenedores
+          1. HERO SECTION: Con imagen de fondo comunitaria Liwa
           ========================================================================= */}
-      <section className="text-center max-w-4xl mx-auto space-y-8 pt-4 sm:pt-8">
-        {/* Badge superior suave con morphicon */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/85 border border-[#EC006C]/20 text-[#2C2C2C] text-xs font-bold tracking-wide shadow-xs backdrop-blur-md">
-          <MorphSparkle className="w-4 h-4 text-[#EC006C]" />
-          <span className="text-[#EC006C] font-black uppercase tracking-wider">
-            Mercado Comunitario
-          </span>
-          <span className="text-slate-300">•</span>
-          <span className="text-slate-600 font-medium">Trueque inteligente y comercio local</span>
-        </div>
+      <section
+        className="relative overflow-hidden rounded-3xl sm:rounded-4xl border border-white/80 shadow-xl text-center max-w-5xl mx-auto py-12 px-6 sm:py-16 sm:px-10"
+        style={{
+          backgroundImage: "url('/assets/imagen_fondo_inicio.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+     
+        <div className="relative z-10 max-w-3xl mx-auto space-y-8">
+   
 
-        {/* Titular Principal de Alto Impacto */}
-        <div className="space-y-5">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-[#2C2C2C] tracking-tight leading-[1.08]">
-            Tu mercado de confianza en{' '}
-            <span className="relative inline-block">
-              <span className="bg-gradient-to-r from-[#4A198C] via-[#EC006C] to-[#EC006C] bg-clip-text text-transparent">
-                Liwa
+          {/* Titular Principal de Alto Impacto */}
+          <div className="space-y-60">
+            <h1  className="text-4xl sm:text-6xl lg:text-7xl font-black text-[#2C2C2C] tracking-tight leading-[1.08]">
+             
+              <span className="relative inline-block">
+                <span className="bg-gradient-to-r from-[#4A198C] via-[#EC006C] to-[#EC006C] bg-clip-text text-transparent">
+                  
+                </span>
+                <span className="absolute -bottom-1.5 left-0 w-full h-3 bg-gradient-to-r from-[#4A198C]/20 via-[#EC006C]/30 to-[#7AAF00]/30 rounded-full blur-[2px] -z-10" />
               </span>
-              <span className="absolute -bottom-1.5 left-0 w-full h-3 bg-gradient-to-r from-[#4A198C]/20 via-[#EC006C]/30 to-[#7AAF00]/30 rounded-full blur-[2px] -z-10" />
-            </span>
-          </h1>
+            </h1>
 
-          <p className="text-base sm:text-xl text-[#2C2C2C]/75 max-w-2xl mx-auto font-normal leading-relaxed">
-            Descubre productos cerca de ti, ubica comerciantes en el mapa y realiza{' '}
-            <span className="text-[#4A198C] font-bold">trueques equitativos</span> valorando
-            tus artículos con justicia y balance comunitario.
-          </p>
-        </div>
+            <p className="text-base sm:text-xl text-[#2C2C2C]/80 max-w-2xl mx-auto font-normal leading-relaxed">
+         
+            </p>
+          </div>
 
-        {/* Acciones Principales (CTAs limpios) */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <button
-            onClick={() => onNavigateToTab('explorar')}
-            className="px-7 py-4 rounded-2xl bg-gradient-to-r from-[#EC006C] via-[#E10067] to-[#4A198C] hover:opacity-95 text-white font-extrabold text-sm shadow-xl shadow-[#EC006C]/25 hover:shadow-2xl hover:shadow-[#EC006C]/35 transition-all duration-300 cursor-pointer hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2.5"
-          >
-            <MorphCompass active className="w-5 h-5 text-white" />
-            <span>Explorar Catálogo</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-
-          <button
-            onClick={() => onNavigateToTab('trueque')}
-            className="px-7 py-4 rounded-2xl bg-white hover:bg-slate-50/80 border border-[#7AAF00]/40 text-[#2C2C2C] font-extrabold text-sm shadow-soft hover:shadow-md hover:border-[#7AAF00] transition-all duration-300 cursor-pointer hover:-translate-y-0.5 flex items-center gap-2.5"
-          >
-            <MorphBarter active className="w-5 h-5 text-[#7AAF00]" />
-            <span>Trueque Inteligente</span>
-          </button>
-
-          {!isLoggedIn && (
+          {/* Acciones Principales (CTAs limpios) */}
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <button
-              onClick={onGoToAuth}
-              className="px-5 py-4 rounded-2xl text-xs font-bold text-[#2C2C2C]/80 hover:text-[#EC006C] hover:bg-white/80 transition-all cursor-pointer"
+              onClick={() => onNavigateToTab('explorar')}
+              className="px-7 py-4 rounded-2xl bg-gradient-to-r from-[#EC006C] via-[#E10067] to-[#4A198C] hover:opacity-95 text-white font-extrabold text-sm shadow-xl shadow-[#EC006C]/25 hover:shadow-2xl hover:shadow-[#EC006C]/35 transition-all duration-300 cursor-pointer hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2.5"
             >
-              Iniciar Sesión o Registrarse →
+              <MorphCompass active className="w-5 h-5 text-white" />
+              <span>Explorar Catálogo</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
-          )}
+
+            <button
+              onClick={() => onNavigateToTab('trueque')}
+              className="px-7 py-4 rounded-2xl bg-white hover:bg-slate-50/80 border border-[#7AAF00]/40 text-[#2C2C2C] font-extrabold text-sm shadow-soft hover:shadow-md hover:border-[#7AAF00] transition-all duration-300 cursor-pointer hover:-translate-y-0.5 flex items-center gap-2.5"
+            >
+              <MorphBarter active className="w-5 h-5 text-[#7AAF00]" />
+              <span>Trueque Inteligente</span>
+            </button>
+
+            {!isLoggedIn && (
+              <button
+                onClick={onGoToAuth}
+                className="px-5 py-4 rounded-2xl text-xs font-bold text-[#2C2C2C]/80 hover:text-[#EC006C] hover:bg-white/80 transition-all cursor-pointer"
+              >
+                Iniciar Sesión o Registrarse →
+              </button>
+            )}
+          </div>
         </div>
       </section>
       

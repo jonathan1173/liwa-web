@@ -48,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     },
     {
       id: 'mapa' as NavTab,
-      label: 'Explorar',
+      label: 'Mapa',
       renderIcon: (active: boolean) => <MorphPin active={active} className="w-4 h-4 text-[#4A198C]" />,
       activeClass: 'text-[#4A198C] border-[#4A198C] bg-[#4A198C]/10 shadow-xs shadow-[#4A198C]/10',
     },

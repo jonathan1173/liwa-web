@@ -151,6 +151,28 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
+      {/* Contenedor Visual con Imagen y Mensaje */}
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-soft border border-white/80 min-h-[400px] sm:min-h-[400px] flex items-center p-5 sm:p-8">
+        <img
+          src="/assets/img4.png"
+          alt="Comunidades y vendedores en el mapa Liwa"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2C2C2C]/90 via-[#2C2C2C]/65 to-transparent" />
+        <div className="relative z-10 max-w-xl text-white space-y-1.5 sm:space-y-2">
+          <span className="inline-block text-[10px] sm:text-xs font-black uppercase tracking-wider px-2.5 py-0.5 sm:py-1 rounded-full bg-[#4A198C] text-white shadow-xs">
+            Geolocalización Comunitaria
+          </span>
+          <h2 className="text-lg sm:text-2xl font-black text-white leading-tight">
+            Encuentra a tu comunidad en cada rincón
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-100 font-normal leading-relaxed">
+            Ubica en el mapa a artesanos, agricultores y emprendedores locales cerca de ti. Cada punto representa talento y comercio justo.
+          </p>
+        </div>
+      </div>
+
       {/* Top Bar for Map */}
       <div className="bg-white/85 backdrop-blur-xl rounded-3xl p-5 border border-white/80 shadow-soft flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">

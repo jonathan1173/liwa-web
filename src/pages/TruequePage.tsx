@@ -100,7 +100,27 @@ export const TruequePage: React.FC<TruequePageProps> = ({ onStartBarter }) => {
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
-    
+      {/* Contenedor Visual con Imagen y Mensaje */}
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-soft border border-white/80 min-h-[400px] sm:min-h-[400px] flex items-center p-5 sm:p-8">
+        <img
+          src="/assets/img3.png"
+          alt="Trueque y creaciones artesanales Liwa"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2C2C2C]/90 via-[#2C2C2C]/65 to-transparent" />
+        <div className="relative z-10 max-w-xl text-white space-y-1.5 sm:space-y-2">
+          <span className="inline-block text-[10px] sm:text-xs font-black uppercase tracking-wider px-2.5 py-0.5 sm:py-1 rounded-full bg-[#7AAF00] text-white shadow-xs">
+            Trueque Comunitario
+          </span>
+          <h2 className="text-lg sm:text-2xl font-black text-white leading-tight">
+            El valor de compartir y crear juntos
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-100 font-normal leading-relaxed">
+            Intercambia artículos, creaciones y talentos de forma justa y sin dinero. Impulsa una economía colaborativa y solidaria.
+          </p>
+        </div>
+      </div>
 
       {/* Filter & Search Bar */}
       <div className="bg-white/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-white/80 shadow-soft">
