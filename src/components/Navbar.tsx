@@ -145,21 +145,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-[#EC006C] via-[#E10067] to-[#4A198C] hover:opacity-95 text-white shadow-md shadow-[#EC006C]/25 hover:shadow-lg hover:shadow-[#EC006C]/35 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer"
               >
                 <LogIn className="w-4 h-4" />
-                <span>Ingresar</span>
               </button>
             )}
           </div>
 
           {/* Mobile/Tablet Hamburger Morph Button (active at 768px and below) */}
           <div className="flex items-center gap-2 lg:hidden">
-            {!user && (
-              <button
-                onClick={() => handleTabClick('auth')}
-                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#EC006C] text-white shadow-xs cursor-pointer"
-              >
-                Ingresar
-              </button>
-            )}
+       
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2.5 rounded-2xl bg-white/90 border border-slate-200/90 text-[#2C2C2C] hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
