@@ -82,14 +82,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                 e.currentTarget.style.display = 'none';
               }}
             />
-            <div className="flex flex-col">
-              <span className="text-2xl font-black tracking-tight text-[#2C2C2C] flex items-center gap-1">
-                Liwa
-              </span>
-              <span className="text-xs text-slate-400 font-medium -mt-1 hidden sm:block">
-                Tu mercado de confianza
-              </span>
-            </div>
+            <img
+              src="/assets/liwa_nombre.png"
+              alt="Liwa"
+              className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+
           </div>
 
           {/* Desktop Navigation Links */}
@@ -100,11 +101,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => handleTabClick(item.id)}
-                  className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 border cursor-pointer ${
-                    isActive
+                  className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 border cursor-pointer ${isActive
                       ? `${item.activeClass} font-bold`
                       : 'text-[#2C2C2C]/70 border-transparent hover:bg-slate-100/80 hover:text-[#2C2C2C]'
-                  }`}
+                    }`}
                 >
                   {item.renderIcon(isActive)}
                   <span>{item.label}</span>
@@ -182,11 +182,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => handleTabClick(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all cursor-pointer border ${
-                    isActive
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all cursor-pointer border ${isActive
                       ? `${item.activeClass} font-bold`
                       : 'text-[#2C2C2C] border-transparent hover:bg-slate-100/70'
-                  }`}
+                    }`}
                 >
                   {item.renderIcon(isActive)}
                   <span>{item.label}</span>
