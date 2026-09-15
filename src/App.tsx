@@ -74,14 +74,10 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFC] relative flex flex-col selection:bg-[#EC006C] selection:text-white text-[#2C2C2C] overflow-x-hidden">
+    <div className="min-h-screen bg-[#FAFAFC] relative flex flex-col selection:bg-[#EC006C] selection:text-white text-[#2C2C2C]">
       <Analytics />
-      {/* 
-        =======================================================================
-        AMBIENT BLUR BACKGROUND ORBS (Efecto de desenfoque ambiental con 4 colores)
-        Rompe la palidez y proporciona máxima vistosidad y profundidad moderna.
-        =======================================================================
-      */}
+
+      {/* backgrond general  */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
         {/* Orbe 1: Morado (#4A198C) en esquina superior izquierda */}
         <div
@@ -118,15 +114,9 @@ export function App() {
       </div>
 
       {/* Top Desktop Navigation */}
-      <div className="relative z-40">
-        <Navbar
-          currentTab={currentTab}
-          onSelectTab={(tab) => setCurrentTab(tab)}
-          user={currentUser}
-          onOpenLoginModal={() => setCurrentTab('auth')}
-          onLogout={handleLogout}
-        />
-      </div>
+      
+  
+      
 
       {/* Toast Notification */}
       {toastMessage && (

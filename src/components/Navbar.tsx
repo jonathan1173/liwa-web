@@ -66,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/85 backdrop-blur-xl border-b border-slate-200/70 shadow-xs transition-all">
+    <header className="fixed w-full top-0 z-50 bg-white/85 backdrop-blur-xl border-b border-slate-200/70 shadow-xs transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Brand Logo */}
@@ -74,14 +74,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-3 cursor-pointer group"
             onClick={() => handleTabClick('bienvenido')}
           >
-            <img
+            {/* <img
               src="/assets/liwa_color.png"
               alt="Liwa"
               className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}
-            />
+            /> */}
             <img
               src="/assets/liwa_nombre.png"
               alt="Liwa"
@@ -125,10 +125,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <p className="text-xs font-bold text-[#2C2C2C] truncate max-w-[120px]">
                       {user.email?.split('@')[0]}
                     </p>
-                    <p className="text-[10px] text-[#7AAF00] font-semibold flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#7AAF00] animate-pulse"></span>
-                      En línea
-                    </p>
+           
                   </div>
                 </div>
                 <button
@@ -195,11 +192,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     {getInitials(user)}
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-[#2C2C2C]">{user.email}</p>
-                    <p className="text-[10px] text-[#7AAF00] font-semibold flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#7AAF00]"></span>
-                      Conectado
-                    </p>
+                    <p className="text-xs font-bold text-[#2C2C2C]">{user.email?.split('@')[0]}</p>
+             
                   </div>
                 </div>
                 <button
