@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { signIn, signUp } from '@/lib/supabase';
-import { Mail, Lock, ArrowRight, ArrowLeft, AlertCircle, CheckCircle2, Sparkles, UserPlus, LogIn, ShieldCheck } from 'lucide-react';
+import { Mail, Lock, ArrowRight, ArrowLeft, AlertCircle, CheckCircle2, UserPlus, LogIn, ShieldCheck } from 'lucide-react';
 import { MorphEye, MorphSparkle } from '@/components/common/MorphIcon';
 
-interface AuthPageProps {
+export interface AuthPageProps {
   onLoginSuccess: (user: any) => void;
   onBackToHome: () => void;
   onExploreAsGuest: () => void;
@@ -89,7 +89,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
       </div>
 
       <div className="w-full max-w-md relative z-10">
-        {/* Tarjeta principal con eufemismo suave y bordes orgánicos */}
+        {/* Tarjeta principal */}
         <div className="bg-white/85 backdrop-blur-2xl rounded-3xl p-8 sm:p-10 shadow-2xl border border-white/90 relative overflow-hidden">
           {/* Orbes internos decorativos suaves */}
           <div
@@ -121,7 +121,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
             </p>
           </div>
 
-          {/* Selector de Pestaña Unificada (Flowbite Tabs Style) */}
+          {/* Selector de Pestaña Unificada */}
           <div className="relative z-10 p-1 bg-slate-100/90 rounded-2xl flex items-center mb-6">
             <button
               type="button"
@@ -245,7 +245,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
               </div>
             )}
 
-            {/* Botón de Envío con degradado suave oficial */}
+            {/* Botón de Envío */}
             <button
               type="submit"
               disabled={loading}
@@ -286,3 +286,5 @@ export const AuthPage: React.FC<AuthPageProps> = ({
     </div>
   );
 };
+
+export default AuthPage;

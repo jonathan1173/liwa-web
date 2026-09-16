@@ -8,7 +8,7 @@ import {
   MorphBarter,
 } from '@/components/common/MorphIcon';
 
-export type NavTab = 'bienvenido' | 'explorar' | 'mapa' | 'trueque' | 'auth';
+export type NavTab = 'home' | 'explorar' | 'mapa' | 'trueque' | 'auth';
 
 interface NavbarProps {
   currentTab: NavTab;
@@ -35,8 +35,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const navItems = [
     {
-      id: 'bienvenido' as NavTab,
-      label: 'Bienvenido',
+      id: 'home' as NavTab,
+      label: 'Inicio',
       renderIcon: (active: boolean) => <MorphSparkle active={active} className="w-4 h-4 text-[#EC006C]" />,
       activeClass: 'text-[#EC006C] border-[#EC006C] bg-[#EC006C]/10 shadow-xs shadow-[#EC006C]/10',
     },
@@ -72,7 +72,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Brand Logo */}
           <div
             className="flex items-center gap-3 cursor-pointer group"
-            onClick={() => handleTabClick('bienvenido')}
+            onClick={() => handleTabClick('home')}
           >
             {/* <img
               src="/assets/liwa_color.png"

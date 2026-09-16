@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import L from 'leaflet';
 
-interface MapaPageProps {
+export interface MapaPageProps {
   onStartBarter: (product: Product) => void;
 }
 
@@ -354,3 +354,5 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
     </div>
   );
 };
+
+export default MapaPage;

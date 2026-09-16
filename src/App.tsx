@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { supabase, signOut, getProducts, ensureSession } from '@/lib/supabase';
 import { Product } from '@/types';
 import { Navbar, NavTab } from '@/components/Navbar';
-import { BienvenidoPage } from '@/pages/BienvenidoPage';
-import { ExplorarPage } from '@/pages/ExplorarPage';
-import { MapaPage } from '@/pages/MapaPage';
-import { TruequePage } from '@/pages/TruequePage';
-import { AuthPage } from '@/pages/AuthPage';
+import {
+  HomePage,
+  ExplorarPage,
+  MapaPage,
+  TruequePage,
+  AuthPage,
+} from '@/pages';
 import { TruequeModal } from '@/components/TruequeModal';
 import { CheckCircle2, X } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
 
 export function App() {
-  const [currentTab, setCurrentTab] = useState<NavTab>('bienvenido');
+  const [currentTab, setCurrentTab] = useState<NavTab>('home');
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [barterTargetProduct, setBarterTargetProduct] = useState<Product | null>(null);
   const [catalogProducts, setCatalogProducts] = useState<Product[]>([]);
@@ -77,7 +79,7 @@ export function App() {
     <div className="min-h-screen bg-[#FAFAFC] relative flex flex-col selection:bg-[#EC006C] selection:text-white text-[#2C2C2C]">
       <Analytics />
 
-      {/* backgrond general  */}
+      {/* Fondo ambiental decorativo */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
         {/* Orbe 1: Morado (#4A198C) en esquina superior izquierda */}
         <div
@@ -114,9 +116,15 @@ export function App() {
       </div>
 
       {/* Top Desktop Navigation */}
-      
-  
-      
+      {currentTab !== 'auth' && (
+        <Navbar
+          currentTab={currentTab}
+          onSelectTab={(tab) => setCurrentTab(tab)}
+          user={currentUser}
+          onOpenLoginModal={() => setCurrentTab('auth')}
+          onLogout={handleLogout}
+        />
+      )}
 
       {/* Toast Notification */}
       {toastMessage && (
@@ -135,11 +143,11 @@ export function App() {
       )}
 
       {/* Main Content Rendered by Tab */}
-      <main className="flex-1 relative z-10">
-        {currentTab === 'bienvenido' && (
-          <BienvenidoPage
+      <main className={`flex-1 relative z-10 ${currentTab === 'home' || currentTab === 'auth' ? '' : 'pt-20'}`}>
+        {currentTab === 'home' && (
+          <HomePage
             onExploreAsGuest={() => setCurrentTab('explorar')}
-            onNavigateToTab={(tab) => setCurrentTab(tab)}
+            onNavigateToTab={(tab) => setCurrentTab(tab as NavTab)}
             onGoToAuth={() => setCurrentTab('auth')}
             isLoggedIn={!!currentUser}
           />
@@ -148,7 +156,7 @@ export function App() {
         {currentTab === 'auth' && (
           <AuthPage
             onLoginSuccess={handleLoginSuccess}
-            onBackToHome={() => setCurrentTab('bienvenido')}
+            onBackToHome={() => setCurrentTab('home')}
             onExploreAsGuest={() => setCurrentTab('explorar')}
           />
         )}

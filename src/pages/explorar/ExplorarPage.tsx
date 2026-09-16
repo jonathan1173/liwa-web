@@ -8,14 +8,12 @@ import { MorphCompass, MorphBarter } from '@/components/common/MorphIcon';
 import {
   Search,
   RefreshCw,
-  Repeat,
   SlidersHorizontal,
   X,
   RotateCcw,
-  Sparkles,
 } from 'lucide-react';
 
-interface ExplorarPageProps {
+export interface ExplorarPageProps {
   onStartBarter: (product: Product) => void;
 }
 
@@ -242,7 +240,7 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
             </button>
           </div>
 
-          {/* Secondary Filters (Always visible on desktop md+, collapsible on mobile) */}
+          {/* Secondary Filters */}
           <div
             className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2.5 sm:gap-3 transition-all duration-300 ${
               showMobileFilters ? 'block' : 'hidden md:grid'
@@ -289,7 +287,7 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
           </div>
         </div>
 
-        {/* Active Filters Chips Bar (When any filter is active) */}
+        {/* Active Filters Chips Bar */}
         {hasAnyFilterActive && (
           <div className="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-1.5 text-xs">
             <span className="text-[11px] font-semibold text-slate-400 mr-1">Filtros activos:</span>
@@ -332,7 +330,7 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
           </div>
         )}
 
-        {/* Categories Chip Carousel (Horizontal Scroll, touch friendly) */}
+        {/* Categories Chip Carousel */}
         <div className="mt-4 pt-3 border-t border-slate-100">
           <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1.5 pt-0.5 no-scrollbar -mx-2 px-2 scroll-smooth">
             <button
@@ -427,3 +425,5 @@ export const ExplorarPage: React.FC<ExplorarPageProps> = ({ onStartBarter }) => 
     </div>
   );
 };
+
+export default ExplorarPage;

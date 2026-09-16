@@ -9,13 +9,11 @@ import {
   Repeat,
   Search,
   RefreshCw,
-  Scale,
-  ShieldCheck,
   X,
   RotateCcw,
 } from 'lucide-react';
 
-interface TruequePageProps {
+export interface TruequePageProps {
   onStartBarter: (product: Product) => void;
 }
 
@@ -208,7 +206,7 @@ export const TruequePage: React.FC<TruequePageProps> = ({ onStartBarter }) => {
           </div>
         )}
 
-        {/* Categories Chip Carousel (Horizontal Scroll, touch friendly) */}
+        {/* Categories Chip Carousel */}
         <div className="mt-4 pt-3 border-t border-slate-100">
           <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1.5 pt-0.5 no-scrollbar -mx-2 px-2 scroll-smooth">
             <button
@@ -304,3 +302,5 @@ export const TruequePage: React.FC<TruequePageProps> = ({ onStartBarter }) => {
     </div>
   );
 };
+
+export default TruequePage;
