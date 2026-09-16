@@ -66,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="fixed w-full top-0 z-50 bg-white/85 backdrop-blur-xl border-b border-slate-200/70 shadow-xs transition-all">
+    <header className=" w-full top-0 z-50 bg-white/85 backdrop-blur-xl border-b border-slate-200/70 shadow-xs transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Brand Logo */}
@@ -74,14 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-3 cursor-pointer group"
             onClick={() => handleTabClick('home')}
           >
-            {/* <img
-              src="/assets/liwa_color.png"
-              alt="Liwa"
-              className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
-            /> */}
+
             <img
               src="/assets/liwa_nombre.png"
               alt="Liwa"
@@ -102,8 +95,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   key={item.id}
                   onClick={() => handleTabClick(item.id)}
                   className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 border cursor-pointer ${isActive
-                      ? `${item.activeClass} font-bold`
-                      : 'text-[#2C2C2C]/70 border-transparent hover:bg-slate-100/80 hover:text-[#2C2C2C]'
+                    ? `${item.activeClass} font-bold`
+                    : 'text-[#2C2C2C]/70 border-transparent hover:bg-slate-100/80 hover:text-[#2C2C2C]'
                     }`}
                 >
                   {item.renderIcon(isActive)}
@@ -125,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <p className="text-xs font-bold text-[#2C2C2C] truncate max-w-[120px]">
                       {user.email?.split('@')[0]}
                     </p>
-           
+
                   </div>
                 </div>
                 <button
@@ -148,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Mobile/Tablet Hamburger Morph Button (active at 768px and below) */}
           <div className="flex items-center gap-2 lg:hidden">
-       
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2.5 rounded-2xl bg-white/90 border border-slate-200/90 text-[#2C2C2C] hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
@@ -172,8 +165,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   key={item.id}
                   onClick={() => handleTabClick(item.id)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all cursor-pointer border ${isActive
-                      ? `${item.activeClass} font-bold`
-                      : 'text-[#2C2C2C] border-transparent hover:bg-slate-100/70'
+                    ? `${item.activeClass} font-bold`
+                    : 'text-[#2C2C2C] border-transparent hover:bg-slate-100/70'
                     }`}
                 >
                   {item.renderIcon(isActive)}
@@ -193,7 +186,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </div>
                   <div>
                     <p className="text-xs font-bold text-[#2C2C2C]">{user.email?.split('@')[0]}</p>
-             
+
                   </div>
                 </div>
                 <button
