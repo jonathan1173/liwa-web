@@ -15,17 +15,17 @@ export default function FeaturesSection() {
     scrollYProgress,
     [0, 0.7, 1],
     [
-      "inset(0% 0% 99% 0% )",
-      "inset(0% 0% 0% 0% )",
-      "inset(0% 0% 0% 0% )", // Permanece fija al 100%
+      "inset(0% 0% 99% 0% round 12px )",
+      "inset(0% 0% 0% 0% round 12px )",
+      "inset(0% 0% 0% 0% round 12px )", // Permanece fija al 100%
     ]
   );
 
   return (
     <section className="relative w-full">
       {/* Sección 1 */}
-      <div className="sticky top-0 flex h-screen w-full items-center justify-center bg-[#2C2C2C] text-white shadow-[0_-20px_40px_rgba(0,0,0,0.6)]">
-        <h2 className="text-4xl font-bold tracking-tight md:text-6xl">
+      <div className="sticky top-0 flex h-screen w-full items-center justify-center text-white shadow-[0_-20px_40px_rgba(0,0,0,0.6)]">
+        <h2 className="text-4xl text-black font-bold tracking-tight md:text-6xl">
           Sección 1
         </h2>
       </div>
@@ -47,9 +47,9 @@ export default function FeaturesSection() {
                 className="relative w-full max-w-[480px] lg:max-w-[540px] aspect-[4/3] overflow-hidden rounded-xl bg-black/20 "
               >
                 <img
-                  src="/image/puesto-frutas.jpg"
+                  // src="/image/puesto-frutas.jpg"
                   alt="Ilustración Principal"
-                  className="h-full w-full object-cover object-center"
+                  className="h-full w-full object-cover object-center bg-blue-500"
                 />
               </motion.div>
             </div>
@@ -71,7 +71,7 @@ export default function FeaturesSection() {
       </div>
 
         {/* Sección 3 */}
-      <div className="sticky top-0 flex h-screen w-full items-center justify-center bg-[#7AAF00] text-white ">
+      <div className="sticky top-0 flex h-screen w-full items-center justify-center bg-[#7AAF00] bg-cover bg-center bg-no-repeat  text-white ">
         <h2 className="text-4xl font-bold tracking-tight md:text-6xl">
           Sección 3
         </h2>
