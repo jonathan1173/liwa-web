@@ -4,6 +4,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 export default function FeaturesSection() {
   const section2TrackRef = useRef<HTMLDivElement>(null);
 
+  const img1 = '/image/stores/img4.jpeg';
+  const img2 = '/image/stores/img5.jpeg';
+  const img3 = '/image/stores/img6.jpeg';
+
   // Mide el scroll a lo largo de toda la pista
   const { scrollYProgress } = useScroll({
     target: section2TrackRef,
@@ -24,8 +28,10 @@ export default function FeaturesSection() {
   return (
     <section className="relative w-full">
       {/* Sección 1 */}
-      <div className="sticky top-0 flex h-screen w-full items-center justify-center text-white shadow-[0_-20px_40px_rgba(0,0,0,0.6)]">
-        <h2 className="text-4xl text-black font-bold tracking-tight md:text-6xl">
+      <div
+        style={{ backgroundImage: `url(${img1})` }}
+        className="sticky bg-no-repeat bg-center bg-cover top-0 flex h-screen w-full items-center justify-center text-white shadow-[0_-20px_40px_rgba(0,0,0,0.6)]">
+        <h2 className="text-4xl font-bold tracking-tight md:text-6xl">
           Sección 1
         </h2>
       </div>
@@ -47,7 +53,7 @@ export default function FeaturesSection() {
                 className="relative w-full max-w-[480px] lg:max-w-[540px] aspect-[4/3] overflow-hidden rounded-xl bg-black/20 "
               >
                 <img
-                  // src="/image/puesto-frutas.jpg"
+                  src={`${img2}`}
                   alt="Ilustración Principal"
                   className="h-full w-full object-cover object-center bg-blue-500"
                 />
@@ -70,8 +76,10 @@ export default function FeaturesSection() {
         </div>
       </div>
 
-        {/* Sección 3 */}
-      <div className="sticky top-0 flex h-screen w-full items-center justify-center bg-[#7AAF00] bg-cover bg-center bg-no-repeat  text-white ">
+      {/* Sección 3 */}
+      <div
+        style={{ backgroundImage: `url(${img3})` }}
+        className="sticky top-0 flex h-screen w-full items-center justify-center bg-[#7AAF00] bg-cover bg-center bg-no-repeat  text-white ">
         <h2 className="text-4xl font-bold tracking-tight md:text-6xl">
           Sección 3
         </h2>

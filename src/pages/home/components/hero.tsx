@@ -19,6 +19,13 @@ export function Hero({
   const containerRef3 = useRef<HTMLDivElement>(null);
 
   // =========================
+  // VARIABLES DE IMÁGENES
+  // =========================
+  const img1 = '/image/stores/img1.jpeg';
+  const img2 = '/image/stores/img2.jpeg';
+  const img3 = '/image/stores/img3.jpeg';
+
+  // =========================
   // SECCIÓN 2 (Animación Scroll)
   // =========================
   const { scrollYProgress: progress2 } = useScroll({
@@ -45,7 +52,10 @@ export function Hero({
       {/* =========================
           SECCIÓN 1 (Fondo base Hero)
       ========================= */}
-      <div className="sticky top-0 h-screen w-full bg-[#EC006C] text-white flex flex-col items-center justify-center z-10 px-6 text-center">
+      <div
+        style={{ backgroundImage: `url(${img1})` }}
+        className="sticky top-0 h-screen w-full bg-no-repeat bg-center bg-cover text-white flex flex-col items-center justify-center z-10 px-6 text-center"
+      >
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold uppercase tracking-wider mb-6">
           <Sparkles className="w-3.5 h-3.5 text-white" />
           <span>El nuevo mercado colaborativo</span>
@@ -89,32 +99,16 @@ export function Hero({
       </div>
 
       {/* =========================
-          SECCIÓN 2 (Escala sobre Sec. 1 - Trueque Inteligente)
+          SECCIÓN 2 (Trueque Inteligente)
       ========================= */}
       <motion.div
         ref={containerRef2}
         style={{
           scale: scale2,
           borderRadius: borderRadius2,
+          backgroundImage: `url(${img2})`,
         }}
-        className="
-          sticky
-          top-0
-          h-screen
-          w-full
-          bg-[#2C2C2C]
-          text-white
-          flex
-          flex-col
-          items-center
-          justify-center
-          shadow-[0_-20px_50px_rgba(0,0,0,0.7)]
-          origin-center
-          overflow-hidden
-          z-20
-          px-6
-          text-center
-        "
+        className="sticky top-0 h-screen w-full bg-no-repeat bg-center bg-cover text-white flex flex-col items-center justify-center shadow-[0_-20px_50px_rgba(0,0,0,0.7)] origin-center overflow-hidden z-20 px-6 text-center"
       >
         <div className="w-16 h-16 rounded-2xl bg-[#7AAF00]/20 border border-[#7AAF00]/30 text-[#7AAF00] flex items-center justify-center mb-6">
           <Repeat className="w-8 h-8" />
@@ -140,32 +134,16 @@ export function Hero({
       </motion.div>
 
       {/* =========================
-          SECCIÓN 3 (Escala sobre Sec. 2 - Mapa Local)
+          SECCIÓN 3 (Comunidad & Mapa Local)
       ========================= */}
       <motion.div
         ref={containerRef3}
         style={{
           scale: scale3,
           borderRadius: borderRadius3,
+          backgroundImage: `url(${img3})`,
         }}
-        className="
-          sticky
-          top-0
-          h-screen
-          w-full
-          bg-[#4A198C]
-          text-white
-          flex
-          flex-col
-          items-center
-          justify-center
-          shadow-[0_-20px_50px_rgba(0,0,0,0.7)]
-          origin-center
-          overflow-hidden
-          z-30
-          px-6
-          text-center
-        "
+        className="sticky top-0 h-screen w-full bg-no-repeat bg-center bg-cover text-white flex flex-col items-center justify-center shadow-[0_-20px_50px_rgba(0,0,0,0.7)] origin-center overflow-hidden z-30 px-6 text-center"
       >
         <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 text-white flex items-center justify-center mb-6">
           <MapPin className="w-8 h-8 text-[#EC006C]" />
