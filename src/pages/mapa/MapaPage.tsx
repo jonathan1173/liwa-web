@@ -151,31 +151,9 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
-   
-      {/* Top Bar for Map */}
-      <div className="bg-white/85 backdrop-blur-xl rounded-3xl p-5 border border-white/80 shadow-soft flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-[#4A198C] text-white flex items-center justify-center font-bold shadow-md shadow-[#4A198C]/25">
-            <MapPin className="w-5 h-5" />
-          </div>
-          <div>
-            <h1 className="text-xl font-black text-[#2C2C2C] tracking-tight">
-              Mapa de Vendedores
-            </h1>
-            <p className="text-xs text-[#2C2C2C]/70">
-              Explora en el mapa a los emprendedores y miembros de la comunidad Liwa
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 text-xs font-semibold text-[#2C2C2C] bg-white/90 py-2 px-3.5 rounded-xl border border-slate-200/80 shadow-2xs">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#EC006C] animate-pulse"></span>
-          <span>{sellers.length} vendedores geolocalizados</span>
-        </div>
-      </div>
 
       {/* Main Map Container with Split Desktop Layout */}
-      <div className="relative w-full h-[calc(100vh-250px)] min-h-[500px] rounded-3xl overflow-hidden border border-white/80 shadow-soft flex bg-white">
+      <div className="relative w-full h-[calc(50vh-250px)] min-h-[400px] rounded-3xl overflow-hidden border border-white/80 shadow-soft flex bg-white">
         {/* Leaflet Map Area */}
         <div
           ref={mapContainerRef}

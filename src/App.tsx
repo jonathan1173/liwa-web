@@ -143,7 +143,7 @@ export function App() {
       )}
 
       {/* Main Content Rendered by Tab */}
-      <main className={`flex-1 relative z-10 ${currentTab === 'home' || currentTab === 'auth' ? '' : 'pt-20'}`}>
+      <main className="flex-1 relative z-10">
         {currentTab === 'home' && (
           <HomePage
             onExploreAsGuest={() => setCurrentTab('explorar')}

@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Sparkles, Compass, Repeat, MapPin, Eye, EyeOff } from 'lucide-react';
+import { Sparkles, Eye, EyeOff } from 'lucide-react';
+import {
+  HouseIcon,
+  CompassIcon,
+  MapPinIcon,
+  RepeatIcon,
+  LogInIcon,
+  LogOutIcon,
+} from '@animateicons/react/lucide';
 
 /**
  * HamburgerMorphIcon:
@@ -42,8 +50,127 @@ export const HamburgerMorphIcon: React.FC<HamburgerMorphIconProps> = ({
 };
 
 /**
- * MorphSparkle:
- * Icono de destello que rota y pulsa sutilmente al pasar el ratón.
+ * MorphHome (Lucide Animate House):
+ * Icono de Casa animado mediante @animateicons/react con micro-animaciones al hover y activo.
+ */
+export const MorphHome: React.FC<{
+  className?: string;
+  active?: boolean;
+  color?: string;
+  size?: number;
+}> = ({ className = '', active = false, color = '#EC006C', size = 20 }) => {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className={`inline-flex items-center justify-center transition-transform duration-300 ${
+        hovered || active ? 'scale-110 drop-shadow-[0_0_8px_rgba(236,0,108,0.35)]' : ''
+      } ${className}`}
+    >
+      <HouseIcon
+        size={size}
+        color={color}
+        isAnimated={hovered || active}
+        className="transition-colors duration-200"
+      />
+    </div>
+  );
+};
+
+/**
+ * MorphCompass (Lucide Animate Compass):
+ * Icono de Brújula animada reactiva con giro orgánico al hover o activo.
+ */
+export const MorphCompass: React.FC<{
+  className?: string;
+  active?: boolean;
+  color?: string;
+  size?: number;
+}> = ({ className = '', active = false, color = '#EC006C', size = 20 }) => {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className={`inline-flex items-center justify-center transition-transform duration-300 ${
+        hovered || active ? 'scale-110 drop-shadow-[0_0_8px_rgba(236,0,108,0.35)]' : ''
+      } ${className}`}
+    >
+      <CompassIcon
+        size={size}
+        color={color}
+        isAnimated={hovered || active}
+        className="transition-colors duration-200"
+      />
+    </div>
+  );
+};
+
+/**
+ * MorphPin (Lucide Animate MapPin):
+ * Icono de Pin de Ubicación con micro-salto reactivo al hover y activo.
+ */
+export const MorphPin: React.FC<{
+  className?: string;
+  active?: boolean;
+  color?: string;
+  size?: number;
+}> = ({ className = '', active = false, color = '#4A198C', size = 20 }) => {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className={`inline-flex items-center justify-center transition-transform duration-300 ${
+        hovered || active ? '-translate-y-0.5 scale-110 drop-shadow-[0_4px_8px_rgba(74,25,140,0.3)]' : ''
+      } ${className}`}
+    >
+      <MapPinIcon
+        size={size}
+        color={color}
+        isAnimated={hovered || active}
+        className="transition-colors duration-200"
+      />
+    </div>
+  );
+};
+
+/**
+ * MorphBarter (Lucide Animate Repeat/Trueque):
+ * Icono de Trueque con animación de ciclo fluido al hover y activo.
+ */
+export const MorphBarter: React.FC<{
+  className?: string;
+  active?: boolean;
+  color?: string;
+  size?: number;
+}> = ({ className = '', active = false, color = '#7AAF00', size = 20 }) => {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className={`inline-flex items-center justify-center transition-transform duration-300 ${
+        hovered || active ? 'scale-110 drop-shadow-[0_0_8px_rgba(122,175,0,0.35)]' : ''
+      } ${className}`}
+    >
+      <RepeatIcon
+        size={size}
+        color={color}
+        isAnimated={hovered || active}
+        className="transition-colors duration-200"
+      />
+    </div>
+  );
+};
+
+/**
+ * MorphSparkle (Preservado para secciones decorativas como Hero/Features):
  */
 export const MorphSparkle: React.FC<{
   className?: string;
@@ -69,84 +196,29 @@ export const MorphSparkle: React.FC<{
 };
 
 /**
- * MorphCompass:
- * Icono de brújula con balanceo orgánico reactivo.
+ * AnimatedLogIn:
+ * Botón de acceso / login con icono animado interactivo.
  */
-export const MorphCompass: React.FC<{
+export const AnimatedLogIn: React.FC<{
+  size?: number;
+  color?: string;
   className?: string;
-  active?: boolean;
-}> = ({ className = 'w-5 h-5 text-[#EC006C]', active = false }) => {
-  const [wobbling, setWobbling] = useState(false);
-
-  return (
-    <div
-      onMouseEnter={() => {
-        setWobbling(true);
-        setTimeout(() => setWobbling(false), 1200);
-      }}
-      className="inline-flex items-center justify-center cursor-pointer"
-    >
-      <Compass
-        className={`${className} transition-all duration-300 ${
-          wobbling ? 'animate-morph-wobble scale-110' : active ? 'scale-110' : ''
-        }`}
-      />
-    </div>
-  );
+  isAnimated?: boolean;
+}> = ({ size = 18, color = '#ffffff', className = '', isAnimated = false }) => {
+  return <LogInIcon size={size} color={color} className={className} isAnimated={isAnimated} />;
 };
 
 /**
- * MorphBarter:
- * Icono de trueque que rota 180 grados de forma fluida simulando el intercambio.
+ * AnimatedLogOut:
+ * Botón de salida con icono animado interactivo.
  */
-export const MorphBarter: React.FC<{
+export const AnimatedLogOut: React.FC<{
+  size?: number;
+  color?: string;
   className?: string;
-  active?: boolean;
-}> = ({ className = 'w-5 h-5 text-[#7AAF00]', active = false }) => {
-  const [rotated, setRotated] = useState(false);
-
-  return (
-    <div
-      onMouseEnter={() => setRotated(true)}
-      onMouseLeave={() => setRotated(false)}
-      className="inline-flex items-center justify-center cursor-pointer"
-    >
-      <Repeat
-        className={`${className} transition-transform duration-500 ease-out ${
-          rotated ? 'rotate-180 scale-115 text-[#7AAF00]' : active ? 'scale-110' : ''
-        }`}
-      />
-    </div>
-  );
-};
-
-/**
- * MorphPin:
- * Icono de ubicación en el mapa que da un salto sutil y resalta al hover.
- */
-export const MorphPin: React.FC<{
-  className?: string;
-  active?: boolean;
-}> = ({ className = 'w-5 h-5 text-[#4A198C]', active = false }) => {
-  const [jumping, setJumping] = useState(false);
-
-  return (
-    <div
-      onMouseEnter={() => setJumping(true)}
-      onMouseLeave={() => setJumping(false)}
-      className="inline-flex items-center justify-center cursor-pointer"
-    >
-      <MapPin
-        className={`${className} transition-all duration-300 ${
-          jumping
-            ? '-translate-y-1.5 scale-120 drop-shadow-[0_4px_8px_rgba(74,25,140,0.3)]'
-            : active
-            ? 'scale-110'
-            : ''
-        }`}
-      />
-    </div>
-  );
+  isAnimated?: boolean;
+}> = ({ size = 18, color = '#e11d48', className = '', isAnimated = false }) => {
+  return <LogOutIcon size={size} color={color} className={className} isAnimated={isAnimated} />;
 };
 
 /**
