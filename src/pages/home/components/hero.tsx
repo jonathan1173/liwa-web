@@ -121,13 +121,7 @@ export function Hero({
           }}
           className="absolute bottom-6 z-20 flex flex-col items-center gap-2 cursor-pointer group select-none"
         >
-          <div className="flex items-center gap-2 px-3 py-1 bg-white/70 backdrop-blur-md rounded-full border border-slate-200/80 shadow-sm group-hover:border-[#EC006C]/40 group-hover:shadow transition-all duration-300">
-            <span className="text-xs sm:text-sm font-extrabold tracking-wide text-[#7AAF00]">
-              Desliza para descubrir más
-            </span>
-
-            <ChevronDown className="w-3.5 h-3.5" />
-          </div>
+    
         </div>
       </div>
 
