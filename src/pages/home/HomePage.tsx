@@ -6,10 +6,9 @@ export interface HomePageProps extends HeroProps { }
 
 export const HomePage: React.FC<HomePageProps> = (props) => {
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-screen">
+    <div className="flex flex-col w-full min-h-screen">
       <Hero {...props} />
       <FeaturesSection />
-
     </div>
   );
 };
