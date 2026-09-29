@@ -15,7 +15,7 @@ interface CardData {
   primaryButtonText: string;
   primaryAction: 'explore' | 'trueque' | 'mapa' | 'auth';
   secondaryButtonText: string;
-  secondaryAction: 'auth' | 'explore' | 'trueque';
+  secondaryAction: 'auth' | 'explore' | 'trueque' | 'mapa';
   overlayColors: {
     blob1From: string;
     blob1To: string;
@@ -168,6 +168,18 @@ export default function Cards({
   const activeCard = CARDS_CONTENT[currentIndex];
   const nextCard = CARDS_CONTENT[(currentIndex + 1) % CARDS_CONTENT.length];
 
+  const cardVariants = {
+    initial: { scale: 0.93, y: 12, opacity: 0 },
+    animate: { scale: 1, y: 0, opacity: 1 },
+    exit: (dir: 'left' | 'right' | null) => ({
+      scale: 0.9,
+      y: -18,
+      opacity: 0,
+      rotate: dir === 'right' ? 8 : -8,
+      transition: { duration: 0.24, ease: 'easeInOut' as const },
+    }),
+  };
+
   return (
     <section className="relative w-full py-10 sm:py-13 px-4 sm:px-6 flex flex-col items-center justify-center overflow-hidden  text-white">
       {/* Luces de ambiente sutiles en el fondo (sin imagen) */}
@@ -246,18 +258,13 @@ export default function Cards({
           <motion.div
             key={activeCard.id}
             custom={exitDirection}
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             onClick={handleNext}
             whileHover={{ scale: 1.015 }}
             whileTap={{ scale: 0.98 }}
-            initial={{ scale: 0.93, y: 12, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
-            exit={(dir) => ({
-              scale: 0.9,
-              y: -18,
-              opacity: 0,
-              rotate: dir === 'right' ? 8 : -8,
-              transition: { duration: 0.24, ease: 'easeInOut' },
-            })}
             transition={{
               type: 'spring',
               stiffness: 280,
