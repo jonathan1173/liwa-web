@@ -66,63 +66,119 @@ export function Hero({
   return (
     <div className="relative w-full bg-[#FAFAFC] text-[#2C2C2C]">
       {/* =========================
-          SECCIÓN 1 (Fondo base Hero Principal)
+          SECCIÓN 1 (Fondo base Hero Principal - Reconstruido)
       ========================= */}
-      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center z-10 px-6 text-center relative overflow-hidden">
-        {/* Fondo con desenfoque exacto de 5px sin ningún velo sobre la pantalla completa */}
-        <div
-          style={{ backgroundImage: `url(${img1})` }}
-          className="absolute inset-0 bg-no-repeat bg-center bg-cover filter blur-[2px] scale-105 pointer-events-none"
-        />
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center z-10 relative overflow-hidden bg-[#0a0a0c]">
+        {/* Tarjeta principal del Hero con bordes redondeados y borde sutil */}
+        <div className="relative w-full h-full  overflow-hidden border border-white/20 shadow-2xl flex flex-col items-center justify-center text-center">
+          {/* Fondo con imagen de vegetales original (img8.jpeg) con desenfoque suave */}
+          <div
+            style={{ backgroundImage: `url(${img1})` }}
+            className="absolute inset-0 bg-no-repeat bg-center bg-cover filter blur-[2.5px] scale-105 pointer-events-none"
+          />
 
-        {/* Contenedor flotante tipo tarjeta de cristal esmerilado para legibilidad perfecta */}
-        <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto px-6 py-8 sm:px-12 sm:py-10 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/80 shadow-soft">
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.1] mb-5 text-[#4A198C]">
-            Descubre el nuevo{' '}
-            <span className="text-[#EC006C]">
-              Liwa
-            </span>
-          </h1>
+          {/* Sombra oscura localizada ÚNICAMENTE donde aparece el texto (los vegetales superiores quedan iluminados y visibles) */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 22%, rgba(10,10,14,0.52) 36%, rgba(10,10,14,0.8) 52%, rgba(10,10,14,0.86) 75%, rgba(10,10,14,0.9) 100%)',
+            }}
+          />
+          {/* Viñeta radial suave para mayor contraste detrás de las letras */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(ellipse 90% 65% at 50% 55%, rgba(10,10,14,0.7) 0%, rgba(10,10,14,0.25) 50%, transparent 80%)',
+            }}
+          />
 
-          <p className="text-base sm:text-lg md:text-xl text-[#2C2C2C]/85 max-w-2xl font-normal leading-relaxed mb-8">
-            El espacio donde la{' '}
-            <span className="text-[#EC006C] font-semibold">confianza</span> y el{' '}
-            <span className="text-[#7AAF00] font-semibold">consumo local</span> se
-            conectan. Compra, vende y haz trueques con valoración justa, cercanía y total seguridad.
-          </p>
+          {/* Contenedor del contenido: Tipografía con máscara y degradado, párrafo y botones */}
+          <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto">
+            {/* Título en dos líneas con efecto de máscara y degradado */}
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] xl:text-[5.8rem] font-black tracking-tight leading-[0.96] text-center select-none">
+              <span
+                className="block bg-clip-text text-transparent"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 45%, #E2E8F0 65%, #DDD6FE 90%, #E9D5FF 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.5))',
+                }}
+              >
+                DESCUBRE EL
+              </span>
+              <span className="block mt-1 sm:mt-2">
+                <span
+                  className="bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 50%, #C4B5FD 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.5))',
+                  }}
+                >
+                  NUEVO{' '}
+                </span>
+                <span
+                  className="bg-clip-text text-transparent font-black"
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(135deg, #9333EA 0%, #A855F7 25%, #C026D3 55%, #D946EF 80%, #EC4899 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    filter:
+                      'drop-shadow(0 2px 14px rgba(168, 85, 247, 0.4)) drop-shadow(0 2px 10px rgba(0,0,0,0.5))',
+                  }}
+                >
+                  LIWA
+                </span>
+              </span>
+            </h1>
 
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            {onExploreAsGuest && (
+            {/* Subtítulo limpio y legible */}
+            <p className="mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-zinc-200/90 max-w-2xl font-normal leading-relaxed drop-shadow-sm px-2">
+              El espacio donde la confianza y el consumo local se conectan. Compra, vende y haz trueques con valoración justa, cercanía y total seguridad.
+            </p>
+
+            {/* Botones de acción fielmente recreados */}
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
               <button
                 onClick={onExploreAsGuest}
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#EC006C] hover:bg-[#D80064] text-white font-bold text-sm sm:text-base shadow-sm hover:shadow transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-white font-medium text-xs sm:text-sm shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer select-none"
+                style={{
+                  background:
+                    'linear-gradient(90deg, #6B1D52 0%, #8C245E 50%, #B02A6F 100%)',
+                  boxShadow: '0 4px 20px rgba(140, 36, 94, 0.4)',
+                }}
               >
-                Explorar Catálogo
-                <ArrowRight className="w-4 h-4" />
+                <span>Explorar Catálogo</span>
+                <span className="text-base leading-none">→</span>
               </button>
-            )}
 
-            {!isLoggedIn && onGoToAuth && (
-              <button
-                onClick={onGoToAuth}
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-slate-100/90 hover:bg-white border border-slate-200/90 text-[#2C2C2C] font-semibold text-sm sm:text-base backdrop-blur-md transition-all cursor-pointer shadow-sm hover:shadow"
-              >
-                <LogIn className="w-4 h-4 text-[#EC006C]" />
-                Iniciar Sesión
-              </button>
-            )}
+              {(!isLoggedIn || !onGoToAuth) && (
+                <button
+                  onClick={onGoToAuth}
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-black/30 hover:bg-white/10 border border-white/40 hover:border-white/70 text-white font-medium text-xs sm:text-sm backdrop-blur-md hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer shadow-md select-none"
+                >
+                  <span className="text-base leading-none">→</span>
+                  <span>Iniciar Sesión</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Indicador de scroll flotante en tema claro */}
+        {/* Indicador de scroll */}
         <div
           onClick={() => {
             containerRef2.current?.scrollIntoView({ behavior: 'smooth' });
           }}
           className="absolute bottom-6 z-20 flex flex-col items-center gap-2 cursor-pointer group select-none"
-        >
-    
-        </div>
+        />
       </div>
 
       {/* =========================
