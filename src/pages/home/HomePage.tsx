@@ -9,7 +9,7 @@ export const HomePage: React.FC<HomePageProps> = (props) => {
   return (
     <div className="flex flex-col w-full min-h-screen">
       <Hero {...props} />
-      <Cards /> {/* 2. Usar en mayúscula */}
+      <Cards {...props} />
       <FeaturesSection />
     </div>
   );
