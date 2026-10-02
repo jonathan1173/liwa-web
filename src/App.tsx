@@ -8,13 +8,37 @@ import {
   MapaPage,
   TruequePage,
   AuthPage,
+  DescargaApkPage,
 } from '@/pages';
 import { TruequeModal } from '@/components/TruequeModal';
 import { CheckCircle2, X } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
 
+// Detección de ruta directa para la página de descarga del APK
+const isApkRoute = (pathname: string, hash: string): boolean => {
+  const cleanPath = pathname.toLowerCase().replace(/\/$/, '');
+  const cleanHash = hash.toLowerCase().replace(/^#\/?/, '').replace(/\/$/, '');
+  return (
+    cleanPath === '/descarga/apk' ||
+    cleanPath === '/descargar/apk' ||
+    cleanPath === '/descarga-apk' ||
+    cleanPath === '/descargar-apk' ||
+    cleanHash === 'descarga/apk' ||
+    cleanHash === 'descargar/apk' ||
+    cleanHash === 'descarga-apk' ||
+    cleanHash === 'descargar-apk'
+  );
+};
+
+export type ActiveView = NavTab | 'descarga-apk';
+
 export function App() {
-  const [currentTab, setCurrentTab] = useState<NavTab>('home');
+  const [currentTab, setCurrentTab] = useState<ActiveView>(() => {
+    if (typeof window !== 'undefined' && isApkRoute(window.location.pathname, window.location.hash)) {
+      return 'descarga-apk';
+    }
+    return 'home';
+  });
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [barterTargetProduct, setBarterTargetProduct] = useState<Product | null>(null);
   const [catalogProducts, setCatalogProducts] = useState<Product[]>([]);
@@ -50,6 +74,26 @@ export function App() {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // Escuchar cambios de URL en el navegador (popstate y hashchange)
+  useEffect(() => {
+    const handleUrlChange = () => {
+      if (typeof window !== 'undefined') {
+        if (isApkRoute(window.location.pathname, window.location.hash)) {
+          setCurrentTab('descarga-apk');
+        } else if (currentTab === 'descarga-apk') {
+          setCurrentTab('home');
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
+  }, [currentTab]);
 
   const handleLogout = async () => {
     try {
@@ -118,8 +162,20 @@ export function App() {
       {/* Top Desktop Navigation */}
       {currentTab !== 'auth' && (
         <Navbar
-          currentTab={currentTab}
-          onSelectTab={(tab) => setCurrentTab(tab)}
+          currentTab={currentTab === 'descarga-apk' ? ('' as any) : currentTab}
+          isApkActive={currentTab === 'descarga-apk'}
+          onGoToApk={() => {
+            if (typeof window !== 'undefined') {
+              window.history.pushState({}, '', '/descarga/apk');
+            }
+            setCurrentTab('descarga-apk');
+          }}
+          onSelectTab={(tab) => {
+            if (typeof window !== 'undefined' && isApkRoute(window.location.pathname, window.location.hash)) {
+              window.history.pushState({}, '', '/');
+            }
+            setCurrentTab(tab);
+          }}
           user={currentUser}
           onOpenLoginModal={() => setCurrentTab('auth')}
           onLogout={handleLogout}
@@ -144,6 +200,17 @@ export function App() {
 
       {/* Main Content Rendered by Tab */}
       <main className="flex-1 relative z-10">
+        {currentTab === 'descarga-apk' && (
+          <DescargaApkPage
+            onBackToHome={() => {
+              if (typeof window !== 'undefined') {
+                window.history.pushState({}, '', '/');
+              }
+              setCurrentTab('home');
+            }}
+          />
+        )}
+
         {currentTab === 'home' && (
           <HomePage
             onExploreAsGuest={() => setCurrentTab('explorar')}
