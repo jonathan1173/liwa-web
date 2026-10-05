@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { ArrowRight, Repeat, MapPin, LogIn, ChevronDown } from 'lucide-react';
+import { Repeat, MapPin } from 'lucide-react';
 
 export interface HeroProps {
   onExploreAsGuest?: () => void;
@@ -191,41 +191,85 @@ export function Hero({
           opacity: opacity2,
           borderRadius: borderRadius2,
         }}
-        className="sticky top-0 h-screen w-full flex flex-col items-center justify-center origin-center overflow-hidden z-20 px-6 text-center will-change-transform transform-gpu relative border-t border-white/60 shadow-sm"
+        className="sticky top-0 h-screen w-full flex flex-col items-center justify-center origin-center overflow-hidden z-20 px-4 sm:px-6 text-center will-change-transform transform-gpu relative bg-[#0a0a0c] border border-white/20 shadow-2xl"
       >
-        {/* Fondo con desenfoque de 5px sin velo global */}
+        {/* Fondo con imagen de productos (img2) con desenfoque suave */}
         <div
           style={{ backgroundImage: `url(${img2})` }}
-          className="absolute inset-0 bg-no-repeat bg-center bg-cover filter blur-[2px] scale-105 pointer-events-none"
+          className="absolute inset-0 bg-no-repeat bg-center bg-cover filter blur-[2.5px] scale-105 pointer-events-none"
         />
 
-        {/* Contenedor flotante tipo tarjeta de cristal */}
-        <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto px-6 py-8 sm:px-12 sm:py-10 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/80 shadow-soft">
-          <div className="w-14 h-14 rounded-2xl bg-[#7AAF00]/15 border border-[#7AAF00]/30 text-[#7AAF00] flex items-center justify-center mb-5 shadow-sm backdrop-blur-sm">
-            <Repeat className="w-7 h-7" />
+        {/* Sombra oscura localizada en el centro detrás del texto (el doble de amplia, sin franja horizontal) */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse min(52rem, 82vw) min(36rem, 76vh) at 50% 50%, rgba(10,10,14,0.96) 0%, rgba(10,10,14,0.9) 45%, rgba(10,10,14,0.55) 75%, transparent 100%)',
+          }}
+        />
+
+        {/* Contenedor del contenido (sin forma de tarjeta blanca flotante) */}
+        <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto px-4">
+          {/* Badge de icono brillante */}
+          <div className="w-14 h-14 rounded-2xl bg-[#7AAF00]/20 border border-[#7AAF00]/40 text-[#A3E635] flex items-center justify-center mb-5 shadow-lg shadow-[#7AAF00]/10 backdrop-blur-md">
+            <Repeat className="w-7 h-7 text-[#A3E635]" />
           </div>
 
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-4 text-[#2C2C2C]">
-            <span>Trueque </span>
-            <span className="text-[#7AAF00]">
-              Inteligente
+          {/* Título en dos líneas con degradado y sombra de profundidad */}
+          <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] font-black tracking-tight leading-[0.96] text-center select-none">
+            <span
+              className="block bg-clip-text text-transparent"
+              style={{
+                backgroundImage:
+                  'linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 45%, #E2E8F0 65%, #DCFCE7 90%, #F0FDF4 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.5))',
+              }}
+            >
+              TRUEQUE
+            </span>
+            <span
+              className="block mt-1 sm:mt-2 bg-clip-text text-transparent font-black"
+              style={{
+                backgroundImage:
+                  'linear-gradient(135deg, #A3E635 0%, #84CC16 25%, #7AAF00 55%, #659900 80%, #4D7300 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter:
+                  'drop-shadow(0 2px 14px rgba(122, 175, 0, 0.45)) drop-shadow(0 2px 10px rgba(0,0,0,0.5))',
+              }}
+            >
+              INTELIGENTE
             </span>
           </h2>
 
-          <p className="text-sm sm:text-base md:text-lg text-[#2C2C2C]/85 max-w-xl font-normal leading-relaxed mb-8">
+          {/* Subtítulo legible y limpio con sombra de texto */}
+          <p
+            className="mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-zinc-200/90 max-w-2xl font-normal leading-relaxed drop-shadow-sm px-2"
+            style={{ textShadow: '0 2px 10px rgba(0,0,0,0.85)' }}
+          >
             Intercambia productos de valor equivalente{' '}
-            <span className="text-[#7AAF00] font-semibold">sin intermediarios monetarios</span>.
+            <span className="text-[#A3E635] font-semibold">sin intermediarios monetarios</span>.
             Nuestra plataforma calcula y sugiere coincidencias ideales para que ambas partes ganen con total transparencia y equidad.
           </p>
 
+          {/* Botón de acción */}
           {onNavigateToTab && (
-            <button
-              onClick={() => onNavigateToTab('trueque')}
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#7AAF00] hover:bg-[#6B9A00] text-white font-extrabold text-sm sm:text-base shadow-sm hover:shadow transition-all cursor-pointer"
-            >
-              Ver Trueques Disponibles
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <div className="flex items-center justify-center mt-6 sm:mt-8">
+              <button
+                onClick={() => onNavigateToTab('trueque')}
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-white font-medium text-xs sm:text-sm shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer select-none"
+                style={{
+                  background:
+                    'linear-gradient(90deg, #557E00 0%, #7AAF00 50%, #8CC600 100%)',
+                  boxShadow: '0 4px 20px rgba(122, 175, 0, 0.4)',
+                }}
+              >
+                <span>Ver Trueques Disponibles</span>
+                <span className="text-base leading-none">→</span>
+              </button>
+            </div>
           )}
         </div>
       </motion.div>
@@ -240,41 +284,85 @@ export function Hero({
           opacity: opacity3,
           borderRadius: borderRadius3,
         }}
-        className="sticky top-0 h-screen w-full flex flex-col items-center justify-center origin-center overflow-hidden z-30 px-6 text-center will-change-transform transform-gpu relative border-t border-white/60 shadow-sm"
+        className="sticky top-0 h-screen w-full flex flex-col items-center justify-center origin-center overflow-hidden z-30 px-4 sm:px-6 text-center will-change-transform transform-gpu relative bg-[#0a0a0c] border border-white/20 shadow-2xl"
       >
-        {/* Fondo con desenfoque de 5px sin velo global */}
+        {/* Fondo con imagen de mapa / comercio (img3) con desenfoque suave */}
         <div
           style={{ backgroundImage: `url(${img3})` }}
-          className="absolute inset-0 bg-no-repeat bg-center bg-cover filter blur-[2px] scale-105 pointer-events-none"
+          className="absolute inset-0 bg-no-repeat bg-center bg-cover filter blur-[2.5px] scale-105 pointer-events-none"
         />
 
-        {/* Contenedor flotante tipo tarjeta de cristal */}
-        <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto px-6 py-8 sm:px-12 sm:py-10 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/80 shadow-soft">
-          <div className="w-14 h-14 rounded-2xl bg-[#4A198C]/10 border border-[#4A198C]/20 text-[#4A198C] flex items-center justify-center mb-5 shadow-sm backdrop-blur-sm">
-            <MapPin className="w-7 h-7 text-[#4A198C]" />
+        {/* Sombra oscura localizada en el centro detrás del texto (el doble de amplia, sin franja horizontal) */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse min(52rem, 82vw) min(36rem, 76vh) at 50% 50%, rgba(10,10,14,0.96) 0%, rgba(10,10,14,0.9) 45%, rgba(10,10,14,0.55) 75%, transparent 100%)',
+          }}
+        />
+
+        {/* Contenedor del contenido (sin forma de tarjeta blanca flotante) */}
+        <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto px-4">
+          {/* Badge de icono brillante */}
+          <div className="w-14 h-14 rounded-2xl bg-[#4A198C]/25 border border-[#A855F7]/40 text-[#C084FC] flex items-center justify-center mb-5 shadow-lg shadow-[#4A198C]/20 backdrop-blur-md">
+            <MapPin className="w-7 h-7 text-[#C084FC]" />
           </div>
 
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-4 text-[#2C2C2C]">
-            <span>Comunidad &amp; </span>
-            <span className="text-[#4A198C]">
-              Mapa Local
+          {/* Título en dos líneas con degradado y sombra de profundidad */}
+          <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] font-black tracking-tight leading-[0.96] text-center select-none">
+            <span
+              className="block bg-clip-text text-transparent"
+              style={{
+                backgroundImage:
+                  'linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 45%, #E2E8F0 65%, #F3E8FF 90%, #FAF5FF 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.5))',
+              }}
+            >
+              COMUNIDAD &amp;
+            </span>
+            <span
+              className="block mt-1 sm:mt-2 bg-clip-text text-transparent font-black"
+              style={{
+                backgroundImage:
+                  'linear-gradient(135deg, #C084FC 0%, #A855F7 25%, #8B5CF6 55%, #6D28D9 80%, #4A198C 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter:
+                  'drop-shadow(0 2px 14px rgba(168, 85, 247, 0.45)) drop-shadow(0 2px 10px rgba(0,0,0,0.5))',
+              }}
+            >
+              MAPA LOCAL
             </span>
           </h2>
 
-          <p className="text-sm sm:text-base md:text-lg text-[#2C2C2C]/85 max-w-xl font-normal leading-relaxed mb-8">
+          {/* Subtítulo legible y limpio con sombra de texto */}
+          <p
+            className="mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-zinc-200/90 max-w-2xl font-normal leading-relaxed drop-shadow-sm px-2"
+            style={{ textShadow: '0 2px 10px rgba(0,0,0,0.85)' }}
+          >
             Conéctate con vecinos y vendedores cerca de ti en tiempo real. Explora{' '}
-            <span className="text-[#4A198C] font-semibold">ubicaciones seguras de entrega</span>,
+            <span className="text-[#C084FC] font-semibold">ubicaciones seguras de entrega</span>,
             descubre oportunidades a la vuelta de la esquina y fortalece la economía de tu barrio.
           </p>
 
+          {/* Botón de acción */}
           {onNavigateToTab && (
-            <button
-              onClick={() => onNavigateToTab('mapa')}
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#4A198C] hover:bg-[#3E1475] text-white font-extrabold text-sm sm:text-base shadow-sm hover:shadow transition-all cursor-pointer"
-            >
-              Explorar Mapa Local
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <div className="flex items-center justify-center mt-6 sm:mt-8">
+              <button
+                onClick={() => onNavigateToTab('mapa')}
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-white font-medium text-xs sm:text-sm shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer select-none"
+                style={{
+                  background:
+                    'linear-gradient(90deg, #38126B 0%, #4A198C 50%, #6D28D9 100%)',
+                  boxShadow: '0 4px 20px rgba(74, 25, 140, 0.45)',
+                }}
+              >
+                <span>Explorar Mapa Local</span>
+                <span className="text-base leading-none">→</span>
+              </button>
+            </div>
           )}
         </div>
       </motion.div>

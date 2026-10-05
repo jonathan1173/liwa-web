@@ -9,7 +9,7 @@ export const HomePage: React.FC<HomePageProps> = (props) => {
   return (
     <div className="flex flex-col w-full min-h-screen">
       <Hero {...props} />
-      <Cards {...props} />
+      {/* <Cards {...props} /> */}
       <FeaturesSection />
     </div>
   );
