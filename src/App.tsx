@@ -9,6 +9,7 @@ import {
   TruequePage,
   AuthPage,
   DescargaApkPage,
+  ProductoDetallePage,
 } from '@/pages';
 import { TruequeModal } from '@/components/TruequeModal';
 import { CheckCircle2, X } from 'lucide-react';
@@ -30,12 +31,43 @@ const isApkRoute = (pathname: string, hash: string): boolean => {
   );
 };
 
-export type ActiveView = NavTab | 'descarga-apk';
+// Detección de ruta para producto individual
+const getProductIdFromRoute = (pathname: string, hash: string): number | null => {
+  const cleanPath = pathname.toLowerCase();
+  const matchPath = cleanPath.match(/^\/producto\/(\d+)/);
+  if (matchPath) return parseInt(matchPath[1], 10);
+
+  const cleanHash = hash.toLowerCase();
+  const matchHash = cleanHash.match(/^#\/?producto\/(\d+)/);
+  if (matchHash) return parseInt(matchHash[1], 10);
+
+  if (typeof window !== 'undefined') {
+    const params = new URLSearchParams(window.location.search);
+    const pId = params.get('producto');
+    if (pId && !isNaN(Number(pId))) return parseInt(pId, 10);
+  }
+
+  return null;
+};
+
+export type ActiveView = NavTab | 'descarga-apk' | 'producto-detalle';
 
 export function App() {
+  const initialProductId = typeof window !== 'undefined'
+    ? getProductIdFromRoute(window.location.pathname, window.location.hash)
+    : null;
+
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(initialProductId);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
   const [currentTab, setCurrentTab] = useState<ActiveView>(() => {
-    if (typeof window !== 'undefined' && isApkRoute(window.location.pathname, window.location.hash)) {
-      return 'descarga-apk';
+    if (typeof window !== 'undefined') {
+      if (initialProductId) {
+        return 'producto-detalle';
+      }
+      if (isApkRoute(window.location.pathname, window.location.hash)) {
+        return 'descarga-apk';
+      }
     }
     return 'home';
   });
@@ -79,10 +111,14 @@ export function App() {
   useEffect(() => {
     const handleUrlChange = () => {
       if (typeof window !== 'undefined') {
-        if (isApkRoute(window.location.pathname, window.location.hash)) {
+        const prodId = getProductIdFromRoute(window.location.pathname, window.location.hash);
+        if (prodId) {
+          setSelectedProductId(prodId);
+          setCurrentTab('producto-detalle');
+        } else if (isApkRoute(window.location.pathname, window.location.hash)) {
           setCurrentTab('descarga-apk');
-        } else if (currentTab === 'descarga-apk') {
-          setCurrentTab('home');
+        } else if (currentTab === 'descarga-apk' || currentTab === 'producto-detalle') {
+          setCurrentTab('explorar');
         }
       }
     };
@@ -117,6 +153,25 @@ export function App() {
 
   const handleBarterSuccess = (msg: string) => {
     setToastMessage(msg);
+  };
+
+  const handleSelectProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setSelectedProductId(product.id);
+    if (typeof window !== 'undefined') {
+      window.history.pushState({ productId: product.id }, '', `/producto/${product.id}`);
+    }
+    setCurrentTab('producto-detalle');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBackFromProductDetail = () => {
+    setSelectedProduct(null);
+    setSelectedProductId(null);
+    if (typeof window !== 'undefined') {
+      window.history.pushState({}, '', '/');
+    }
+    setCurrentTab('explorar');
   };
 
   return (
@@ -162,7 +217,13 @@ export function App() {
       {/* Top Desktop Navigation */}
       {currentTab !== 'auth' && (
         <Navbar
-          currentTab={currentTab === 'descarga-apk' ? ('' as any) : currentTab}
+          currentTab={
+            currentTab === 'descarga-apk'
+              ? ('' as any)
+              : currentTab === 'producto-detalle'
+              ? 'explorar'
+              : currentTab
+          }
           isApkActive={currentTab === 'descarga-apk'}
           onGoToApk={() => {
             if (typeof window !== 'undefined') {
@@ -171,9 +232,11 @@ export function App() {
             setCurrentTab('descarga-apk');
           }}
           onSelectTab={(tab) => {
-            if (typeof window !== 'undefined' && isApkRoute(window.location.pathname, window.location.hash)) {
+            if (typeof window !== 'undefined') {
               window.history.pushState({}, '', '/');
             }
+            setSelectedProduct(null);
+            setSelectedProductId(null);
             setCurrentTab(tab);
           }}
           user={currentUser}
@@ -199,7 +262,7 @@ export function App() {
       )}
 
       {/* Main Content Rendered by Tab */}
-      <main className="flex-1 relative z-10">
+      <main className="flex-1 relative">
         {currentTab === 'descarga-apk' && (
           <DescargaApkPage
             onBackToHome={() => {
@@ -229,7 +292,20 @@ export function App() {
         )}
 
         {currentTab === 'explorar' && (
-          <ExplorarPage onStartBarter={handleStartBarter} />
+          <ExplorarPage
+            onStartBarter={handleStartBarter}
+            onSelectProduct={handleSelectProduct}
+          />
+        )}
+
+        {currentTab === 'producto-detalle' && (
+          <ProductoDetallePage
+            product={selectedProduct}
+            productId={selectedProductId}
+            onBack={handleBackFromProductDetail}
+            onStartBarter={handleStartBarter}
+            onSelectProduct={handleSelectProduct}
+          />
         )}
 
         {currentTab === 'mapa' && (

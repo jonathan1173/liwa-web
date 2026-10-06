@@ -4,3 +4,4 @@ export * from './mapa';
 export * from './trueque';
 export * from './auth';
 export * from './descarga';
+export * from './producto';
