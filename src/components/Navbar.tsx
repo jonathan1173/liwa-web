@@ -150,7 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <img
                   src="/assets/liwa_nombre.png"
                   alt="Liwa"
-                  className="h-9 sm:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                  className="h-6 sm:h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                   }}
@@ -160,33 +160,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Right Section: Descargar APK + User / Login */}
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Botón Descargar APK */}
-              {onGoToApk && (
-                <button
-                  onClick={onGoToApk}
-                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold border transition-all duration-200 cursor-pointer shadow-2xs hover:scale-105 group ${
-                    isApkActive
-                      ? 'bg-[#EC006C]/10 text-[#EC006C] border-[#EC006C]/30 shadow-xs shadow-[#EC006C]/10'
-                      : 'bg-white/90 text-[#2C2C2C] border-slate-200/90 hover:border-[#EC006C]/30 hover:text-[#EC006C] hover:bg-slate-50'
-                  }`}
-                  title="Descargar Liwa APK para Android"
-                >
-                  <div
-                    className={`w-5 h-5 rounded-lg flex items-center justify-center transition-colors ${
-                      isApkActive
-                        ? 'bg-[#EC006C] text-white'
-                        : 'bg-[#EC006C]/10 text-[#EC006C] group-hover:bg-[#EC006C] group-hover:text-white'
-                    }`}
-                  >
-                    <Download className="w-3 h-3" />
-                  </div>
-                  <span className="hidden sm:inline-block">Descargar APK</span>
-                  <span className="inline-block sm:hidden">APK</span>
-                  <span className="hidden md:inline-block px-1.5 py-0.5 text-[10px] font-black rounded bg-[#7AAF00]/15 text-[#7AAF00]">
-                    Android
-                  </span>
-                </button>
-              )}
+           
 
               {user ? (
                 <div className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-3 border-l border-slate-200">
