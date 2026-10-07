@@ -64,8 +64,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         <p className="text-xs font-medium text-slate-500 order-2 sm:order-1">
           Mostrando{' '}
           <span className="font-bold text-[#2C2C2C]">{startItem}</span> a{' '}
-          <span className="font-bold text-[#2C2C2C]">{endItem}</span> de{' '}
-          <span className="font-bold text-[#2C2C2C]">{totalItems}</span> productos
+          <span className="font-bold text-[#2C2C2C]">{endItem}</span>
         </p>
       )}
 

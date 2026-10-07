@@ -28,17 +28,17 @@ import {
  * el indicador visual del paso correspondiente.
  */
 export const STEP_IMAGES = {
-  // Paso 1: Alerta en el navegador (ej: "Este archivo puede ser dañino -> Descargar de todos modos")
-  step1: '',
+  // Paso 1: Notificación de descarga completada en el navegador
+  step1: '/image/download/1_descarga.jpg',
 
-  // Paso 2: Permisos de orígenes desconocidos (ej: Ajustes -> Confiar en esta fuente / Chrome)
-  step2: '',
+  // Paso 2: Ventana emergente de confirmación de instalación
+  step2: '/image/download/2_instalar.jpg',
 
-  // Paso 3: Instalador de Android (ej: "¿Deseas instalar esta app? -> Instalar")
-  step3: '',
+  // Paso 3: Alerta preventiva de Play Protect (Desplegar más detalles)
+  step3: '/image/download/3_desplegar_mas_detalles.jpg',
 
-  // Paso 4: App instalada (ej: "Se instaló la app -> Abrir" y bienvenida a Liwa)
-  step4: '',
+  // Paso 4: Confirmación en Play Protect (Instalar sin analizar)
+  step4: '/image/download/4_aceptar_instalacion.jpg',
 };
 
 interface ReleaseInfo {
@@ -159,16 +159,16 @@ export const DescargaApkPage: React.FC<DescargaApkPageProps> = ({ onBackToHome }
     setTimeout(() => setCopiedLink(false), 2500);
   };
 
-  // Definición de los pasos pedagógicos ordenados
+  // Definición de los pasos pedagógicos ordenados según las capturas
   const steps = [
     {
       id: 1,
       badge: 'Paso 01',
-      title: 'Descarga el archivo APK en tu celular',
-      subtitle: 'Acepta la advertencia preventiva del navegador',
+      title: 'Abre el archivo APK descargado',
+      subtitle: 'Presiona "Abrir" en la barra de descarga de tu navegador',
       description:
-        'Al pulsar el botón de descarga situado al final de esta guía, tu navegador Android (Google Chrome, Samsung Internet, etc.) te advertirá que los archivos APK pueden ser perjudiciales. Esto es una medida de seguridad genérica para cualquier app no descargada directamente desde la Play Store.',
-      tip: 'Haz clic en "Descargar de todos modos" o "Aceptar" para continuar con la descarga del instalador oficial.',
+        'Al completarse la descarga en tu navegador (como Google Chrome), aparecerá una barra inferior con el aviso "Archivo descargado" (File downloaded) y el instalador liwa-v9.0.1.apk.',
+      tip: 'Presiona el botón azul "Abrir" (Open) en la parte inferior para iniciar el proceso de instalación.',
       imageVariable: 'STEP_IMAGES.step1',
       imageUrl: STEP_IMAGES.step1,
       highlightColor: '#EC006C',
@@ -177,40 +177,40 @@ export const DescargaApkPage: React.FC<DescargaApkPageProps> = ({ onBackToHome }
     {
       id: 2,
       badge: 'Paso 02',
-      title: 'Permite la instalación de fuentes desconocidas',
-      subtitle: 'Habilita los permisos de seguridad de Android',
+      title: 'Confirma la instalación de Liwa',
+      subtitle: 'Autoriza el paquete oficial del instalador',
       description:
-        'Si es la primera vez que instalas un archivo descargado desde tu navegador o explorador de archivos, el sistema te solicitará autorización: "Para tu seguridad, el teléfono no tiene permitido instalar apps desconocidas de esta fuente".',
-      tip: 'Presiona "Configuración" en la ventana emergente y activa el interruptor "Permitir desde esta fuente" o "Confiar en esta app".',
+        'El sistema Android abrirá una ventana emergente preguntando "¿Deseas instalar esta app?" ("Install this app?"), reconociendo el logo oficial de Liwa.',
+      tip: 'Presiona el botón "Instalar" (Install) en la esquina inferior derecha para continuar con el proceso.',
       imageVariable: 'STEP_IMAGES.step2',
       imageUrl: STEP_IMAGES.step2,
       highlightColor: '#4A198C',
-      icon: Settings,
+      icon: PackageCheck,
     },
     {
       id: 3,
       badge: 'Paso 03',
-      title: 'Confirma la instalación de Liwa',
-      subtitle: 'Inicia el paquete del instalador',
+      title: 'Despliega los detalles de Google Play Protect',
+      subtitle: 'Aviso preventivo: "Se recomienda analizar la app"',
       description:
-        'Una vez terminada la descarga, pulsa sobre la notificación de "Descarga finalizada" o busca el archivo APK descargado en tu carpeta de "Descargas" (Archivos/Files de tu celular).',
-      tip: 'El instalador te preguntará "¿Deseas instalar esta aplicación?". Simplemente pulsa el botón "Instalar" y aguarda unos segundos.',
+        'Google Play Protect mostrará una pantalla preventiva advirtiendo que no reconoce la app porque no fue descargada directamente desde Google Play Store ("App scan recommended").',
+      tip: 'No selecciones "Don\'t install". En su lugar, presiona en "Más detalles" (More details ⌵) para ver las opciones disponibles.',
       imageVariable: 'STEP_IMAGES.step3',
       imageUrl: STEP_IMAGES.step3,
-      highlightColor: '#7AAF00',
-      icon: PackageCheck,
+      highlightColor: '#F59E0B',
+      icon: AlertTriangle,
     },
     {
       id: 4,
       badge: 'Paso 04',
-      title: 'Abre Liwa y configura tus permisos',
-      subtitle: '¡Todo listo para comerciar y hacer trueques!',
+      title: 'Acepta la instalación sin analizar',
+      subtitle: 'Finaliza la instalación y accede a Liwa',
       description:
-        'Cuando la pantalla muestre "Se instaló la app", pulsa en "Abrir". La aplicación Liwa iniciará inmediatamente en tu dispositivo Android.',
-      tip: 'Concede los permisos solicitados (como ubicación para visualizar productos cercanos en el mapa y cámara para publicar artículos) para disfrutar la experiencia completa.',
+        'Al expandir los detalles, Play Protect te permitirá continuar de inmediato. Nuestra aplicación está compilada de manera limpia y segura directamente desde nuestro código fuente.',
+      tip: 'Presiona en "Instalar sin analizar" (Install without scanning). ¡Listo! La app se instalará en tu teléfono y podrás abrirla de inmediato.',
       imageVariable: 'STEP_IMAGES.step4',
       imageUrl: STEP_IMAGES.step4,
-      highlightColor: '#EC006C',
+      highlightColor: '#7AAF00',
       icon: CheckCircle2,
     },
   ];
@@ -249,9 +249,48 @@ export const DescargaApkPage: React.FC<DescargaApkPageProps> = ({ onBackToHome }
 
         <p className="mt-5 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
           Sigue esta sencilla guía visual paso a paso para instalar la aplicación oficial de
-          Liwa en tu teléfono Android. Al finalizar el tutorial encontrarás el botón de{' '}
-          <strong className="text-[#EC006C] font-semibold">descarga directa</strong> del APK.
+          Liwa en tu teléfono Android. Puedes descargar el APK directamente aquí o seguir los
+          pasos visuales a continuación.
         </p>
+
+        {/* Botón de descarga en la parte superior */}
+        <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+          <button
+            onClick={handleDownload}
+            className="w-full sm:w-auto min-w-[270px] flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-base font-extrabold text-white bg-gradient-to-r from-[#EC006C] via-[#E10067] to-[#4A198C] hover:opacity-95 shadow-xl shadow-[#EC006C]/30 hover:shadow-2xl hover:shadow-[#EC006C]/45 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer group"
+          >
+            <Download className="w-5 h-5 transition-transform group-hover:translate-y-0.5" />
+            <span>Descargar APK ({releaseInfo.version})</span>
+          </button>
+
+          <button
+            onClick={handleCopyLink}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-4 rounded-2xl text-xs font-bold text-slate-700 hover:text-[#EC006C] bg-white/90 hover:bg-white border border-slate-200 shadow-2xs backdrop-blur-md transition-all cursor-pointer"
+            title="Copiar enlace de descarga directa"
+          >
+            {copiedLink ? (
+              <>
+                <Check className="w-4 h-4 text-[#7AAF00]" />
+                <span>¡Enlace copiado!</span>
+              </>
+            ) : (
+              <>
+                <ExternalLink className="w-4 h-4" />
+                <span>Copiar link</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Notificación al presionar descargar */}
+        {downloadStarted && (
+          <div className="mt-4 max-w-md mx-auto p-3.5 rounded-2xl bg-[#7AAF00]/15 border border-[#7AAF00]/40 text-[#436500] text-xs font-bold flex items-center justify-center gap-2 animate-in fade-in duration-300">
+            <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-[#7AAF00]" />
+            <span>
+              ¡Descarga iniciada! Revisa las notificaciones de tu teléfono y sigue la guía para instalar.
+            </span>
+          </div>
+        )}
 
         {/* Resumen rápido de requisitos */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-slate-600">
@@ -345,31 +384,29 @@ export const DescargaApkPage: React.FC<DescargaApkPageProps> = ({ onBackToHome }
                   </div>
                 </div>
 
-                {/* Columna del Contenedor de Imagen (Mockup móvil con soporte bg-image) */}
+                {/* Columna del Contenedor de Imagen (Mockup móvil con la captura) */}
                 <div
                   className={`flex justify-center ${
                     isEven ? 'lg:col-span-6 lg:order-1' : 'lg:col-span-6 lg:order-2'
                   }`}
                 >
-                  <div className="relative w-full max-w-[320px] sm:max-w-[340px] aspect-[9/16] rounded-[2.5rem] p-3 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-950 shadow-2xl border-4 border-slate-700/60 ring-1 ring-white/20 overflow-hidden flex flex-col">
+                  <div className="relative w-full max-w-[280px] sm:max-w-[310px] aspect-[1080/2203] rounded-[2.5rem] p-2.5 sm:p-3 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-950 shadow-2xl border-4 border-slate-700/60 ring-1 ring-white/20 overflow-hidden flex flex-col group">
                     {/* Bocina / Altavoz superior del celular */}
-                    <div className="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-3 bg-black/80 rounded-full z-20 flex items-center justify-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-slate-800 border border-slate-700" />
-                      <div className="w-6 h-1 rounded-full bg-slate-800" />
+                    <div className="absolute top-3 sm:top-4 left-1/2 -translate-x-1/2 w-16 sm:w-20 h-2.5 sm:h-3 bg-black/85 rounded-full z-20 flex items-center justify-center gap-1.5 pointer-events-none">
+                      <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-slate-800 border border-slate-700" />
+                      <div className="w-5 sm:w-6 h-0.5 sm:h-1 rounded-full bg-slate-800" />
                     </div>
 
-                    {/* Área de Pantalla: Aplica la imagen mediante bg-image */}
-                    <div
-                      className="relative w-full h-full rounded-[2rem] overflow-hidden bg-slate-900 flex flex-col items-center justify-center text-center p-6 border border-slate-800/80"
-                      style={{
-                        backgroundImage: step.imageUrl ? `url("${step.imageUrl}")` : undefined,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat',
-                      }}
-                    >
-                      {/* Si NO hay URL asignada en la variable, mostramos el contenedor mockup vacío informativo */}
-                      {!step.imageUrl && (
+                    {/* Área de Pantalla */}
+                    <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-slate-950 flex flex-col items-center justify-center border border-slate-800/80">
+                      {step.imageUrl ? (
+                        <img
+                          src={step.imageUrl}
+                          alt={step.title}
+                          className="w-full h-full object-cover object-top select-none transition-transform duration-300 group-hover:scale-[1.01]"
+                          loading="lazy"
+                        />
+                      ) : (
                         <div className="relative z-10 flex flex-col items-center justify-center p-4 bg-slate-950/70 border border-white/10 rounded-2xl backdrop-blur-md max-w-[240px] shadow-lg">
                           <div
                             className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3 shadow-md"
@@ -407,7 +444,7 @@ export const DescargaApkPage: React.FC<DescargaApkPageProps> = ({ onBackToHome }
                     </div>
 
                     {/* Barra de inicio inferior de navegación */}
-                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-28 h-1 bg-white/40 rounded-full z-20" />
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-24 sm:w-28 h-1 bg-white/40 rounded-full z-20 pointer-events-none" />
                   </div>
                 </div>
               </div>

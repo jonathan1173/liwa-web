@@ -44,39 +44,7 @@ export default function FeaturesSection() {
           className="absolute inset-0 bg-no-repeat bg-center bg-cover filter blur-[2px] scale-105 pointer-events-none"
         />
 
-        {/* Tarjeta flotante de cristal esmerilado para legibilidad impecable */}
-        <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto px-6 py-8 sm:px-12 sm:py-10 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/80 shadow-soft">
-          <div className="w-14 h-14 rounded-2xl bg-[#7AAF00]/15 border border-[#7AAF00]/30 text-[#7AAF00] flex items-center justify-center mb-5 shadow-sm backdrop-blur-sm">
-            <Recycle className="w-7 h-7" />
-          </div>
 
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight mb-5 text-[#2C2C2C]">
-            <span>Economía Circular &amp; </span>
-            <span className="text-[#7AAF00]">
-              Comercio Consciente
-            </span>
-          </h2>
-
-          <p className="text-base sm:text-lg md:text-xl text-[#2C2C2C]/85 max-w-2xl font-normal leading-relaxed mb-8">
-            Dale una segunda vida a los artículos que ya no usas. Al reusar, comprar de segunda mano
-            y realizar trueques directos, reduces residuos en tu ciudad, apoyas a tus vecinos y ahorras de manera inteligente.
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-slate-200/80 text-xs sm:text-sm font-semibold text-[#2C2C2C] shadow-sm">
-              <CheckCircle2 className="w-4 h-4 text-[#7AAF00]" />
-              <span>100% Sostenible</span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-slate-200/80 text-xs sm:text-sm font-semibold text-[#2C2C2C] shadow-sm">
-              <CheckCircle2 className="w-4 h-4 text-[#7AAF00]" />
-              <span>Sin comisiones abusivas</span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-slate-200/80 text-xs sm:text-sm font-semibold text-[#2C2C2C] shadow-sm">
-              <CheckCircle2 className="w-4 h-4 text-[#7AAF00]" />
-              <span>Valoración honesta</span>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* =========================================================================
@@ -118,7 +86,7 @@ export default function FeaturesSection() {
 
             {/* LADO DERECHO: Título y descripción con diseño elegante */}
             <div className="order-1 lg:order-2 flex w-full flex-col items-center lg:items-start text-center lg:text-left lg:w-1/2">
-             
+
 
               <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15] mb-5">
                 Rapido &amp;{' '}
@@ -158,39 +126,6 @@ export default function FeaturesSection() {
           className="absolute inset-0 bg-no-repeat bg-center bg-cover filter blur-[2px] scale-105 pointer-events-none"
         />
 
-        {/* Tarjeta flotante de cristal esmerilado para legibilidad impecable */}
-        <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto px-6 py-8 sm:px-12 sm:py-10 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/80 shadow-soft">
-          <div className="w-14 h-14 rounded-2xl bg-[#EC006C]/15 border border-[#EC006C]/30 text-[#EC006C] flex items-center justify-center mb-5 shadow-sm backdrop-blur-sm">
-            <Users className="w-7 h-7 text-[#EC006C]" />
-          </div>
-
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight mb-5 text-[#2C2C2C]">
-            <span>Una Red Vecinal Basada en la </span>
-            <span className="text-[#EC006C]">
-              Confianza Mutua
-            </span>
-          </h2>
-
-          <p className="text-base sm:text-lg md:text-xl text-[#2C2C2C]/85 max-w-2xl font-normal leading-relaxed mb-8">
-            Cada persona en Liwa cuenta con un perfil transparente, historial comunitario y calificaciones de otros usuarios.
-            Construye una reputación sólida en tu vecindario y sé parte de un comercio donde la palabra y la honestidad son lo primero.
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-slate-200/80 text-xs sm:text-sm font-semibold text-[#2C2C2C] shadow-sm">
-              <CheckCircle2 className="w-4 h-4 text-[#EC006C]" />
-              <span>Calificaciones auténticas</span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-slate-200/80 text-xs sm:text-sm font-semibold text-[#2C2C2C] shadow-sm">
-              <CheckCircle2 className="w-4 h-4 text-[#EC006C]" />
-              <span>Perfiles verificados</span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-slate-200/80 text-xs sm:text-sm font-semibold text-[#2C2C2C] shadow-sm">
-              <CheckCircle2 className="w-4 h-4 text-[#7AAF00]" />
-              <span>Comunidad activa</span>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );

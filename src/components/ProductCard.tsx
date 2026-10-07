@@ -49,13 +49,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         )}
 
-        {/* Discreet Trueque badge on image corner */}
-        {product.barter && (
-          <div className="absolute top-2 left-2 bg-[#7AAF00] text-white text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-md shadow-xs flex items-center gap-1 backdrop-blur-xs">
-            <MorphBarter active className="w-3 h-3 text-white" />
-            <span>Trueque</span>
-          </div>
-        )}
+      
 
         {/* Condition tag */}
         {product.condition && (
