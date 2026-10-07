@@ -200,18 +200,40 @@ export async function getProductById(id: number): Promise<Product | null> {
       category:category_id ( name ),
       condition:condition_id ( name ),
       state:state_id ( id, name ),
-      images:product_image ( url )
+      images:product_image ( url ),
+      seller:user_id ( full_name, phone )
     `)
     .eq('id', id)
     .single();
 
   if (error) return null;
 
+  let sellerData = Array.isArray((data as any).seller)
+    ? ((data as any).seller[0] ?? null)
+    : ((data as any).seller ?? null);
+
+  // Fallback direct query to profile table if join didn't populate
+  if (!sellerData && data.user_id) {
+    try {
+      const { data: prof } = await supabase
+        .from('profile')
+        .select('full_name, phone')
+        .eq('id', data.user_id)
+        .single();
+      if (prof) {
+        sellerData = prof;
+      }
+    } catch {
+      // ignore
+    }
+  }
+
   return {
     ...data,
     state: Array.isArray((data as any).state) ? ((data as any).state[0] ?? null) : ((data as any).state ?? null),
     category: Array.isArray((data as any).category) ? ((data as any).category[0] ?? null) : ((data as any).category ?? null),
     condition: Array.isArray((data as any).condition) ? ((data as any).condition[0] ?? null) : ((data as any).condition ?? null),
+    seller: sellerData,
     status: (data as any).state?.name ?? 'Activo',
     barter: (data as any).barter ?? true,
     images: formatProductImages((data as any).images),

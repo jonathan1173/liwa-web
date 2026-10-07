@@ -332,7 +332,12 @@ export function App() {
         )}
 
         {currentTab === 'trueque' && (
-          <TruequePage onStartBarter={handleStartBarter} />
+          <TruequePage
+            currentUser={currentUser}
+            catalogProducts={catalogProducts}
+            onBarterSuccess={handleBarterSuccess}
+            onStartBarter={handleStartBarter}
+          />
         )}
 
         {currentTab === 'biblioteca' && (

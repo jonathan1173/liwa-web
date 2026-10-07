@@ -12,6 +12,7 @@ export interface Product {
   condition: { name: string } | null;
   state?: { id: number; name: string } | null;
   images: { url: string }[];
+  seller?: { full_name: string | null; phone?: string | null } | null;
 }
 
 export interface SellerLocation {
