@@ -108,7 +108,7 @@ export function Hero({
                   filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.5))',
                 }}
               >
-                DESCUBRE EL
+                Conectamos raíces
               </span>
               <span className="block mt-1 sm:mt-2">
                 <span
@@ -121,7 +121,7 @@ export function Hero({
                     filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.5))',
                   }}
                 >
-                  NUEVO{' '}
+                  {' '}
                 </span>
                 <span
                   className="bg-clip-text text-transparent font-black"
@@ -134,7 +134,7 @@ export function Hero({
                       'drop-shadow(0 2px 14px rgba(168, 85, 247, 0.4)) drop-shadow(0 2px 10px rgba(0,0,0,0.5))',
                   }}
                 >
-                  LIWA
+                Impulsamos futuro
                 </span>
               </span>
             </h1>
