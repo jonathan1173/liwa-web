@@ -566,7 +566,7 @@ export async function getSellerLocationsWithInventory(): Promise<{
     supabase
       .from('category')
       .select('id, name')
-      .order('name'),
+      .order('id'),
   ]);
 
   const rawProfiles = profilesRes.data ?? [];

@@ -367,7 +367,11 @@ export function App() {
         )}
 
         {currentTab === 'mapa' && (
-          <MapaPage onStartBarter={handleStartBarter} />
+          <MapaPage
+            onStartBarter={handleStartBarter}
+            userProfile={userProfile}
+            currentUser={currentUser}
+          />
         )}
 
         {currentTab === 'trueque' && (

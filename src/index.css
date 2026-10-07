@@ -81,6 +81,45 @@
   box-shadow: 0 6px 20px rgba(236, 0, 108, 0.4);
 }
 
+/* Custom User Location pin on Leaflet map */
+.custom-user-pin {
+  background: transparent !important;
+  border: none !important;
+}
+
+.user-location-badge {
+  background-color: #2C2C2C;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  border: 2px solid #EC006C;
+  box-shadow: 0 4px 16px rgba(236, 0, 108, 0.45);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: bounce-subtle 3s ease-in-out infinite;
+}
+
+.user-ping-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #EC006C;
+  box-shadow: 0 0 10px #EC006C;
+}
+
+@keyframes bounce-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
