@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Eye, EyeOff } from 'lucide-react';
+import { Sparkles, Eye, EyeOff, BookOpen } from 'lucide-react';
 import {
   HouseIcon,
   CompassIcon,
@@ -168,6 +168,36 @@ export const MorphBarter: React.FC<{
     </div>
   );
 };
+
+/**
+ * MorphBook:
+ * Icono de Libro interactivo con micro-animaciones al hover y activo.
+ */
+export const MorphBook: React.FC<{
+  className?: string;
+  active?: boolean;
+  color?: string;
+  size?: number;
+}> = ({ className = '', active = false, color = '#4A198C', size = 20 }) => {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className={`inline-flex items-center justify-center transition-transform duration-300 ${
+        hovered || active ? '-translate-y-0.5 scale-110 drop-shadow-[0_4px_8px_rgba(74,25,140,0.35)]' : ''
+      } ${className}`}
+    >
+      <BookOpen
+        size={size}
+        color={color}
+        className="transition-colors duration-200"
+      />
+    </div>
+  );
+};
+
 
 /**
  * MorphSparkle (Preservado para secciones decorativas como Hero/Features):

@@ -1,5 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
-import { Category, Condition, Product, SellerLocation, SendBarterProposalParams } from '@/types';
+import {
+  Category,
+  Condition,
+  Product,
+  SellerLocation,
+  SendBarterProposalParams,
+  LibraryBook,
+} from '@/types';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://ximkltsvydnzvudfojay.supabase.co';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_BC6S7Wpdm_0tEugFze-7FQ_qPcV9o3K';
@@ -320,3 +327,25 @@ export async function sendBarterProposal(input: SendBarterProposalParams): Promi
 
   return proposal.id;
 }
+
+// ─── Library Helpers ──────────────────────────────────────────────────────────
+export async function getLibraryBooks(): Promise<LibraryBook[]> {
+  await ensureSession();
+  const { data, error } = await supabase
+    .from('library')
+    .select('id, title_book, url_download, url_image')
+    .order('id', { ascending: true });
+
+  if (error) {
+    console.error('Error Supabase getLibraryBooks:', error);
+    throw error;
+  }
+
+  return (data ?? []).map((item: any) => ({
+    id: item.id,
+    title_book: item.title_book,
+    url_download: item.url_download ?? null,
+    url_image: item.url_image ?? null,
+  }));
+}
+

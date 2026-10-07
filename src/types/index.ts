@@ -51,3 +51,11 @@ export interface UserProfile {
   longitude?: number | null;
   profile_completed?: boolean;
 }
+
+export interface LibraryBook {
+  id: number;
+  title_book: string;
+  url_download: string | null;
+  url_image: string | null;
+}
+

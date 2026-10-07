@@ -10,6 +10,7 @@ import {
   AuthPage,
   DescargaApkPage,
   ProductoDetallePage,
+  BibliotecaPage,
 } from '@/pages';
 import { TruequeModal } from '@/components/TruequeModal';
 import { CheckCircle2, X } from 'lucide-react';
@@ -29,6 +30,13 @@ const isApkRoute = (pathname: string, hash: string): boolean => {
     cleanHash === 'descarga-apk' ||
     cleanHash === 'descargar-apk'
   );
+};
+
+// Detección de ruta directa para la página de Biblioteca
+const isBibliotecaRoute = (pathname: string, hash: string): boolean => {
+  const cleanPath = pathname.toLowerCase().replace(/\/$/, '');
+  const cleanHash = hash.toLowerCase().replace(/^#\/?/, '').replace(/\/$/, '');
+  return cleanPath === '/biblioteca' || cleanHash === 'biblioteca';
 };
 
 // Detección de ruta para producto individual
@@ -67,6 +75,9 @@ export function App() {
       }
       if (isApkRoute(window.location.pathname, window.location.hash)) {
         return 'descarga-apk';
+      }
+      if (isBibliotecaRoute(window.location.pathname, window.location.hash)) {
+        return 'biblioteca';
       }
     }
     return 'home';
@@ -117,6 +128,8 @@ export function App() {
           setCurrentTab('producto-detalle');
         } else if (isApkRoute(window.location.pathname, window.location.hash)) {
           setCurrentTab('descarga-apk');
+        } else if (isBibliotecaRoute(window.location.pathname, window.location.hash)) {
+          setCurrentTab('biblioteca');
         } else if (currentTab === 'descarga-apk' || currentTab === 'producto-detalle') {
           setCurrentTab('explorar');
         }
@@ -233,7 +246,13 @@ export function App() {
           }}
           onSelectTab={(tab) => {
             if (typeof window !== 'undefined') {
-              window.history.pushState({}, '', '/');
+              if (tab === 'biblioteca') {
+                window.history.pushState({}, '', '/biblioteca');
+              } else if (tab === 'home') {
+                window.history.pushState({}, '', '/');
+              } else {
+                window.history.pushState({}, '', `/${tab}`);
+              }
             }
             setSelectedProduct(null);
             setSelectedProductId(null);
@@ -314,6 +333,10 @@ export function App() {
 
         {currentTab === 'trueque' && (
           <TruequePage onStartBarter={handleStartBarter} />
+        )}
+
+        {currentTab === 'biblioteca' && (
+          <BibliotecaPage />
         )}
       </main>
 
