@@ -61,75 +61,7 @@ export const BibliotecaPage: React.FC = () => {
 
   return (
     <div className="w-full min-h-[calc(100vh-80px)] py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      {/* Header Banner */}
-      <div className="relative rounded-3xl p-6 sm:p-10 mb-8 sm:mb-12 overflow-hidden border border-slate-200/80 bg-white/80 backdrop-blur-xl shadow-xs">
-        <div
-          className="absolute -right-20 -top-20 w-80 h-80 rounded-full blur-3xl opacity-20 pointer-events-none"
-          style={{ background: 'radial-gradient(circle, #4A198C 0%, #EC006C 100%)' }}
-        />
-        <div
-          className="absolute -left-16 -bottom-16 w-60 h-60 rounded-full blur-3xl opacity-15 pointer-events-none"
-          style={{ background: 'radial-gradient(circle, #7AAF00 0%, transparent 70%)' }}
-        />
-
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#4A198C]/10 border border-[#4A198C]/20 text-[#4A198C] text-xs font-bold mb-3 shadow-2xs">
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>Biblioteca Digital Liwa</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#EC006C]" />
-            </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-[#2C2C2C] tracking-tight mb-2">
-              Lecturas y Libros de la Comunidad
-            </h1>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Explora y descarga material educativo, libros y guías digitales disponibles para todos.
-              Aprende, comparte y fomenta el conocimiento libre.
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <div className="px-4 py-3 rounded-2xl bg-slate-50/90 border border-slate-200/80 text-center flex items-center justify-center gap-2">
-              <span className="text-2xl font-black text-[#4A198C]">{books.length}</span>
-              <span className="text-xs font-semibold text-slate-500">
-                {books.length === 1 ? 'Libro disponible' : 'Libros disponibles'}
-              </span>
-            </div>
-            <button
-              onClick={fetchBooks}
-              disabled={loading}
-              className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-white border border-slate-200/90 hover:bg-slate-50 text-xs font-bold text-[#2C2C2C] transition-all cursor-pointer shadow-2xs hover:scale-[1.02] disabled:opacity-50"
-              title="Actualizar biblioteca"
-            >
-              <RefreshCw className={`w-4 h-4 text-[#4A198C] ${loading ? 'animate-spin' : ''}`} />
-              <span>Actualizar</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Search Bar */}
-        <div className="relative z-10 mt-6 sm:mt-8 pt-6 border-t border-slate-100">
-          <div className="relative max-w-xl">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Buscar libros por título..."
-              className="w-full pl-11 pr-10 py-3 rounded-2xl bg-white/95 border border-slate-200/90 text-sm text-[#2C2C2C] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4A198C]/30 focus:border-[#4A198C] transition-all shadow-xs"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer"
-                title="Limpiar búsqueda"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+    
 
       {/* Error state */}
       {error && !loading && (

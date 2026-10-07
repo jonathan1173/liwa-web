@@ -108,7 +108,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       id: 'biblioteca' as NavTab,
       label: 'Biblioteca',
       description: 'Libros y lecturas digitales comunitarias',
-      badge: 'Nuevo',
+      badge: '',
       renderIcon: (active: boolean) => (
         <MorphBook active={active} size={20} color={active ? '#4A198C' : '#2C2C2C'} />
       ),
