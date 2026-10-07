@@ -16,13 +16,12 @@ import {
   Shirt,
   UtensilsCrossed,
   Gamepad2,
-  Sparkles,
-  Layers,
-  ChevronRight,
-  ExternalLink,
   Store,
   RotateCcw,
   SlidersHorizontal,
+  Check,
+  ChevronRight,
+  Layers,
 } from 'lucide-react';
 import L from 'leaflet';
 
@@ -35,6 +34,7 @@ interface CategoryFilterConfig {
   id: string;
   label: string;
   shortLabel: string;
+  description: string;
   icon: React.ElementType;
   dbCategories: string[];
   keywords: string[];
@@ -46,6 +46,7 @@ const CATEGORY_FILTERS: CategoryFilterConfig[] = [
     id: 'all',
     label: 'Todos los vendedores',
     shortLabel: 'Todos',
+    description: 'Ver todos los vendedores comunitarios registrados en el mapa',
     icon: Store,
     dbCategories: [],
     keywords: [],
@@ -55,6 +56,7 @@ const CATEGORY_FILTERS: CategoryFilterConfig[] = [
     id: 'electrodomesticos',
     label: 'Electrodomésticos y Electrónica',
     shortLabel: 'Electrodomésticos',
+    description: 'Refrigeradores, microondas, licuadoras, televisores, computadoras y celulares',
     icon: Tv,
     dbCategories: ['Electronica'],
     keywords: [
@@ -92,6 +94,7 @@ const CATEGORY_FILTERS: CategoryFilterConfig[] = [
     id: 'casa',
     label: 'Cosas de Casa y Hogar',
     shortLabel: 'Cosas de Casa',
+    description: 'Muebles, cocina, comedor, decoración, camas, sábanas y vajilla',
     icon: Home,
     dbCategories: ['Casa'],
     keywords: [
@@ -130,6 +133,7 @@ const CATEGORY_FILTERS: CategoryFilterConfig[] = [
     id: 'ropa',
     label: 'Ropa y Accesorios',
     shortLabel: 'Ropa y Accesorios',
+    description: 'Prendas de vestir, calzado, sandalias, bolsos, joyas y relojes',
     icon: Shirt,
     dbCategories: ['Ropa y Accesorios'],
     keywords: [
@@ -160,6 +164,7 @@ const CATEGORY_FILTERS: CategoryFilterConfig[] = [
     id: 'comida',
     label: 'Comida y Bebidas',
     shortLabel: 'Comida',
+    description: 'Alimentos preparados, granos, frutas, verduras, refrescos y postres',
     icon: UtensilsCrossed,
     dbCategories: ['Comida', 'Verduras', 'Refrescos'],
     keywords: [
@@ -188,6 +193,7 @@ const CATEGORY_FILTERS: CategoryFilterConfig[] = [
     id: 'entretenimiento',
     label: 'Entretenimiento y Pasatiempos',
     shortLabel: 'Entretenimiento',
+    description: 'Juegos, videojuegos, instrumentos musicales, libros y pasatiempos',
     icon: Gamepad2,
     dbCategories: ['Entretenimiento', 'Pasatiempo'],
     keywords: [
@@ -223,6 +229,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
   // Filters state
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<'all' | 'sections'>('sections');
 
   // Selected seller details state
@@ -234,6 +241,29 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
   // Initial map center (Nicaragua: Masaya / Managua / Granada)
   const defaultLat = 11.9768;
   const defaultLng = -86.0877;
+
+  // Handle Escape key for Filter Modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isFilterModalOpen) {
+        setIsFilterModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isFilterModalOpen]);
+
+  // Lock body scroll when Filter Modal is open
+  useEffect(() => {
+    if (isFilterModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isFilterModalOpen]);
 
   // Load sellers with inventory & categories directly from Supabase
   useEffect(() => {
@@ -262,7 +292,6 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
       const activeFilter = CATEGORY_FILTERS.find((f) => f.id === selectedCategory);
       if (activeFilter) {
         result = result.filter((seller) => {
-          // Check if any product category matches
           const hasDbCatMatch = seller.categories?.some((catName) =>
             activeFilter.dbCategories.some(
               (target) => target.toLowerCase() === catName.toLowerCase()
@@ -270,7 +299,6 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
           );
           if (hasDbCatMatch) return true;
 
-          // Check keywords in products
           const hasKeywordMatch = seller.products?.some((prod) => {
             const text = `${prod.title} ${prod.description || ''}`.toLowerCase();
             return activeFilter.keywords.some((kw) => text.includes(kw));
@@ -285,7 +313,6 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
     const q = searchQuery.trim().toLowerCase();
     if (q) {
       result = result.filter((seller) => {
-        // Name, username or city
         if (
           seller.full_name?.toLowerCase().includes(q) ||
           seller.username?.toLowerCase().includes(q) ||
@@ -294,12 +321,10 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
           return true;
         }
 
-        // Category name
         if (seller.categories?.some((cat) => cat.toLowerCase().includes(q))) {
           return true;
         }
 
-        // Aliases check: electrodomesticos -> electronica
         if (
           q.includes('electro') &&
           seller.categories?.some((c) => c.toLowerCase() === 'electronica')
@@ -313,7 +338,6 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
           return true;
         }
 
-        // Product titles or descriptions
         return seller.products?.some((prod) => {
           const prodText = `${prod.title} ${prod.description || ''}`.toLowerCase();
           return prodText.includes(q);
@@ -324,7 +348,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
     return result;
   }, [sellers, selectedCategory, searchQuery]);
 
-  // Count sellers per category for badges
+  // Count sellers per category for badges inside the modal
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = { all: sellers.length };
 
@@ -399,11 +423,12 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
         const isSelected = selectedSeller?.id === seller.id;
         const prodCount = seller.products?.length || 0;
 
-        // Custom divIcon matching mobile "@username" pill badge with official colors
         const customIcon = L.divIcon({
           className: 'custom-username-pin',
           html: `<div class="username-box ${isSelected ? 'active-pin' : ''}" style="${
-            isSelected ? 'background-color:#EC006C;transform:scale(1.08);box-shadow:0 0 16px rgba(236,0,108,0.5);' : ''
+            isSelected
+              ? 'background-color:#EC006C;transform:scale(1.08);box-shadow:0 0 16px rgba(236,0,108,0.5);'
+              : ''
           }">
                   <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#EC006C;margin-right:4px;"></span>
                   @${usernameTag}
@@ -438,7 +463,6 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
       return;
     }
 
-    // Preload from seller object if available
     if (selectedSeller.products && selectedSeller.products.length > 0) {
       setSellerProducts(selectedSeller.products);
     }
@@ -477,7 +501,12 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
   const handleResetFilters = () => {
     setSelectedCategory('all');
     setSearchQuery('');
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.setView([defaultLat, defaultLng], 12, { animate: true });
+    }
   };
+
+  const activeCategoryObj = CATEGORY_FILTERS.find((f) => f.id === selectedCategory);
 
   return (
     <div className="w-full min-h-screen bg-[#FAFAFC] pb-16">
@@ -520,10 +549,13 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
           </p>
         </div>
 
-        {/* Floating Capsule / Pill Bar (Inspirado en la barra redondeada de las capturas) */}
+        {/* ────────────────────────────────────────────────────────────────────────
+            BARRA FLOTANTE REDONDEADA CON BUSCADOR Y BOTONES IDÉNTICOS A LA IMAGEN 2:
+            [ Filtros ] y [ ↻ ]
+            ──────────────────────────────────────────────────────────────────────── */}
         <div className="relative z-20 max-w-4xl mx-auto px-4 -mt-8 sm:-mt-10 mb-8">
           <div className="bg-white/95 backdrop-blur-2xl rounded-3xl sm:rounded-full border border-white/90 shadow-2xl p-2.5 sm:p-3 transition-all">
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               {/* Search Bar Input */}
               <div className="relative flex-1 flex items-center">
                 <Search className="w-5 h-5 text-slate-400 absolute left-4 pointer-events-none" />
@@ -545,36 +577,72 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
                 )}
               </div>
 
-              {/* Quick View Mode Toggle on Desktop */}
-              <div className="flex items-center justify-between sm:justify-start gap-2 px-1">
-                <button
-                  onClick={() => setViewMode(viewMode === 'sections' ? 'all' : 'sections')}
-                  className={`flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl sm:rounded-full text-xs font-bold transition-all cursor-pointer border ${
-                    viewMode === 'sections'
-                      ? 'bg-[#4A198C] text-white border-[#4A198C]'
-                      : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
-                  }`}
-                  title="Alternar vista seccionada por categoría"
-                >
-                  <Layers className="w-4 h-4" />
-                  <span>{viewMode === 'sections' ? 'Por Categoría' : 'Todos'}</span>
-                </button>
-
-                {(selectedCategory !== 'all' || searchQuery) && (
-                  <button
-                    onClick={handleResetFilters}
-                    className="flex items-center gap-1 px-3 py-2.5 rounded-2xl sm:rounded-full text-xs font-bold text-[#EC006C] hover:bg-[#EC006C]/10 transition-colors cursor-pointer"
-                    title="Restablecer filtros"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Limpiar</span>
-                  </button>
+              {/* Botón 1: 'Filtros' (Idéntico a la segunda imagen del usuario) */}
+              <button
+                onClick={() => setIsFilterModalOpen(true)}
+                className={`flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl sm:rounded-full border font-bold text-xs sm:text-sm shadow-xs transition-all cursor-pointer hover:scale-102 active:scale-98 flex-shrink-0 ${
+                  selectedCategory !== 'all'
+                    ? 'bg-gradient-to-r from-[#4A198C] to-[#EC006C] text-white border-transparent shadow-md shadow-[#4A198C]/20'
+                    : 'bg-white hover:bg-slate-50 border-slate-200/90 text-[#2C2C2C]'
+                }`}
+                title="Abrir modal de filtros"
+              >
+                <SlidersHorizontal className="w-4 h-4 flex-shrink-0" />
+                <span>Filtros</span>
+                {selectedCategory !== 'all' && (
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                 )}
+              </button>
+
+              {/* Botón 2: Reset / Refresh (Idéntico a la segunda imagen del usuario) */}
+              <button
+                onClick={handleResetFilters}
+                className="p-3 rounded-2xl sm:rounded-full bg-white hover:bg-slate-50 border border-slate-200/90 text-[#2C2C2C] hover:text-[#4A198C] shadow-xs transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center flex-shrink-0"
+                title="Restablecer filtros y centrar mapa"
+              >
+                <RotateCcw className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* ──────────────────────────────────────────────────────────────────────────
+          2. MODAL DE FILTROS POR CATEGORÍA (DESPLEGADO POR EL BOTÓN 'FILTROS')
+          ────────────────────────────────────────────────────────────────────────── */}
+      {isFilterModalOpen && (
+        <div className="fixed inset-0 z-50 bg-[#2C2C2C]/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
+          <div
+            className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-white/90 p-5 sm:p-7 space-y-5 my-auto animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-[#4A198C]/10 text-[#4A198C] flex items-center justify-center">
+                  <SlidersHorizontal className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-[#2C2C2C]">
+                    Filtros por Categoría
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Selecciona qué tipo de cosas deseas ver en el mapa
+                  </p>
+                </div>
               </div>
+
+              <button
+                onClick={() => setIsFilterModalOpen(false)}
+                className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-[#2C2C2C] transition-colors cursor-pointer"
+                title="Cerrar modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
-            {/* Category Filter Pills (Horizontal scrollable chips) */}
-            <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pt-2 sm:pt-2.5 px-1 pb-1">
+            {/* Modal Body: Botones / Tarjetas de Selección de Categoría */}
+            <div className="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
               {CATEGORY_FILTERS.map((cat) => {
                 const Icon = cat.icon;
                 const isActive = selectedCategory === cat.id;
@@ -583,32 +651,86 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
                 return (
                   <button
                     key={cat.id}
+                    type="button"
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`flex items-center gap-1.5 px-3.5 py-1.5 sm:py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex-shrink-0 ${
+                    className={`w-full flex items-center justify-between p-3.5 rounded-2xl border transition-all text-left cursor-pointer group ${
                       isActive
-                        ? 'bg-gradient-to-r from-[#4A198C] to-[#EC006C] text-white shadow-md shadow-[#4A198C]/20 scale-105'
-                        : 'bg-slate-100/90 text-slate-700 hover:bg-slate-200/90 border border-slate-200/60'
+                        ? 'bg-[#4A198C]/5 border-[#4A198C] shadow-xs ring-2 ring-[#4A198C]/20'
+                        : 'bg-white hover:bg-slate-50 border-slate-200/80 hover:border-slate-300'
                     }`}
                   >
-                    <Icon className="w-3.5 h-3.5 flex-shrink-0" />
-                    <span>{cat.shortLabel}</span>
-                    <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
-                        isActive ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'
-                      }`}
-                    >
-                      {count}
-                    </span>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
+                          isActive ? 'text-white' : 'bg-slate-100 text-slate-600'
+                        }`}
+                        style={{ backgroundColor: isActive ? cat.color : undefined }}
+                      >
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <h4
+                          className={`text-sm font-bold truncate ${
+                            isActive ? 'text-[#4A198C]' : 'text-[#2C2C2C]'
+                          }`}
+                        >
+                          {cat.label}
+                        </h4>
+                        <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                          {cat.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2.5 flex-shrink-0 ml-3">
+                      <span
+                        className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                          isActive
+                            ? 'bg-[#4A198C] text-white'
+                            : 'bg-slate-100 text-slate-600'
+                        }`}
+                      >
+                        {count} {count === 1 ? 'vendedor' : 'vendedores'}
+                      </span>
+                      <div
+                        className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${
+                          isActive
+                            ? 'border-[#4A198C] bg-[#4A198C] text-white'
+                            : 'border-slate-300 bg-white'
+                        }`}
+                      >
+                        {isActive && <Check className="w-3 h-3 stroke-[3]" />}
+                      </div>
+                    </div>
                   </button>
                 );
               })}
             </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="px-4 py-3 rounded-2xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-bold transition-all cursor-pointer"
+              >
+                Restablecer
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsFilterModalOpen(false)}
+                className="flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-[#4A198C] to-[#EC006C] hover:opacity-95 text-white text-xs sm:text-sm font-bold shadow-md shadow-[#4A198C]/20 transition-all cursor-pointer flex items-center justify-center gap-2"
+              >
+                <span>Mostrar {filteredSellers.length} en el mapa</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
-      </header>
+      )}
 
       {/* ──────────────────────────────────────────────────────────────────────────
-          2. SECCIÓN DEL MAPA INTERACTIVO
+          3. SECCIÓN DEL MAPA INTERACTIVO
           ────────────────────────────────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 space-y-6">
         {/* Banner de estado de filtrado */}
@@ -624,7 +746,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
                   {' '}
                   en{' '}
                   <strong className="text-[#4A198C]">
-                    {CATEGORY_FILTERS.find((f) => f.id === selectedCategory)?.shortLabel}
+                    {activeCategoryObj?.shortLabel}
                   </strong>
                 </span>
               )}
@@ -638,21 +760,21 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            {selectedSeller && (
-              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#4A198C]/10 text-[#4A198C] flex items-center gap-1">
-                <MapPin className="w-3 h-3" />
-                Vendedor seleccionado: @{selectedSeller.username || 'vendedor'}
-              </span>
+            {selectedCategory !== 'all' && (
+              <button
+                onClick={() => setSelectedCategory('all')}
+                className="text-xs font-bold text-[#EC006C] hover:underline flex items-center gap-1 cursor-pointer mr-2"
+              >
+                <X className="w-3.5 h-3.5" />
+                Quitar filtro
+              </button>
             )}
             <button
-              onClick={() => {
-                if (mapInstanceRef.current) {
-                  mapInstanceRef.current.setView([defaultLat, defaultLng], 12, { animate: true });
-                }
-              }}
-              className="text-xs font-bold text-slate-600 hover:text-[#4A198C] px-2.5 py-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+              onClick={() => setIsFilterModalOpen(true)}
+              className="text-xs font-bold text-[#4A198C] hover:text-[#EC006C] px-2.5 py-1 rounded-lg hover:bg-[#4A198C]/5 transition-colors cursor-pointer flex items-center gap-1"
             >
-              Centrar mapa
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              Cambiar filtro
             </button>
           </div>
         </div>
@@ -707,7 +829,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
         </div>
 
         {/* ──────────────────────────────────────────────────────────────────────────
-            3. DETALLES DEL VENDEDOR SELECCIONADO (CUANDO SE HACE CLIC EN EL MAPA)
+            4. DETALLES DEL VENDEDOR SELECCIONADO (CUANDO SE HACE CLIC EN EL MAPA)
             ────────────────────────────────────────────────────────────────────────── */}
         {selectedSeller && (
           <div className="bg-white/95 backdrop-blur-2xl rounded-3xl border border-white/90 shadow-soft p-5 sm:p-8 space-y-6 animate-in fade-in slide-in-from-top-4 duration-300">
@@ -819,8 +941,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
         )}
 
         {/* ──────────────────────────────────────────────────────────────────────────
-            4. SECCIONADO DE VENDEDORES POR TIPO DE COSAS QUE VENDEN
-               (CUMPLE: 'poder seccionar a los vendedores por el tipo de cosas que vende')
+            5. SECCIONADO DE VENDEDORES POR TIPO DE COSAS QUE VENDEN
             ────────────────────────────────────────────────────────────────────────── */}
         <section className="space-y-6 pt-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
@@ -866,7 +987,6 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
               {CATEGORY_FILTERS.filter((f) => f.id !== 'all').map((catFilter) => {
                 const Icon = catFilter.icon;
 
-                // Vendedores pertenecientes a esta categoría
                 const matchingSellers = sellers.filter((seller) => {
                   const hasDbCat = seller.categories?.some((catName) =>
                     catFilter.dbCategories.some(
@@ -1180,7 +1300,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({ onStartBarter }) => {
       </div>
 
       {/* ──────────────────────────────────────────────────────────────────────────
-          5. MODAL DE DETALLES DEL PRODUCTO (TRUEQUE DIRECTO)
+          6. MODAL DE DETALLES DEL PRODUCTO (TRUEQUE DIRECTO)
           ────────────────────────────────────────────────────────────────────────── */}
       {selectedProductModal && (
         <ProductModal
