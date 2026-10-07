@@ -502,6 +502,7 @@ export async function getSellerLocations(): Promise<SellerLocation[]> {
       id,
       full_name,
       username,
+      photo_url,
       phone,
       latitude,
       longitude,
@@ -517,8 +518,107 @@ export async function getSellerLocations(): Promise<SellerLocation[]> {
 
   return (data ?? []).map((p: any) => ({
     ...p,
+    photo_url: p.photo_url ?? null,
     city: Array.isArray(p.city) ? (p.city[0] ?? null) : (p.city ?? null),
   }));
+}
+
+export async function getSellerLocationsWithInventory(): Promise<{
+  sellers: SellerLocation[];
+  categories: Category[];
+}> {
+  await ensureSession();
+
+  const [profilesRes, productsRes, categoriesRes] = await Promise.all([
+    supabase
+      .from('profile')
+      .select(`
+        id,
+        full_name,
+        username,
+        photo_url,
+        phone,
+        latitude,
+        longitude,
+        city:city_id ( name )
+      `)
+      .not('latitude', 'is', null)
+      .not('longitude', 'is', null),
+    supabase
+      .from('product')
+      .select(`
+        id,
+        user_id,
+        title,
+        description,
+        price,
+        barter,
+        state_id,
+        category_id,
+        created_at,
+        category:category_id ( id, name ),
+        condition:condition_id ( name ),
+        state:state_id ( id, name ),
+        images:product_image ( url )
+      `)
+      .or('state_id.eq.1,state_id.is.null')
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('category')
+      .select('id, name')
+      .order('name'),
+  ]);
+
+  const rawProfiles = profilesRes.data ?? [];
+  const rawProducts = productsRes.data ?? [];
+  const categories = categoriesRes.data ?? [];
+
+  const formattedProducts: Product[] = rawProducts.map((p: any) => ({
+    ...p,
+    category: Array.isArray(p.category) ? (p.category[0] ?? null) : (p.category ?? null),
+    condition: Array.isArray(p.condition) ? (p.condition[0] ?? null) : (p.condition ?? null),
+    state: Array.isArray(p.state) ? (p.state[0] ?? null) : (p.state ?? null),
+    status: p.state?.name ?? 'Activo',
+    barter: p.barter ?? true,
+    images: formatProductImages(p.images),
+  }));
+
+  const sellers: SellerLocation[] = rawProfiles.map((p: any) => {
+    const userProducts = formattedProducts.filter((prod) => prod.user_id === p.id);
+    const catNames = Array.from(
+      new Set(
+        userProducts
+          .map((prod) => prod.category?.name)
+          .filter((n): n is string => Boolean(n))
+      )
+    );
+    const catIds = Array.from(
+      new Set(
+        userProducts
+          .map((prod) => (prod as any).category_id)
+          .filter((id): id is number => typeof id === 'number')
+      )
+    );
+
+    return {
+      id: p.id,
+      full_name: p.full_name,
+      username: p.username,
+      photo_url: p.photo_url ?? null,
+      phone: p.phone,
+      latitude: Number(p.latitude),
+      longitude: Number(p.longitude),
+      city: Array.isArray(p.city) ? (p.city[0] ?? null) : (p.city ?? null),
+      products: userProducts,
+      categories: catNames,
+      categoryIds: catIds,
+    };
+  });
+
+  return {
+    sellers,
+    categories,
+  };
 }
 
 // ─── Barter Proposal Helpers (matching liwa-movil lines 631-671) ──────────────

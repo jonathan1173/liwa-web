@@ -19,10 +19,14 @@ export interface SellerLocation {
   id: string;
   full_name: string | null;
   username: string | null;
+  photo_url?: string | null;
   phone: string | null;
   latitude: number;
   longitude: number;
   city?: { name: string } | null;
+  categories?: string[];
+  categoryIds?: number[];
+  products?: Product[];
 }
 
 export interface Category {
