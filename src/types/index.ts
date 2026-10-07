@@ -44,13 +44,38 @@ export interface SendBarterProposalParams {
 
 export interface UserProfile {
   id: string;
-  full_name: string | null;
+  email?: string;
   username: string | null;
+  full_name: string | null;
+  photo_url?: string | null;
   phone: string | null;
-  city_id?: number | null;
+  biography?: string | null;
   latitude?: number | null;
   longitude?: number | null;
+  city_id?: number | null;
+  gender_id?: number | null;
+  ethnicity_id?: number | null;
   profile_completed?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  city?: { id?: number; name: string } | null;
+  gender?: { id?: number; name: string } | null;
+  ethnicity?: { id?: number; name: string } | null;
+}
+
+export interface City {
+  id: number;
+  name: string;
+}
+
+export interface Gender {
+  id: number;
+  name: string;
+}
+
+export interface Ethnicity {
+  id: number;
+  name: string;
 }
 
 export interface LibraryBook {
@@ -59,4 +84,5 @@ export interface LibraryBook {
   url_download: string | null;
   url_image: string | null;
 }
+
 

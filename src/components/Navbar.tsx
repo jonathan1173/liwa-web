@@ -18,6 +18,8 @@ interface NavbarProps {
   currentTab: NavTab;
   onSelectTab: (tab: NavTab) => void;
   user: any;
+  userProfile?: any;
+  onOpenProfileModal?: () => void;
   onOpenLoginModal: () => void;
   onLogout: () => void;
   onGoToApk?: () => void;
@@ -28,6 +30,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   currentTab,
   onSelectTab,
   user,
+  userProfile,
+  onOpenProfileModal,
   onLogout,
   onGoToApk,
   isApkActive,
@@ -164,14 +168,26 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {user ? (
                 <div className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-3 border-l border-slate-200">
-                  <div className="flex items-center gap-2 bg-white/90 py-1 sm:py-1.5 px-2.5 sm:px-3.5 rounded-full border border-slate-200/90 shadow-2xs">
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-[#EC006C] to-[#4A198C] text-white flex items-center justify-center font-black text-xs shadow-xs">
+                  <div
+                    onClick={onOpenProfileModal}
+                    className="flex items-center gap-2 bg-white/90 py-1 sm:py-1.5 px-2.5 sm:px-3.5 rounded-full border border-slate-200/90 shadow-2xs hover:border-[#EC006C]/40 transition-all cursor-pointer"
+                    title={userProfile?.profile_completed ? 'Ver/editar perfil' : 'Completa tu perfil'}
+                  >
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-[#EC006C] to-[#4A198C] text-white flex items-center justify-center font-black text-xs shadow-xs relative">
                       {getInitials(user)}
+                      {userProfile && !userProfile.profile_completed && (
+                        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-amber-500 rounded-full border border-white" />
+                      )}
                     </div>
                     <div className="text-left hidden sm:block">
                       <p className="text-xs font-bold text-[#2C2C2C] truncate max-w-[120px]">
-                        {user.email?.split('@')[0]}
+                        {userProfile?.username ? `@${userProfile.username}` : user.email?.split('@')[0]}
                       </p>
+                      {userProfile && !userProfile.profile_completed && (
+                        <span className="text-[9px] font-bold text-amber-600 block leading-tight">
+                          Completar perfil
+                        </span>
+                      )}
                     </div>
                   </div>
                   <button

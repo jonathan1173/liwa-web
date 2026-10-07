@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Product } from '@/types';
+import { Product, UserProfile } from '@/types';
 import { getProductById, getProducts } from '@/lib/supabase';
 import { ProductCard } from '@/components/ProductCard';
 import { MorphBarter } from '@/components/common/MorphIcon';
@@ -23,6 +23,9 @@ export interface ProductoDetallePageProps {
   onBack: () => void;
   onStartBarter?: (product: Product) => void;
   onSelectProduct?: (product: Product) => void;
+  currentUser?: any;
+  userProfile?: UserProfile | null;
+  onRequestCompleteProfile?: () => void;
 }
 
 export const ProductoDetallePage: React.FC<ProductoDetallePageProps> = ({
@@ -31,6 +34,9 @@ export const ProductoDetallePage: React.FC<ProductoDetallePageProps> = ({
   onBack,
   onStartBarter,
   onSelectProduct,
+  currentUser,
+  userProfile,
+  onRequestCompleteProfile,
 }) => {
   const [product, setProduct] = useState<Product | null>(initialProduct);
   const [loading, setLoading] = useState<boolean>(!initialProduct && !!productId);
@@ -341,10 +347,18 @@ export const ProductoDetallePage: React.FC<ProductoDetallePageProps> = ({
                   <span>Contactar por WhatsApp</span>
                 </button>
 
-                {/* Proponer Trueque button */}
-                {product.barter && onStartBarter && (
+                {/* Proponer Trueque button - Solo visible si el usuario tiene sesión iniciada */}
+                {currentUser && product.barter && onStartBarter && (
                   <button
-                    onClick={() => onStartBarter(product)}
+                    onClick={() => {
+                      if (userProfile && !userProfile.profile_completed) {
+                        if (onRequestCompleteProfile) {
+                          onRequestCompleteProfile();
+                        }
+                        return;
+                      }
+                      onStartBarter(product);
+                    }}
                     className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-[#7AAF00] hover:bg-[#6B9A00] text-white font-bold text-xs sm:text-sm shadow-md shadow-[#7AAF00]/25 transition-all cursor-pointer hover:scale-[1.01] active:scale-98"
                   >
                     <MorphBarter active className="w-4 h-4 text-white" />

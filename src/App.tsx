@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { supabase, signOut, getProducts, ensureSession } from '@/lib/supabase';
-import { Product } from '@/types';
+import { supabase, signOut, getProducts, ensureSession, getUserProfile } from '@/lib/supabase';
+import { Product, UserProfile } from '@/types';
 import { Navbar, NavTab } from '@/components/Navbar';
 import {
   HomePage,
@@ -13,6 +13,7 @@ import {
   BibliotecaPage,
 } from '@/pages';
 import { TruequeModal } from '@/components/TruequeModal';
+import { CompleteProfileModal } from '@/components/CompleteProfileModal';
 import { CheckCircle2, X } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -82,7 +83,10 @@ export function App() {
     }
     return 'home';
   });
+
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [showCompleteProfileModal, setShowCompleteProfileModal] = useState<boolean>(false);
   const [barterTargetProduct, setBarterTargetProduct] = useState<Product | null>(null);
   const [catalogProducts, setCatalogProducts] = useState<Product[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -94,8 +98,12 @@ export function App() {
         // Only set currentUser if it's not the anonymous guest account
         if (session?.user && session.user.email !== 'invitado@liwa.app') {
           setCurrentUser(session.user);
+          getUserProfile(session.user.id).then((prof) => {
+            setUserProfile(prof);
+          });
         } else {
           setCurrentUser(null);
+          setUserProfile(null);
         }
       });
 
@@ -110,8 +118,12 @@ export function App() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user && session.user.email !== 'invitado@liwa.app') {
         setCurrentUser(session.user);
+        getUserProfile(session.user.id).then((prof) => {
+          setUserProfile(prof);
+        });
       } else {
         setCurrentUser(null);
+        setUserProfile(null);
       }
     });
 
@@ -148,19 +160,35 @@ export function App() {
     try {
       await signOut();
       setCurrentUser(null);
+      setUserProfile(null);
       setToastMessage('Has cerrado sesión correctamente.');
     } catch (err: any) {
       console.warn('Error during logout:', err);
     }
   };
 
-  const handleLoginSuccess = (user: any) => {
+  const handleLoginSuccess = (user: any, profile?: UserProfile) => {
     setCurrentUser(user);
-    setToastMessage('¡Bienvenido de vuelta a Liwa!');
+    if (profile) {
+      setUserProfile(profile);
+    } else if (user?.id) {
+      getUserProfile(user.id).then((p) => setUserProfile(p));
+    }
+    setToastMessage('¡Bienvenido a Liwa!');
     setCurrentTab('explorar');
   };
 
   const handleStartBarter = (product: Product) => {
+    if (!currentUser) {
+      setCurrentTab('auth');
+      setToastMessage('Debes iniciar sesión para realizar un trueque.');
+      return;
+    }
+    if (userProfile && !userProfile.profile_completed) {
+      setShowCompleteProfileModal(true);
+      setToastMessage('Completa tu perfil para enviar propuestas de trueque.');
+      return;
+    }
     setBarterTargetProduct(product);
   };
 
@@ -259,6 +287,14 @@ export function App() {
             setCurrentTab(tab);
           }}
           user={currentUser}
+          userProfile={userProfile}
+          onOpenProfileModal={() => {
+            if (currentUser) {
+              setShowCompleteProfileModal(true);
+            } else {
+              setCurrentTab('auth');
+            }
+          }}
           onOpenLoginModal={() => setCurrentTab('auth')}
           onLogout={handleLogout}
         />
@@ -324,6 +360,9 @@ export function App() {
             onBack={handleBackFromProductDetail}
             onStartBarter={handleStartBarter}
             onSelectProduct={handleSelectProduct}
+            currentUser={currentUser}
+            userProfile={userProfile}
+            onRequestCompleteProfile={() => setShowCompleteProfileModal(true)}
           />
         )}
 
@@ -334,9 +373,13 @@ export function App() {
         {currentTab === 'trueque' && (
           <TruequePage
             currentUser={currentUser}
+            userProfile={userProfile}
             catalogProducts={catalogProducts}
             onBarterSuccess={handleBarterSuccess}
             onStartBarter={handleStartBarter}
+            onGoToAuth={() => setCurrentTab('auth')}
+            onRequestCompleteProfile={() => setShowCompleteProfileModal(true)}
+            onExploreProducts={() => setCurrentTab('explorar')}
           />
         )}
 
@@ -353,6 +396,21 @@ export function App() {
         onSuccess={handleBarterSuccess}
         availableProducts={catalogProducts}
       />
+
+      {/* Modal para Completar o Editar Perfil */}
+      {currentUser && (
+        <CompleteProfileModal
+          isOpen={showCompleteProfileModal}
+          onClose={() => setShowCompleteProfileModal(false)}
+          user={currentUser}
+          initialProfile={userProfile}
+          onProfileCompleted={(updated) => {
+            setUserProfile(updated);
+            setShowCompleteProfileModal(false);
+            setToastMessage('¡Perfil actualizado con éxito!');
+          }}
+        />
+      )}
 
       {/* Footer for Desktop */}
       <footer className="relative z-10 border-t border-slate-200/80 bg-white/80 backdrop-blur-md py-6 text-center text-xs text-slate-500">

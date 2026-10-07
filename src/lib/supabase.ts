@@ -6,7 +6,53 @@ import {
   SellerLocation,
   SendBarterProposalParams,
   LibraryBook,
+  UserProfile,
+  City,
+  Gender,
+  Ethnicity,
 } from '@/types';
+
+// Fallback taxonomy data in case tables are unpopulated
+export const DEFAULT_CITIES: City[] = [
+  { id: 1, name: 'Managua' },
+  { id: 2, name: 'León' },
+  { id: 3, name: 'Granada' },
+  { id: 4, name: 'Masaya' },
+  { id: 5, name: 'Matagalpa' },
+  { id: 6, name: 'Estelí' },
+  { id: 7, name: 'Chinandega' },
+  { id: 8, name: 'Jinotega' },
+  { id: 9, name: 'Rivas' },
+  { id: 10, name: 'Carazo' },
+  { id: 11, name: 'Nueva Segovia' },
+  { id: 12, name: 'Madriz' },
+  { id: 13, name: 'Boaco' },
+  { id: 14, name: 'Chontales' },
+  { id: 15, name: 'Río San Juan' },
+  { id: 16, name: 'Bilwi (Puerto Cabezas)' },
+  { id: 17, name: 'Bluefields' },
+];
+
+export const DEFAULT_GENDERS: Gender[] = [
+  { id: 1, name: 'Femenino' },
+  { id: 2, name: 'Masculino' },
+  { id: 3, name: 'No binario' },
+  { id: 4, name: 'Prefiero no decir' },
+];
+
+export const DEFAULT_ETHNICITIES: Ethnicity[] = [
+  { id: 1, name: 'Mestizo' },
+  { id: 2, name: 'Miskito' },
+  { id: 3, name: 'Mayangna' },
+  { id: 4, name: 'Creol' },
+  { id: 5, name: 'Rama' },
+  { id: 6, name: 'Ulwa' },
+  { id: 7, name: 'Garífuna' },
+  { id: 8, name: 'Xiu-Sutiaba' },
+  { id: 9, name: 'Chorotega' },
+  { id: 10, name: 'Otro / Prefiero no decir' },
+];
+
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://ximkltsvydnzvudfojay.supabase.co';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_BC6S7Wpdm_0tEugFze-7FQ_qPcV9o3K';
@@ -75,9 +121,179 @@ export async function checkProfileCompleted(userId: string): Promise<boolean> {
     .eq('id', userId)
     .single();
 
-  if (error) throw error;
+  if (error) return false;
   return data?.profile_completed ?? false;
 }
+
+export async function getUserProfile(userId: string): Promise<UserProfile | null> {
+  await ensureSession();
+  const { data, error } = await supabase
+    .from('profile')
+    .select(`
+      id,
+      username,
+      full_name,
+      photo_url,
+      phone,
+      biography,
+      latitude,
+      longitude,
+      email,
+      city_id,
+      gender_id,
+      ethnicity_id,
+      profile_completed,
+      city:city_id ( id, name ),
+      gender:gender_id ( id, name ),
+      ethnicity:ethnicity_id ( id, name )
+    `)
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (error) {
+    console.warn('Error fetching user profile:', error);
+    return null;
+  }
+  if (!data) return null;
+
+  return {
+    ...data,
+    city: Array.isArray(data.city) ? (data.city[0] ?? null) : (data.city ?? null),
+    gender: Array.isArray(data.gender) ? (data.gender[0] ?? null) : (data.gender ?? null),
+    ethnicity: Array.isArray(data.ethnicity) ? (data.ethnicity[0] ?? null) : (data.ethnicity ?? null),
+  };
+}
+
+export async function updateUserProfile(
+  userId: string,
+  profileData: {
+    username: string;
+    full_name: string;
+    phone: string;
+    city_id: number;
+    gender_id: number;
+    ethnicity_id: number;
+    latitude?: number | null;
+    longitude?: number | null;
+    email?: string;
+    biography?: string | null;
+    photo_url?: string | null;
+  }
+): Promise<UserProfile> {
+  await ensureSession();
+
+  const { data: existing } = await supabase
+    .from('profile')
+    .select('id, email')
+    .eq('id', userId)
+    .maybeSingle();
+
+  const payload: any = {
+    username: profileData.username.trim(),
+    full_name: profileData.full_name.trim(),
+    phone: profileData.phone.trim(),
+    city_id: Number(profileData.city_id),
+    gender_id: Number(profileData.gender_id),
+    ethnicity_id: Number(profileData.ethnicity_id),
+    latitude: profileData.latitude !== undefined && profileData.latitude !== null ? Number(profileData.latitude) : null,
+    longitude: profileData.longitude !== undefined && profileData.longitude !== null ? Number(profileData.longitude) : null,
+    profile_completed: true,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (profileData.biography !== undefined) {
+    payload.biography = profileData.biography;
+  }
+  if (profileData.photo_url !== undefined) {
+    payload.photo_url = profileData.photo_url;
+  }
+
+  let result;
+  if (existing) {
+    const { data, error } = await supabase
+      .from('profile')
+      .update(payload)
+      .eq('id', userId)
+      .select()
+      .single();
+
+    if (error) throw error;
+    result = data;
+  } else {
+    let emailToUse = profileData.email;
+    if (!emailToUse) {
+      const { data: authData } = await supabase.auth.getUser();
+      emailToUse = authData.user?.email || '';
+    }
+
+    const { data, error } = await supabase
+      .from('profile')
+      .insert({
+        id: userId,
+        email: emailToUse,
+        ...payload,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    result = data;
+  }
+
+  return result;
+}
+
+export async function getCities(): Promise<City[]> {
+  await ensureSession();
+  try {
+    const { data, error } = await supabase
+      .from('city')
+      .select('id, name')
+      .order('name');
+
+    if (!error && data && data.length > 0) {
+      return data;
+    }
+  } catch (e) {
+    console.warn('Error fetching cities:', e);
+  }
+  return DEFAULT_CITIES;
+}
+
+export async function getGenders(): Promise<Gender[]> {
+  await ensureSession();
+  try {
+    const { data, error } = await supabase
+      .from('gender')
+      .select('id, name')
+      .order('name');
+
+    if (!error && data && data.length > 0) {
+      return data;
+    }
+  } catch (e) {
+    console.warn('Error fetching genders:', e);
+  }
+  return DEFAULT_GENDERS;
+}
+
+export async function getEthnicities(): Promise<Ethnicity[]> {
+  await ensureSession();
+  try {
+    const { data, error } = await supabase
+      .from('ethnicity')
+      .select('id, name')
+      .order('name');
+
+    if (!error && data && data.length > 0) {
+      return data;
+    }
+  } catch (e) {
+    console.warn('Error fetching ethnicities:', e);
+  }
+  return DEFAULT_ETHNICITIES;
+}
+
 
 // ─── Catalog Helpers (matching liwa-movil lines 137-147) ─────────────────────
 export async function getCategories(): Promise<Category[]> {

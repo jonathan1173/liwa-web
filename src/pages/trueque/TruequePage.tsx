@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Product, Category, Condition } from '@/types';
+import { Product, Category, Condition, UserProfile } from '@/types';
 import {
   getBarterProducts,
   getCategories,
@@ -26,21 +26,30 @@ import {
   Plus,
   Trash2,
   ShieldAlert,
+  Lock,
 } from 'lucide-react';
 
 export interface TruequePageProps {
   currentUser?: any;
+  userProfile?: UserProfile | null;
   catalogProducts?: Product[];
   onBarterSuccess?: (message: string) => void;
   onStartBarter?: (product: Product) => void;
+  onGoToAuth?: () => void;
+  onRequestCompleteProfile?: () => void;
+  onExploreProducts?: () => void;
 }
 
 const ITEMS_PER_PAGE = 8;
 
 export const TruequePage: React.FC<TruequePageProps> = ({
   currentUser,
+  userProfile,
   catalogProducts = [],
   onBarterSuccess,
+  onGoToAuth,
+  onRequestCompleteProfile,
+  onExploreProducts,
 }) => {
   // ─── Estado del Catálogo ────────────────────────────────────────────────────
   const [products, setProducts] = useState<Product[]>([]);
@@ -87,6 +96,8 @@ export const TruequePage: React.FC<TruequePageProps> = ({
   // Cargar inventario del usuario para la propuesta cuando se selecciona un producto objetivo
   useEffect(() => {
     if (!selectedTargetProduct) return;
+    const currentTarget = selectedTargetProduct;
+    const targetId = currentTarget.id;
 
     async function loadInventory() {
       setLoadingInventory(true);
@@ -103,7 +114,7 @@ export const TruequePage: React.FC<TruequePageProps> = ({
         // Inventario de muestra si el usuario no ha publicado artículos o es invitado
         const fallbackList = catalogProducts.length > 0 ? catalogProducts : products;
         const sampleInventory: Product[] = fallbackList
-          .filter((p) => p.id !== selectedTargetProduct.id)
+          .filter((p) => p.id !== targetId)
           .slice(0, 8);
 
         setMyInventory(sampleInventory);
@@ -275,6 +286,17 @@ export const TruequePage: React.FC<TruequePageProps> = ({
   const handleSendProposal = async () => {
     if (!selectedTargetProduct) return;
 
+    if (userProfile && !userProfile.profile_completed) {
+      setStatusMessage({
+        text: 'Debes completar tu perfil con todos tus datos antes de enviar propuestas de trueque.',
+        error: true,
+      });
+      if (onRequestCompleteProfile) {
+        onRequestCompleteProfile();
+      }
+      return;
+    }
+
     if (selectedItems.length === 0) {
       setStatusMessage({ text: 'Debes agregar al menos un artículo a tu oferta.', error: true });
       return;
@@ -312,6 +334,56 @@ export const TruequePage: React.FC<TruequePageProps> = ({
   };
 
   const StatusIcon = balanceStatus.icon;
+
+  // Condición: Si el usuario NO está autenticado, no puede hacer trueque y no debe ver botones de propuesta
+  if (!currentUser) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-16 text-center animate-in fade-in duration-300">
+        <div className="bg-white/90 backdrop-blur-2xl rounded-3xl p-8 sm:p-12 border border-slate-200/80 shadow-2xl space-y-6 relative overflow-hidden">
+          <div
+            className="absolute -top-20 -right-20 w-52 h-52 rounded-full blur-3xl opacity-20 pointer-events-none"
+            style={{ background: 'radial-gradient(circle, #7AAF00 0%, transparent 70%)' }}
+          />
+          <div
+            className="absolute -bottom-20 -left-20 w-52 h-52 rounded-full blur-3xl opacity-20 pointer-events-none"
+            style={{ background: 'radial-gradient(circle, #4A198C 0%, transparent 70%)' }}
+          />
+
+          <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-3xl bg-[#7AAF00]/15 border border-[#7AAF00]/30 flex items-center justify-center text-[#7AAF00] shadow-sm">
+            <Repeat className="w-8 h-8 sm:w-10 sm:h-10 text-[#7AAF00]" />
+          </div>
+
+          <div className="space-y-2 max-w-md mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-black text-[#2C2C2C] tracking-tight">
+              Inicia sesión para hacer Trueques
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+              El Trueque Inteligente es una funcionalidad exclusiva para miembros autenticados de Liwa. Inicia sesión o crea tu cuenta con tu perfil completado para proponer e intercambiar artículos de forma segura.
+            </p>
+          </div>
+
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-sm mx-auto">
+            {onGoToAuth && (
+              <button
+                onClick={onGoToAuth}
+                className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#EC006C] via-[#E10067] to-[#4A198C] hover:opacity-95 text-white font-extrabold text-xs sm:text-sm shadow-xl shadow-[#EC006C]/30 transition-all cursor-pointer hover:scale-[1.02]"
+              >
+                Iniciar Sesión / Registrarme
+              </button>
+            )}
+            {onExploreProducts && (
+              <button
+                onClick={onExploreProducts}
+                className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 text-[#2C2C2C] font-bold text-xs sm:text-sm shadow-xs transition-all cursor-pointer"
+              >
+                Explorar Catálogo
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // ═════════════════════════════════════════════════════════════════════════════
   // VISTA 1: PÁGINA COMPLETA DE TRUEQUE INTELIGENTE (Contenido del modal como página)
@@ -656,6 +728,31 @@ export const TruequePage: React.FC<TruequePageProps> = ({
   // ═════════════════════════════════════════════════════════════════════════════
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6 animate-in fade-in duration-200">
+      {/* Banner de aviso si el perfil no está completado */}
+      {userProfile && !userProfile.profile_completed && (
+        <div className="bg-amber-50/90 border border-amber-200/90 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs animate-in fade-in">
+          <div className="flex items-center gap-3">
+            <ShieldAlert className="w-6 h-6 text-amber-600 flex-shrink-0" />
+            <div>
+              <h4 className="text-xs sm:text-sm font-bold text-amber-900">
+                Completa tu perfil para activar el Trueque Inteligente
+              </h4>
+              <p className="text-[11px] sm:text-xs text-amber-700 mt-0.5">
+                Debes registrar tu nombre de usuario, nombre completo, teléfono, ciudad, género, etnicidad y ubicación para poder proponer e intercambiar artículos.
+              </p>
+            </div>
+          </div>
+          {onRequestCompleteProfile && (
+            <button
+              onClick={onRequestCompleteProfile}
+              className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs transition-all cursor-pointer flex-shrink-0"
+            >
+              Completar Perfil Ahora
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Compact Search Bar & Filter Trigger Button (Amazon style, idéntico a Explorar) */}
       <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-3 sm:p-4 border border-white/80 shadow-soft space-y-2.5">
         <div className="flex items-center gap-2 sm:gap-3">
@@ -797,6 +894,12 @@ export const TruequePage: React.FC<TruequePageProps> = ({
                 key={product.id}
                 product={product}
                 onViewDetails={(p) => {
+                  if (userProfile && !userProfile.profile_completed) {
+                    if (onRequestCompleteProfile) {
+                      onRequestCompleteProfile();
+                    }
+                    return;
+                  }
                   // En la página de trueque, al hacer clic en un producto se abre la página completa de Trueque Inteligente
                   setSelectedTargetProduct(p);
                   window.scrollTo({ top: 0, behavior: 'smooth' });
