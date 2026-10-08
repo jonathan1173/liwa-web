@@ -62,62 +62,66 @@
   background-color: #4A198C;
   color: #ffffff;
   font-weight: 700;
-  font-size: 13px;
-  padding: 6px 14px;
+  font-size: 11px;
+  line-height: 1;
+  padding: 3.5px 8px;
   border-radius: 9999px;
-  border: 2px solid #ffffff;
-  box-shadow: 0 4px 14px rgba(74, 25, 140, 0.3);
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(74, 25, 140, 0.35);
   white-space: nowrap;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  user-select: none;
 }
 
 .username-box:hover {
-  transform: translateY(-2px) scale(1.05);
+  transform: translateY(-2px) scale(1.08);
   background-color: #EC006C;
-  box-shadow: 0 6px 20px rgba(236, 0, 108, 0.4);
+  box-shadow: 0 4px 12px rgba(236, 0, 108, 0.45);
+  z-index: 9999 !important;
 }
 
-/* Custom User Location pin on Leaflet map */
+.username-box.active-pin {
+  background-color: #EC006C;
+  transform: scale(1.1);
+  box-shadow: 0 0 14px rgba(236, 0, 108, 0.55);
+  z-index: 10000 !important;
+}
+
+/* Custom User Location pin on Leaflet map (replaces the username badge for current user) */
 .custom-user-pin {
   background: transparent !important;
   border: none !important;
 }
 
-.user-location-badge {
+.user-location-badge,
+.user-location-box {
   background-color: #2C2C2C;
   color: #ffffff;
   font-weight: 800;
   font-size: 11px;
-  padding: 5px 12px;
+  line-height: 1;
+  padding: 3.5px 9px;
   border-radius: 9999px;
-  border: 2px solid #EC006C;
-  box-shadow: 0 4px 16px rgba(236, 0, 108, 0.45);
+  border: 1.5px solid #EC006C;
+  box-shadow: 0 2px 10px rgba(236, 0, 108, 0.5);
   white-space: nowrap;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  animation: bounce-subtle 3s ease-in-out infinite;
+  justify-content: center;
+  user-select: none;
+  transition: all 0.15s ease;
 }
 
-.user-ping-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: #EC006C;
-  box-shadow: 0 0 10px #EC006C;
-}
-
-@keyframes bounce-subtle {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
+.user-location-badge:hover,
+.user-location-box:hover {
+  transform: translateY(-2px) scale(1.08);
+  box-shadow: 0 4px 14px rgba(236, 0, 108, 0.6);
+  z-index: 9999 !important;
 }
 
 /* Custom Scrollbar */

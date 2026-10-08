@@ -64,11 +64,11 @@ function getCategoryColor(name: string): string {
 export const MapaPage: React.FC<MapaPageProps> = ({
   onStartBarter,
   userProfile,
+  currentUser,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersGroupRef = useRef<L.LayerGroup | null>(null);
-  const userMarkerRef = useRef<L.Marker | null>(null);
 
   const [sellers, setSellers] = useState<SellerLocation[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -240,27 +240,9 @@ export const MapaPage: React.FC<MapaPageProps> = ({
     markersGroupRef.current = markersGroup;
     mapInstanceRef.current = map;
 
-    // If user coordinates exist, add dedicated User Location marker
-    if (hasUserCoords) {
-      const userIcon = L.divIcon({
-        className: 'custom-user-pin',
-        html: `<div class="user-location-badge">
-                <span class="user-ping-dot"></span>
-                Tu ubicación
-               </div>`,
-        iconSize: [110, 32],
-        iconAnchor: [55, 16],
-      });
-      userMarkerRef.current = L.marker([userLat!, userLng!], {
-        icon: userIcon,
-        zIndexOffset: 1000,
-      }).addTo(map);
-    }
-
     return () => {
       map.remove();
       mapInstanceRef.current = null;
-      userMarkerRef.current = null;
     };
   }, []);
 
@@ -270,24 +252,6 @@ export const MapaPage: React.FC<MapaPageProps> = ({
     if (!map || !hasUserCoords) return;
 
     map.setView([userLat!, userLng!], 15, { animate: true });
-
-    if (userMarkerRef.current) {
-      userMarkerRef.current.setLatLng([userLat!, userLng!]);
-    } else {
-      const userIcon = L.divIcon({
-        className: 'custom-user-pin',
-        html: `<div class="user-location-badge">
-                <span class="user-ping-dot"></span>
-                Tu ubicación
-               </div>`,
-        iconSize: [110, 32],
-        iconAnchor: [55, 16],
-      });
-      userMarkerRef.current = L.marker([userLat!, userLng!], {
-        icon: userIcon,
-        zIndexOffset: 1000,
-      }).addTo(map);
-    }
   }, [hasUserCoords, userLat, userLng]);
 
   // Update map markers when filtered sellers change
@@ -298,32 +262,36 @@ export const MapaPage: React.FC<MapaPageProps> = ({
 
     markersGroup.clearLayers();
 
-    if (filteredSellers.length === 0) return;
+    const currentUserId = userProfile?.id || currentUser?.id || null;
+    let userRenderedInSellers = false;
 
     filteredSellers.forEach((seller) => {
       if (seller.latitude && seller.longitude) {
+        const isCurrentUser = Boolean(currentUserId && seller.id === currentUserId);
+        if (isCurrentUser) {
+          userRenderedInSellers = true;
+        }
+
         const usernameTag =
           seller.username || seller.full_name?.split(' ')[0] || 'vendedor';
         const isSelected = selectedSeller?.id === seller.id;
-        const prodCount = seller.products?.length || 0;
+
+        // Si es el usuario actual, reemplaza el nombre por 'Tu ubicación'
+        const labelText = isCurrentUser ? 'Tu ubicación' : `@${usernameTag}`;
+        const pinClass = isCurrentUser ? 'user-location-box' : 'username-box';
 
         const customIcon = L.divIcon({
-          className: 'custom-username-pin',
-          html: `<div class="username-box ${isSelected ? 'active-pin' : ''}" style="${
-            isSelected
-              ? 'background-color:#EC006C;transform:scale(1.08);box-shadow:0 0 16px rgba(236,0,108,0.5);'
-              : ''
-          }">
-                  <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#EC006C;margin-right:4px;"></span>
-                  @${usernameTag}
-                  ${prodCount > 0 ? `<span style="opacity:0.8;font-size:11px;margin-left:3px;font-weight:600;">(${prodCount})</span>` : ''}
+          className: isCurrentUser ? 'custom-user-pin' : 'custom-username-pin',
+          html: `<div class="${pinClass} ${isSelected ? 'active-pin' : ''}">
+                  ${labelText}
                  </div>`,
-          iconSize: [120, 34],
-          iconAnchor: [60, 17],
+          iconSize: [80, 24],
+          iconAnchor: [40, 12],
         });
 
         const marker = L.marker([seller.latitude, seller.longitude], {
           icon: customIcon,
+          zIndexOffset: isCurrentUser ? 500 : isSelected ? 400 : 10,
         });
 
         marker.on('click', () => {
@@ -334,7 +302,23 @@ export const MapaPage: React.FC<MapaPageProps> = ({
         markersGroup.addLayer(marker);
       }
     });
-  }, [filteredSellers, selectedSeller]);
+
+    // Si el usuario tiene ubicación pero no está entre los vendedores filtrados,
+    // se coloca su pin 'Tu ubicación' sin duplicar ningún marcador
+    if (hasUserCoords && !userRenderedInSellers) {
+      const userIcon = L.divIcon({
+        className: 'custom-user-pin',
+        html: `<div class="user-location-box">Tu ubicación</div>`,
+        iconSize: [80, 24],
+        iconAnchor: [40, 12],
+      });
+      const standaloneUserMarker = L.marker([userLat!, userLng!], {
+        icon: userIcon,
+        zIndexOffset: 600,
+      });
+      markersGroup.addLayer(standaloneUserMarker);
+    }
+  }, [filteredSellers, selectedSeller, hasUserCoords, userLat, userLng, userProfile, currentUser]);
 
   // Load products of selected seller
   useEffect(() => {
