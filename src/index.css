@@ -245,3 +245,10 @@
   scrollbar-width: none;
 }
 
+/* Stacking context isolation for Leaflet to never bleed into modals */
+.leaflet-container {
+  isolation: isolate;
+  z-index: 0 !important;
+}
+
+

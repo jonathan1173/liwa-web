@@ -485,7 +485,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({
           2. MODAL DE FILTROS CON LAS CATEGORÍAS REALES DE LA BASE DE DATOS
           ────────────────────────────────────────────────────────────────────────── */}
       {isFilterModalOpen && (
-        <div className="fixed inset-0 z-50 bg-[#2C2C2C]/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[9999] bg-[#2C2C2C]/70 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
           <div
             className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-white/90 p-5 sm:p-7 space-y-5 my-auto animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
@@ -730,7 +730,7 @@ export const MapaPage: React.FC<MapaPageProps> = ({
         {/* Leaflet Map Frame */}
         <div
           ref={mapContainerRef}
-          className="relative w-full h-[380px] sm:h-[480px] lg:h-[540px] rounded-3xl overflow-hidden border border-white/90 shadow-soft bg-white"
+          className="relative w-full h-[380px] sm:h-[480px] lg:h-[540px] rounded-3xl overflow-hidden border border-white/90 shadow-soft bg-white z-0 isolate"
         >
           {/* Map canvas */}
           <div className="w-full h-full z-10" />
