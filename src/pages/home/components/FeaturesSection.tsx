@@ -7,7 +7,9 @@ export default function FeaturesSection() {
 
   const img1 = '/image/stores/img4.jpeg';
   const img2 = '/image/stores/img5.jpeg';
-  const img3 = '/image/stores/img6.jpeg';
+  const img3 = '/image/liwa-mujer-sin-bg.png';
+  const img4 = '/image/liwa-mujer-sin-bg.png';
+  const img5 = '/image/team-nicabyte.png';
 
   // Mide el scroll a lo largo de toda la pista con física suave useSpring
   const { scrollYProgress: rawScrollProgress } = useScroll({
@@ -119,14 +121,33 @@ export default function FeaturesSection() {
       {/* =========================================================================
           SECCIÓN 3: Reputación y Red Comunitaria Confiable
           ========================================================================= */}
-      <div className="sticky top-0 flex h-screen w-full items-center justify-center px-6 relative overflow-hidden border-t border-white/60 shadow-sm">
-        {/* Fondo con desenfoque de 5px sin velo global */}
+
+      {/* SECCIÓN 3: Reputación y Red Comunitaria Confiable */}
+      <div className="sticky  top-0 relative flex h-screen w-full items-center justify-center overflow-hidden border-t border-white/60 shadow-sm">
+
+        {/* Imagen de fondo */}
         <div
-          style={{ backgroundImage: `url(${img3})` }}
-          className="absolute inset-0 bg-no-repeat bg-center bg-cover filter blur-[2px] scale-105 pointer-events-none"
+          // style={{ backgroundImage: `url(${img3})` }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-[2px] scale-105 pointer-events-none"
         />
 
+        <div className="flex flex-col items-center justify-center gap-6 px-6 text-center">
+          {/* Imagen de la mujer / logo */}
+          <img
+            src={img4}
+            alt="Reputación y Red Comunitaria Confiable Liwa"
+            className="relative z-10 w-auto h-auto max-w-[95%] max-h-[75vh] object-contain pointer-events-none"
+          />
+          <img
+            src={img5}
+            alt="Reputación y Red Comunitaria Confiable Liwa"
+            className="relative  z-10 w-auto h-auto max-w-[60%] max-h-[75vh] object-contain pointer-events-none"
+          />
+        </div>
+
+
       </div>
+
     </section>
   );
 }
