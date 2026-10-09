@@ -265,8 +265,14 @@ export const MapaPage: React.FC<MapaPageProps> = ({
     const currentUserId = userProfile?.id || currentUser?.id || null;
     let userRenderedInSellers = false;
 
+    const validCoords: [number, number][] = [];
+
     filteredSellers.forEach((seller) => {
-      if (seller.latitude && seller.longitude) {
+      const sLat = typeof seller.latitude === 'number' ? seller.latitude : parseFloat(String(seller.latitude ?? ''));
+      const sLng = typeof seller.longitude === 'number' ? seller.longitude : parseFloat(String(seller.longitude ?? ''));
+
+      if (!isNaN(sLat) && !isNaN(sLng)) {
+        validCoords.push([sLat, sLng]);
         const isCurrentUser = Boolean(currentUserId && seller.id === currentUserId);
         if (isCurrentUser) {
           userRenderedInSellers = true;
@@ -289,14 +295,14 @@ export const MapaPage: React.FC<MapaPageProps> = ({
           iconAnchor: [40, 12],
         });
 
-        const marker = L.marker([seller.latitude, seller.longitude], {
+        const marker = L.marker([sLat, sLng], {
           icon: customIcon,
           zIndexOffset: isCurrentUser ? 500 : isSelected ? 400 : 10,
         });
 
         marker.on('click', () => {
           setSelectedSeller(seller);
-          map.setView([seller.latitude, seller.longitude], 15, { animate: true });
+          map.setView([sLat, sLng], 15, { animate: true });
         });
 
         markersGroup.addLayer(marker);
@@ -317,6 +323,16 @@ export const MapaPage: React.FC<MapaPageProps> = ({
         zIndexOffset: 600,
       });
       markersGroup.addLayer(standaloneUserMarker);
+    }
+
+    // Centrar o ajustar automáticamente la vista a los vendedores cargados si no hay ubicación de usuario fijada
+    if (!hasUserCoords && validCoords.length > 0) {
+      if (validCoords.length === 1) {
+        map.setView(validCoords[0], 14, { animate: true });
+      } else {
+        const bounds = L.latLngBounds(validCoords);
+        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14, animate: true });
+      }
     }
   }, [filteredSellers, selectedSeller, hasUserCoords, userLat, userLng, userProfile, currentUser]);
 
@@ -368,6 +384,18 @@ export const MapaPage: React.FC<MapaPageProps> = ({
     if (!mapInstanceRef.current) return;
     if (hasUserCoords) {
       mapInstanceRef.current.setView([userLat!, userLng!], 15, { animate: true });
+    } else if (sellers.length > 0) {
+      const validPoints = sellers
+        .filter((s) => typeof s.latitude === 'number' && !isNaN(s.latitude) && typeof s.longitude === 'number' && !isNaN(s.longitude))
+        .map((s) => [s.latitude, s.longitude] as [number, number]);
+      if (validPoints.length === 1) {
+        mapInstanceRef.current.setView(validPoints[0], 14, { animate: true });
+      } else if (validPoints.length > 1) {
+        const bounds = L.latLngBounds(validPoints);
+        mapInstanceRef.current.fitBounds(bounds, { padding: [40, 40], maxZoom: 14, animate: true });
+      } else {
+        mapInstanceRef.current.setView([defaultLat, defaultLng], 12, { animate: true });
+      }
     } else {
       mapInstanceRef.current.setView([defaultLat, defaultLng], 12, { animate: true });
     }

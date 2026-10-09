@@ -493,34 +493,119 @@ export async function getMyProducts(userId: string): Promise<Product[]> {
   }));
 }
 
+// ─── Nicaragua City Coordinates & Spatial Jitter Helper ──────────────────────
+export const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
+  managua: { lat: 12.1364, lng: -86.2514 },
+  león: { lat: 12.4379, lng: -86.878 },
+  leon: { lat: 12.4379, lng: -86.878 },
+  granada: { lat: 11.9299, lng: -85.956 },
+  masaya: { lat: 11.9744, lng: -86.0942 },
+  matagalpa: { lat: 12.9256, lng: -85.9175 },
+  estelí: { lat: 13.0919, lng: -86.3538 },
+  esteli: { lat: 13.0919, lng: -86.3538 },
+  chinandega: { lat: 12.6294, lng: -87.1311 },
+  jinotega: { lat: 13.0921, lng: -86.0028 },
+  rivas: { lat: 11.4372, lng: -85.8263 },
+  carazo: { lat: 11.8541, lng: -86.2081 },
+  'nueva segovia': { lat: 13.6276, lng: -86.4754 },
+  madriz: { lat: 13.4614, lng: -86.5828 },
+  boaco: { lat: 12.4722, lng: -85.6586 },
+  chontales: { lat: 12.0624, lng: -85.3678 },
+  'río san juan': { lat: 11.2064, lng: -84.6989 },
+  'rio san juan': { lat: 11.2064, lng: -84.6989 },
+  bilwi: { lat: 14.0351, lng: -83.3888 },
+  'puerto cabezas': { lat: 14.0351, lng: -83.3888 },
+  bluefields: { lat: 12.0137, lng: -83.7635 },
+};
+
+export function getResolvedCoordinates(
+  lat: number | string | null | undefined,
+  lng: number | string | null | undefined,
+  cityName?: string | null,
+  seedId?: string | null
+): { latitude: number; longitude: number } {
+  const parsedLat = typeof lat === 'number' ? lat : parseFloat(String(lat ?? ''));
+  const parsedLng = typeof lng === 'number' ? lng : parseFloat(String(lng ?? ''));
+
+  if (!isNaN(parsedLat) && !isNaN(parsedLng) && parsedLat !== 0 && parsedLng !== 0) {
+    return { latitude: parsedLat, longitude: parsedLng };
+  }
+
+  // Fallback a las coordenadas de la ciudad en Nicaragua
+  let baseCoords = { lat: 12.1364, lng: -86.2514 }; // Managua por defecto
+  if (cityName) {
+    const cleanCity = cityName.toLowerCase().trim();
+    for (const [key, coords] of Object.entries(CITY_COORDINATES)) {
+      if (cleanCity.includes(key) || key.includes(cleanCity)) {
+        baseCoords = coords;
+        break;
+      }
+    }
+  }
+
+  // Desplazamiento pseudoaleatorio determinista para separar múltiples vendedores en la misma ciudad
+  let hash = 0;
+  const seed = String(seedId || cityName || 'liwa');
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash << 5) - hash + seed.charCodeAt(i);
+    hash |= 0;
+  }
+  const angle = (Math.abs(hash) % 360) * (Math.PI / 180);
+  const distance = 0.003 + ((Math.abs(hash >> 3) % 100) / 100) * 0.008; // ~300m a 1.2km
+
+  return {
+    latitude: parseFloat((baseCoords.lat + Math.sin(angle) * distance).toFixed(6)),
+    longitude: parseFloat((baseCoords.lng + Math.cos(angle) * distance).toFixed(6)),
+  };
+}
+
 // ─── Seller Location Helpers (matching liwa-movil lines 85-109) ───────────────
 export async function getSellerLocations(): Promise<SellerLocation[]> {
   await ensureSession();
-  const { data, error } = await supabase
-    .from('profile')
-    .select(`
-      id,
-      full_name,
-      username,
-      photo_url,
-      phone,
-      latitude,
-      longitude,
-      city:city_id ( name )
-    `)
-    .not('latitude', 'is', null)
-    .not('longitude', 'is', null);
 
-  if (error) {
-    console.error('Error fetching seller locations:', error);
-    return [];
+  let citiesMap = new Map<number, string>();
+  try {
+    const cList = await getCities();
+    cList.forEach((c) => citiesMap.set(c.id, c.name));
+  } catch {
+    DEFAULT_CITIES.forEach((c) => citiesMap.set(c.id, c.name));
   }
 
-  return (data ?? []).map((p: any) => ({
-    ...p,
-    photo_url: p.photo_url ?? null,
-    city: Array.isArray(p.city) ? (p.city[0] ?? null) : (p.city ?? null),
-  }));
+  let rawProfiles: any[] = [];
+  try {
+    const { data, error } = await supabase.from('profile').select('*');
+    if (!error && data && data.length > 0) {
+      rawProfiles = data;
+    } else {
+      const { data: minData } = await supabase
+        .from('profile')
+        .select('id, full_name, username, phone, latitude, longitude, city_id');
+      if (minData) rawProfiles = minData;
+    }
+  } catch (err) {
+    console.warn('Error fetching seller locations:', err);
+  }
+
+  return rawProfiles.map((p: any) => {
+    const resolvedCityName =
+      p.city?.name ||
+      (typeof p.city === 'string' ? p.city : null) ||
+      (p.city_id ? citiesMap.get(p.city_id) : null) ||
+      null;
+
+    const coords = getResolvedCoordinates(p.latitude, p.longitude, resolvedCityName, p.id);
+
+    return {
+      id: p.id,
+      full_name: p.full_name || p.username || 'Vendedor',
+      username: p.username || (p.full_name ? p.full_name.split(' ')[0].toLowerCase() : 'vendedor'),
+      photo_url: p.photo_url ?? null,
+      phone: p.phone ?? null,
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+      city: resolvedCityName ? { name: resolvedCityName } : null,
+    };
+  });
 }
 
 export async function getSellerLocationsWithInventory(): Promise<{
@@ -529,21 +614,17 @@ export async function getSellerLocationsWithInventory(): Promise<{
 }> {
   await ensureSession();
 
-  const [profilesRes, productsRes, categoriesRes] = await Promise.all([
-    supabase
-      .from('profile')
-      .select(`
-        id,
-        full_name,
-        username,
-        photo_url,
-        phone,
-        latitude,
-        longitude,
-        city:city_id ( name )
-      `)
-      .not('latitude', 'is', null)
-      .not('longitude', 'is', null),
+  // 1. Obtener taxonomía de ciudades para mapear city_id sin depender de joins frágiles
+  const citiesMap = new Map<number, string>();
+  try {
+    const cList = await getCities();
+    cList.forEach((c) => citiesMap.set(c.id, c.name));
+  } catch {
+    DEFAULT_CITIES.forEach((c) => citiesMap.set(c.id, c.name));
+  }
+
+  // 2. Cargar productos y categorías de forma paralela
+  const [productsRes, categoriesRes] = await Promise.all([
     supabase
       .from('product')
       .select(`
@@ -559,7 +640,8 @@ export async function getSellerLocationsWithInventory(): Promise<{
         category:category_id ( id, name ),
         condition:condition_id ( name ),
         state:state_id ( id, name ),
-        images:product_image ( url )
+        images:product_image ( url ),
+        seller:user_id ( full_name, phone )
       `)
       .or('state_id.eq.1,state_id.is.null')
       .order('created_at', { ascending: false }),
@@ -569,7 +651,6 @@ export async function getSellerLocationsWithInventory(): Promise<{
       .order('id'),
   ]);
 
-  const rawProfiles = profilesRes.data ?? [];
   const rawProducts = productsRes.data ?? [];
   const categories = categoriesRes.data ?? [];
 
@@ -578,12 +659,63 @@ export async function getSellerLocationsWithInventory(): Promise<{
     category: Array.isArray(p.category) ? (p.category[0] ?? null) : (p.category ?? null),
     condition: Array.isArray(p.condition) ? (p.condition[0] ?? null) : (p.condition ?? null),
     state: Array.isArray(p.state) ? (p.state[0] ?? null) : (p.state ?? null),
+    seller: Array.isArray(p.seller) ? (p.seller[0] ?? null) : (p.seller ?? null),
     status: p.state?.name ?? 'Activo',
     barter: p.barter ?? true,
     images: formatProductImages(p.images),
   }));
 
-  const sellers: SellerLocation[] = rawProfiles.map((p: any) => {
+  // 3. Cargar perfiles de forma segura y tolerante a fallos
+  let rawProfiles: any[] = [];
+  try {
+    // Intentar primero select(*) sin filtros restrictivos de coordenadas
+    const { data: pData, error: pError } = await supabase
+      .from('profile')
+      .select('*');
+
+    if (!pError && pData && pData.length > 0) {
+      rawProfiles = pData;
+    } else {
+      if (pError) console.warn('Supabase select(*) from profile aviso:', pError);
+      // Segundo intento con columnas esenciales
+      const { data: pData2, error: pError2 } = await supabase
+        .from('profile')
+        .select('id, full_name, username, phone, latitude, longitude, city_id');
+      if (!pError2 && pData2 && pData2.length > 0) {
+        rawProfiles = pData2;
+      }
+    }
+  } catch (err) {
+    console.warn('Error al consultar tabla profile:', err);
+  }
+
+  // 4. Si hay productos de vendedores cuyos perfiles no se cargaron (por ejemplo por políticas RLS),
+  // intentar cargarlos individualmente por ID
+  const productUserIds = Array.from(
+    new Set(formattedProducts.map((p) => p.user_id).filter((id): id is string => Boolean(id)))
+  );
+  const knownProfileIds = new Set(rawProfiles.map((p) => p.id));
+  const missingUserIds = productUserIds.filter((id) => !knownProfileIds.has(id));
+
+  if (missingUserIds.length > 0) {
+    try {
+      const { data: missingProfiles } = await supabase
+        .from('profile')
+        .select('*')
+        .in('id', missingUserIds);
+      if (missingProfiles && missingProfiles.length > 0) {
+        rawProfiles = [...rawProfiles, ...missingProfiles];
+        missingProfiles.forEach((p) => knownProfileIds.add(p.id));
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  // 5. Construir el mapa de vendedores
+  const sellersMap = new Map<string, SellerLocation>();
+
+  rawProfiles.forEach((p: any) => {
     const userProducts = formattedProducts.filter((prod) => prod.user_id === p.id);
     const catNames = Array.from(
       new Set(
@@ -600,20 +732,75 @@ export async function getSellerLocationsWithInventory(): Promise<{
       )
     );
 
-    return {
+    const resolvedCityName =
+      p.city?.name ||
+      (typeof p.city === 'string' ? p.city : null) ||
+      (p.city_id ? citiesMap.get(p.city_id) : null) ||
+      null;
+
+    const coords = getResolvedCoordinates(
+      p.latitude,
+      p.longitude,
+      resolvedCityName,
+      p.id
+    );
+
+    sellersMap.set(p.id, {
       id: p.id,
-      full_name: p.full_name,
-      username: p.username,
+      full_name: p.full_name || p.username || 'Vendedor Liwa',
+      username: p.username || (p.full_name ? p.full_name.split(' ')[0].toLowerCase() : 'vendedor'),
       photo_url: p.photo_url ?? null,
-      phone: p.phone,
-      latitude: Number(p.latitude),
-      longitude: Number(p.longitude),
-      city: Array.isArray(p.city) ? (p.city[0] ?? null) : (p.city ?? null),
+      phone: p.phone ?? null,
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+      city: resolvedCityName ? { name: resolvedCityName } : null,
       products: userProducts,
       categories: catNames,
       categoryIds: catIds,
-    };
+    });
   });
+
+  // 6. Si aún quedan productos cuyos vendedores no están en profile (por ejemplo cuenta eliminada o RLS privado),
+  // sintetizar el vendedor a partir de los datos del producto para que sus publicaciones y ubicación aparezcan en el mapa
+  productUserIds.forEach((uid) => {
+    if (!sellersMap.has(uid)) {
+      const userProducts = formattedProducts.filter((prod) => prod.user_id === uid);
+      const sample = userProducts[0];
+      const catNames = Array.from(
+        new Set(
+          userProducts
+            .map((prod) => prod.category?.name)
+            .filter((n): n is string => Boolean(n))
+        )
+      );
+      const catIds = Array.from(
+        new Set(
+          userProducts
+            .map((prod) => (prod as any).category_id)
+            .filter((id): id is number => typeof id === 'number')
+        )
+      );
+
+      const sellerName = sample?.seller?.full_name || 'Vendedor Liwa';
+      const coords = getResolvedCoordinates(null, null, 'Managua', uid);
+
+      sellersMap.set(uid, {
+        id: uid,
+        full_name: sellerName,
+        username: sellerName.split(' ')[0].toLowerCase() || 'vendedor',
+        photo_url: null,
+        phone: sample?.seller?.phone || null,
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        city: { name: 'Managua' },
+        products: userProducts,
+        categories: catNames,
+        categoryIds: catIds,
+      });
+    }
+  });
+
+  const sellers = Array.from(sellersMap.values());
 
   return {
     sellers,
